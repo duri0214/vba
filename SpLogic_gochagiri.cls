@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "SpLogic_Œä’ƒ‹`—"
+Attribute VB_Name = "SpLogic_å¾¡èŒ¶ç¾©ç†"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -12,72 +12,75 @@ Option Explicit
 Const PROVIDER As String = "Provider = Microsoft.Jet.OLEDB.4.0; Data Source = "
 
 
-Private objFSO As Object            'LogWritterƒNƒ‰ƒX ‚ÌƒRƒsƒy‚Åg—p
-Private txtStream As Object         'LogWritterƒNƒ‰ƒX ‚ÌƒRƒsƒy‚Åg—p
+Private objFSO As Object            'LogWritterã‚¯ãƒ©ã‚¹ ã®ã‚³ãƒ”ãƒšã§ä½¿ç”¨
+Private txtStream As Object         'LogWritterã‚¯ãƒ©ã‚¹ ã®ã‚³ãƒ”ãƒšã§ä½¿ç”¨
 
 Sub Gochagiri(targetTable As String, csvOutPutFolder As String, cutSegment As Long)
 
     '==================================================
-    'ƒOƒ‹[ƒv“o˜^—pCSV“f‚«o‚µƒƒWƒbƒN
+    'ã‚°ãƒ«ãƒ¼ãƒ—ç™»éŒ²ç”¨CSVåãå‡ºã—ãƒ­ã‚¸ãƒƒã‚¯
     '==================================================
     'targetTable    :
-    'csvOutPutName  :csvƒAƒEƒgƒvƒbƒgƒl[ƒ€BiŠg’£q”²‚«j
-    'cutSegment     :Ø‚è‚ŞŒ”BZEUS“o˜^—p‚È‚ç‚Ü‚¸5000‚Å‚Ù‚ÚŒÅ’è‚©‚ÈB
+    'csvOutPutName  :csvã‚¢ã‚¦ãƒˆãƒ—ãƒƒãƒˆãƒãƒ¼ãƒ ã€‚ï¼ˆæ‹¡å¼µå­æŠœãï¼‰
+    'cutSegment     :åˆ‡ã‚Šåˆ»ã‚€ä»¶æ•°ã€‚ZEUSç™»éŒ²ç”¨ãªã‚‰ã¾ãš5000ã§ã»ã¼å›ºå®šã‹ãªã€‚
     
     Dim fso As New FSOSuite
+    Dim rs As New ADODB.Recordset       'ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚»ãƒƒãƒˆ
+    Dim txt As String                   'CSVã«æ›¸ãè¾¼ã‚€æ–‡å­—
+    Dim recCount As Long                'ç´¯ç©ãƒ¬ã‚³ãƒ¼ãƒ‰æ•°
+    Dim csvNumber As Long               'CSVãƒ•ã‚¡ã‚¤ãƒ«ãƒŠãƒ³ãƒãƒ¼
     
-    Dim rs As New ADODB.Recordset       'ƒŒƒR[ƒhƒZƒbƒg
-'    Dim csvFile As New LogWritter       'csvƒIƒuƒWƒFƒNƒg
-    Dim txt As String                   'CSV‚É‘‚«‚Ş•¶š
-    Dim recCount As Long                '—İÏƒŒƒR[ƒh”
-    Dim csvNumber As Long               'CSVƒtƒ@ƒCƒ‹ƒiƒ“ƒo[
-    Dim col As Variant                  '’P€–Ú
-    Dim now_StreamIsOpen As Boolean     'LogWritterƒNƒ‰ƒX‚ÍŒ»İ1ŒÂ‚µ‚©ŠJ‚¯‚È‚¢‚Ì‚ÅAƒtƒ‰ƒO‚ª•K—v
+    'Check
+    If fso.IsFolderExists(csvOutPutFolder) = False 
+      Exit sub
+    End if
     
-    Dim outputFileName As String
-    
-    If fso.IsFolderExists(csvOutPutFolder) = False Then GoTo illegalRoot                    'yŒŸ–âz
-    
+    'Init
+    csvNumber = 1
+    recCount = 1
+  
+    'Open
+    OpenTextStream (csvOutPutFolder & "\" & targetTable & Format(csvNumber, "00") & ".csv")
+    'Open
     rs.ActiveConnection = CurrentProject.Connection
     rs.Open (targetTable)
-    
-    csvNumber = 1                                                                       'CSVƒtƒ@ƒCƒ‹ƒiƒ“ƒo[‰Šú’l‚P
-    recCount = 1                                                                        '—İÏƒŒƒR[ƒh”‰Šú’l‚P
-    
-    outputFileName = csvOutPutFolder & "\" & targetTable & Format(csvNumber, "00") & ".csv"
-    OpenTextStream (outputFileName)                                                     '[“à•”ƒƒWƒbƒNg—p«]CSVƒtƒ@ƒCƒ‹ƒI[ƒvƒ“
-    now_StreamIsOpen = True                                                             'flg on
-    
+  
     Do Until rs.EOF
         
-        txt = ""                                                                        'y‘zƒf[ƒ^æ“¾
-        For Each col In rs.fields                                                       'y‘zƒf[ƒ^æ“¾
-            txt = txt & col.value & ","                                                 'y‘zƒf[ƒ^æ“¾
-        Next col                                                                        'y‘zƒf[ƒ^æ“¾
-        txt = Left(txt, Len(txt) - 1)                                                   'y‘zƒ‰ƒXƒgƒJƒ“ƒ}Øœ
-        WriteLine (txt)                                                                 '[“à•”ƒƒWƒbƒNg—p«]y‘zƒf[ƒ^o—Í
+        'Concat
+        txt = ""
+        For i=0 to rs.Fields.Count - 1
+          if i >0 then
+            txt = txt & ","
+          end if
+          txt = txt & rs.Fields(i).value
+        Next i
+  
+        'Output
+        WriteLine (txt)
         
+        'Break
         If recCount >= cutSegment Then
-            CloseTextStream                                                             '[“à•”ƒƒWƒbƒNg—p«]yØ‘ÖzCSVƒtƒ@ƒCƒ‹ƒNƒ[ƒY
-            now_StreamIsOpen = False                                                    'yØ‘Özflg off
-            recCount = 1                                                                'yØ‘Öz—İÏƒŒƒR[ƒh”‰Šú’l‚P
-            csvNumber = csvNumber + 1                                                   'yØ‘ÖzCSVƒtƒ@ƒCƒ‹ƒiƒ“ƒo[{‚P
-            outputFileName = csvOutPutFolder & "\" & targetTable & Format(csvNumber, "00") & ".csv"
-            OpenTextStream (outputFileName)                                             '[“à•”ƒƒWƒbƒNg—p«]yØ‘ÖzCSVƒtƒ@ƒCƒ‹ƒI[ƒvƒ“
-            now_StreamIsOpen = True                                                     'yØ‘Özflg on
+    
+            'Close
+            CloseTextStream
+            rs.MoveNext
+    
+            if rs.EOF = false then
+              'Reset
+              recCount = 1
+              csvNumber = csvNumber + 1
+              'Open
+               OpenTextStream (csvOutPutFolder & "\" & targetTable & Format(csvNumber, "00") & ".csv")
+            end if
+    
         Else
-            recCount = recCount + 1                                                     'yŒp‘±z—İÏƒŒƒR[ƒh”{‚P
+            recCount = recCount + 1
+            rs.MoveNext
         End If
         
-        rs.MoveNext
-        
     Loop
-    
-    If now_StreamIsOpen Then CloseTextStream                                            '[“à•”ƒƒWƒbƒNg—p«]yI—¹zCSVƒtƒ@ƒCƒ‹‚ªŠJ‚¢‚Ä‚¢‚½‚ç•Â‚¶‚é
-    
     rs.Close
-    
-illegalRoot:                                                                            'ŒŸ–â‚Éˆø‚Á‚©‚©‚Á‚½ê‡‚ÉAƒƒWƒbƒN‚Í–¢Às‚ÅI‚í‚éB
     
 End Sub
 
@@ -86,7 +89,7 @@ End Sub
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
-'/_/_‚±‚±‚©‚ç‰º‚Í@LogWritterƒNƒ‰ƒX ‚ÌƒRƒsƒy_/_/
+'/_/_ã“ã“ã‹ã‚‰ä¸‹ã¯ã€€LogWritterã‚¯ãƒ©ã‚¹ ã®ã‚³ãƒ”ãƒš_/_/
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
@@ -98,16 +101,16 @@ End Sub
 
 Private Sub OpenTextStream(Optional logFileFullPath As String)
 
-    'WriteLineLog‚²‚Æ‚ÉƒeƒLƒXƒg•Û‘¶‚³‚ê‚é‚Ì‚ÅCloseTextStream‚ª“­‚­‘O‚É•s³I—¹‚µ‚Ä‚àok‚Å‚·
+    'WriteLineLogã”ã¨ã«ãƒ†ã‚­ã‚¹ãƒˆä¿å­˜ã•ã‚Œã‚‹ã®ã§CloseTextStreamãŒåƒãå‰ã«ä¸æ­£çµ‚äº†ã—ã¦ã‚‚okã§ã™
 
-    Dim logOutPath As String                                                'o—ÍƒpƒXiŠî–{©•ªƒtƒ@ƒCƒ‹‚ÌˆÊ’u‚Éì¬j
-    Dim ioMode As Integer                                                   '“üo—Íƒ‚[ƒh
+    Dim logOutPath As String                                                'å‡ºåŠ›ãƒ‘ã‚¹ï¼ˆåŸºæœ¬è‡ªåˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½ç½®ã«ä½œæˆï¼‰
+    Dim ioMode As Integer                                                   'å…¥å‡ºåŠ›ãƒ¢ãƒ¼ãƒ‰
     
-    Const MODE_NEW_CREATE As Integer = 2                                    'V‹Kì¬ƒ‚[ƒh
-    Const MODE_ADDITIONAL As Integer = 8                                    '’Ç‹Lƒ‚[ƒh
+    Const MODE_NEW_CREATE As Integer = 2                                    'æ–°è¦ä½œæˆãƒ¢ãƒ¼ãƒ‰
+    Const MODE_ADDITIONAL As Integer = 8                                    'è¿½è¨˜ãƒ¢ãƒ¼ãƒ‰
     
     If logFileFullPath = vbNullString Then
-        logOutPath = Application.CurrentProject.path & "\log.txt"           '©ƒpƒXƒtƒHƒ‹ƒ_æ“¾
+        logOutPath = Application.CurrentProject.path & "\log.txt"           'è‡ªãƒ‘ã‚¹ãƒ•ã‚©ãƒ«ãƒ€å–å¾—
     Else
         logOutPath = logFileFullPath
     End If
@@ -115,32 +118,32 @@ Private Sub OpenTextStream(Optional logFileFullPath As String)
     Set objFSO = CreateObject("Scripting.FileSystemObject")
 
     If Dir(logOutPath) <> "" Then
-        ioMode = MODE_ADDITIONAL                                            'logOutPathƒtƒ@ƒCƒ‹‚ª‚ ‚ê‚Î’Ç‹Lƒ‚[ƒh
+        ioMode = MODE_ADDITIONAL                                            'logOutPathãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Œã°è¿½è¨˜ãƒ¢ãƒ¼ãƒ‰
     Else
-        ioMode = MODE_NEW_CREATE                                            'logOutPathƒtƒ@ƒCƒ‹‚ª‚È‚¢‚È‚çV‹Kì¬
+        ioMode = MODE_NEW_CREATE                                            'logOutPathãƒ•ã‚¡ã‚¤ãƒ«ãŒãªã„ãªã‚‰æ–°è¦ä½œæˆ
     End If
     
-    Set txtStream = objFSO.OpenTextFile(logOutPath, ioMode, True)           'logOutPathƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡AV‚µ‚¢ƒtƒ@ƒCƒ‹‚ğì¬itruej
+    Set txtStream = objFSO.OpenTextFile(logOutPath, ioMode, True)           'logOutPathãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„å ´åˆã€æ–°ã—ã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆï¼ˆtrueï¼‰
     
 End Sub
 
 Private Sub CloseTextStream()
     
-    txtStream.Close                                                         'ƒXƒgƒŠ[ƒ€ƒIƒuƒWƒFƒNƒgŠJ•ú
+    txtStream.Close                                                         'ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé–‹æ”¾
     
-    Set txtStream = Nothing                                                 'Œãn––
-    Set objFSO = Nothing                                                    'Œãn––
+    Set txtStream = Nothing                                                 'å¾Œå§‹æœ«
+    Set objFSO = Nothing                                                    'å¾Œå§‹æœ«
 
 End Sub
 
 Private Sub WriteLineLog(txt As String)
 
-    txtStream.WriteLine Now & " " & txt                                     'ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Æ‚Æ‚à‚ÉƒƒOo—Í
+    txtStream.WriteLine Now & " " & txt                                     'ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã¨ã¨ã‚‚ã«ãƒ­ã‚°å‡ºåŠ›
     
 End Sub
 
 Private Sub WriteLine(txt As String)
 
-    txtStream.WriteLine txt                                                 'ƒƒOo—Í
+    txtStream.WriteLine txt                                                 'ãƒ­ã‚°å‡ºåŠ›
     
 End Sub
