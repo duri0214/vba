@@ -31,7 +31,7 @@ Sub Gochagiri(targetTable As String, csvOutPutFolder As String, cutSegment As Lo
     dim i as integer
     
     'Check
-    If fso.IsFolderExists(csvOutPutFolder) = False 
+    If fso.IsFolderExists(csvOutPutFolder) = False then
       Exit sub
     End if
     
@@ -49,7 +49,7 @@ Sub Gochagiri(targetTable As String, csvOutPutFolder As String, cutSegment As Lo
         
         'Concat
         txt = ""
-        For i=0 to rs.Fields.Count - 1 then
+        For i=0 to rs.Fields.Count - 1
           if i >0 then
             txt = txt & ","
           end if
