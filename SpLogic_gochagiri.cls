@@ -11,7 +11,6 @@ Option Compare Database
 Option Explicit
 Const PROVIDER As String = "Provider = Microsoft.Jet.OLEDB.4.0; Data Source = "
 
-
 Private objFSO As Object            'LogWritterクラス のコピペで使用
 Private txtStream As Object         'LogWritterクラス のコピペで使用
 
@@ -22,13 +21,14 @@ Sub Gochagiri(targetTable As String, csvOutPutFolder As String, cutSegment As Lo
     '==================================================
     'targetTable    :
     'csvOutPutName  :csvアウトプットネーム。（拡張子抜き）
-    'cutSegment     :切り刻む件数。ZEUS登録用ならまず5000でほぼ固定かな。
+    'cutSegment     :切り刻む件数
     
     Dim fso As New FSOSuite
     Dim rs As New ADODB.Recordset       'レコードセット
     Dim txt As String                   'CSVに書き込む文字
     Dim recCount As Long                '累積レコード数
     Dim csvNumber As Long               'CSVファイルナンバー
+    dim i as integer
     
     'Check
     If fso.IsFolderExists(csvOutPutFolder) = False 
@@ -49,7 +49,7 @@ Sub Gochagiri(targetTable As String, csvOutPutFolder As String, cutSegment As Lo
         
         'Concat
         txt = ""
-        For i=0 to rs.Fields.Count - 1
+        For i=0 to rs.Fields.Count - 1 then
           if i >0 then
             txt = txt & ","
           end if
