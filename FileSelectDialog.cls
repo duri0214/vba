@@ -10,16 +10,16 @@ Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
-'£notice
-'FileSelectDialogƒNƒ‰ƒX‚Ìg—p‚ÍAMicrosoft Office 11.0 Object Library‚Ö‚ÌƒA[ƒŠ[ƒoƒCƒ“ƒfƒBƒ“ƒO‚ª•K—v‚Å‚·B
+'â–²notice
+'FileSelectDialogã‚¯ãƒ©ã‚¹ã®ä½¿ç”¨æ™‚ã¯ã€Microsoft Office 11.0 Object Libraryã¸ã®ã‚¢ãƒ¼ãƒªãƒ¼ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãŒå¿…è¦ã§ã™ã€‚
 
 Function FileDialog(Optional title As String) As String
     
-    Const mode As Integer = msoFileDialogFilePicker             'ƒtƒ@ƒCƒ‹ƒsƒbƒJ[
+    Const mode As Integer = msoFileDialogFilePicker             'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ”ãƒƒã‚«ãƒ¼
     Dim editTitle As String
     Dim retValue As String
     
-    editTitle = "‘ÎÛƒtƒ@ƒCƒ‹‚ğ‘I‘ğ‚µ‚ÄuŠJ‚­v"                'ƒ_ƒCƒAƒƒO‚Ìƒ^ƒCƒgƒ‹ƒo[‚Ì•¶š
+    editTitle = "å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠã—ã¦ã€Œé–‹ãã€"                'ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã®æ–‡å­—
     If title <> vbNullString Then
         editTitle = title
     End If
@@ -31,11 +31,11 @@ End Function
 
 Function FolderDialog(Optional title As String) As String
 
-    Const mode As Integer = msoFileDialogFolderPicker           'ƒtƒHƒ‹ƒ_ƒsƒbƒJ[
+    Const mode As Integer = msoFileDialogFolderPicker           'ãƒ•ã‚©ãƒ«ãƒ€ãƒ”ãƒƒã‚«ãƒ¼
     Dim editTitle As String
     Dim retValue As String
     
-    editTitle = "‘ÎÛƒtƒHƒ‹ƒ_‚ÌˆÊ’u‚ÅuŠJ‚­v"                  'ƒ_ƒCƒAƒƒO‚Ìƒ^ƒCƒgƒ‹ƒo[‚Ì•¶š
+    editTitle = "å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã®ä½ç½®ã§ã€Œé–‹ãã€"                  'ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã®æ–‡å­—
     If title <> vbNullString Then
         editTitle = title
     End If
@@ -51,14 +51,15 @@ Private Function FileDialogCore(mode As Integer, title As String) As String
     Dim dialog As FileDialog
     Dim retValue As String
     
-    Set dialog = Application.FileDialog(mode)                   'ƒsƒbƒJ[
-    dialog.AllowMultiSelect = False                             'ƒtƒ@ƒCƒ‹‚Í•¡”‘I‘ğ‚Å‚«‚Ü‚¹‚ñ
-    dialog.title = title                                        'ƒ_ƒCƒAƒƒO‚Ìƒ^ƒCƒgƒ‹ƒo[‚Ì•¶š
+    Set dialog = Application.FileDialog(mode)                   'ãƒ”ãƒƒã‚«ãƒ¼
+    dialog.initialfilename = thisworkbook.path                  'Accessã®å ´åˆã¯è‡ªãƒ‘ã‚¹ãƒ•ã‚©ãƒ«ãƒ€ã«å¤‰ãˆã¦
+    dialog.AllowMultiSelect = False                             'ãƒ•ã‚¡ã‚¤ãƒ«ã¯è¤‡æ•°é¸æŠã§ãã¾ã›ã‚“
+    dialog.title = title                                        'ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã®æ–‡å­—
     
-    If dialog.Show Then                                                 'ƒ_ƒCƒAƒƒO•\¦
+    If dialog.Show Then                                         'ãƒ€ã‚¤ã‚¢ãƒ­ã‚°è¡¨ç¤º
         retValue = dialog.SelectedItems(1)
     End If
     
-    FileDialogCore = retValue                                   'Œ‹‰Ê•Ô‚µ
+    FileDialogCore = retValue                                   'çµæœè¿”ã—
     
 End Function
