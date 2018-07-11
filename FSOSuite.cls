@@ -15,10 +15,11 @@ Function DeleteFile(fileFullPath As String) As String
     Dim objFSO As Object
     Dim retValue As String
     
-    retValue = GetFileName(fileFullPath)    'Á‚µ‚½ƒtƒ@ƒCƒ‹–¼get
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
+    retValue = GetFileName(fileFullPath)    'æ¶ˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«åget
     objFSO.DeleteFile fileFullPath          'delete
     
-    DeleteFile = retValue                   'Á‚µ‚½ƒtƒ@ƒCƒ‹–¼‚ğ•Ô‚·
+    DeleteFile = retValue                   'æ¶ˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¿”ã™
     
 End Function
 
@@ -46,10 +47,10 @@ Function GetFilesCountForCSV(folderPath As String) As Integer
     Dim objFiles As Object
     Dim file As Variant
 
-    Dim filesCount As Integer                                   'Œ©‚Â‚¯‚½ƒtƒ@ƒCƒ‹”
+    Dim filesCount As Integer                                   'è¦‹ã¤ã‘ãŸãƒ•ã‚¡ã‚¤ãƒ«æ•°
 
     Set objFSO = CreateObject("Scripting.FileSystemObject")
-    Set objFiles = objFSO.GetFolder(folderPath).Files           'w’è‚³‚ê‚½ƒtƒHƒ‹ƒ_‚Ìƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğæ“¾
+    Set objFiles = objFSO.GetFolder(folderPath).Files           'æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—
 
     For Each file In objFiles
         If Right(file.Name, 4) = ".csv" Then
@@ -67,10 +68,10 @@ Function GetFilesCountForMDB(folderPath As String) As Integer
     Dim objFiles As Object
     Dim file As Variant
 
-    Dim filesCount As Integer                                   'Œ©‚Â‚¯‚½ƒtƒ@ƒCƒ‹”
+    Dim filesCount As Integer                                   'è¦‹ã¤ã‘ãŸãƒ•ã‚¡ã‚¤ãƒ«æ•°
 
     Set objFSO = CreateObject("Scripting.FileSystemObject")
-    Set objFiles = objFSO.GetFolder(folderPath).Files           'w’è‚³‚ê‚½ƒtƒHƒ‹ƒ_‚Ìƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğæ“¾
+    Set objFiles = objFSO.GetFolder(folderPath).Files           'æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—
 
     For Each file In objFiles
         If Right(file.Name, 4) = ".mdb" Then
@@ -108,12 +109,12 @@ End Sub
 
 Function IsFileExists(filePath As String) As Boolean
     
-    '£notice
-    'ƒtƒ@ƒCƒ‹‚Ì‘¶İ—L–³‚ğ2’l‚Å•Ô‚µ‚Ü‚·
-    'DIRŠÖ”‚ğ1ƒ‹[ƒv‚Ì’†‚Å•¡”‰ñg‚¢‚½‚¢‚Æ‚«‚Ég—p‚µ‚Ü‚·B
-    '‚½‚Æ‚¦‚ÎAƒtƒHƒ‹ƒ_‚Ìƒtƒ@ƒCƒ‹‚ğ‘S‚Äˆ—‚·‚éƒ‹[ƒ`ƒ“‚ÅAÅ‰‚ÉDIR‚ğg—p‚µ‚Ä
-    '‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹‚ğˆ—‚µ‚æ‚¤‚Æ‚·‚é’†‚ÅA‚³‚ç‚É’Pƒtƒ@ƒCƒ‹‚Ì‘¶İ—L–³ˆ—‚ª•K—v‚É
-    '‚È‚Á‚½‚Æ‚«DIRŠÖ”‚ğg‚¤‚ÆƒGƒ‰[‚É‚È‚è‚Ü‚·B‚»‚Ì‚Æ‚«‚É‚±‚ÌŠÖ”‚Å‘ã‘Ö‚µ‚Ü‚·B
+    'â–²notice
+    'ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨æœ‰ç„¡ã‚’2å€¤ã§è¿”ã—ã¾ã™
+    'DIRé–¢æ•°ã‚’1ãƒ«ãƒ¼ãƒ—ã®ä¸­ã§è¤‡æ•°å›ä½¿ã„ãŸã„ã¨ãã«ä½¿ç”¨ã—ã¾ã™ã€‚
+    'ãŸã¨ãˆã°ã€ãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¨ã¦å‡¦ç†ã™ã‚‹ãƒ«ãƒ¼ãƒãƒ³ã§ã€æœ€åˆã«DIRã‚’ä½¿ç”¨ã—ã¦
+    'ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‡¦ç†ã—ã‚ˆã†ã¨ã™ã‚‹ä¸­ã§ã€ã•ã‚‰ã«å˜ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨æœ‰ç„¡å‡¦ç†ãŒå¿…è¦ã«
+    'ãªã£ãŸã¨ãDIRé–¢æ•°ã‚’ä½¿ã†ã¨ã‚¨ãƒ©ãƒ¼ã«ãªã‚Šã¾ã™ã€‚ãã®ã¨ãã«ã“ã®é–¢æ•°ã§ä»£æ›¿ã—ã¾ã™ã€‚
     
     Dim objFSO As Object
     Dim retValue As Boolean
@@ -127,9 +128,9 @@ End Function
 
 Function IsValidFileForMdb(mdbPath As String) As Boolean
     
-    'ƒtƒ@ƒCƒ‹ŒŸ¸‚ğs‚¤
-    'ƒtƒ@ƒCƒ‹‚ÉˆÙí‚ª‚È‚¯‚ê‚Î...True‚ğ•Ô‚·
-    'ƒtƒ@ƒCƒ‹‚ªˆÙí‚ª‚ ‚é‚È‚ç...False‚ğ•Ô‚·
+    'ãƒ•ã‚¡ã‚¤ãƒ«æ¤œæŸ»ã‚’è¡Œã†
+    'ãƒ•ã‚¡ã‚¤ãƒ«ã«ç•°å¸¸ãŒãªã‘ã‚Œã°...Trueã‚’è¿”ã™
+    'ãƒ•ã‚¡ã‚¤ãƒ«ãŒç•°å¸¸ãŒã‚ã‚‹ãªã‚‰...Falseã‚’è¿”ã™
     
     IsValidFileForMdb = IsValidFileCore(mdbPath, ".mdb")
 
@@ -137,9 +138,9 @@ End Function
 
 Function IsValidFileForCSV(csvPath As String) As Boolean
     
-    'ƒtƒ@ƒCƒ‹ŒŸ¸‚ğs‚¤
-    'ƒtƒ@ƒCƒ‹‚ÉˆÙí‚ª‚È‚¯‚ê‚Î...True‚ğ•Ô‚·
-    'ƒtƒ@ƒCƒ‹‚ªˆÙí‚ª‚ ‚é‚È‚ç...False‚ğ•Ô‚·
+    'ãƒ•ã‚¡ã‚¤ãƒ«æ¤œæŸ»ã‚’è¡Œã†
+    'ãƒ•ã‚¡ã‚¤ãƒ«ã«ç•°å¸¸ãŒãªã‘ã‚Œã°...Trueã‚’è¿”ã™
+    'ãƒ•ã‚¡ã‚¤ãƒ«ãŒç•°å¸¸ãŒã‚ã‚‹ãªã‚‰...Falseã‚’è¿”ã™
         
     IsValidFileForCSV = IsValidFileCore(csvPath, ".csv")
 
@@ -147,18 +148,18 @@ End Function
 
 Private Function IsValidFileCore(path As String, compareString As String) As Boolean
     
-    'ƒtƒ@ƒCƒ‹ŒŸ¸‚ğs‚¤
-    'ƒtƒ@ƒCƒ‹‚ÉˆÙí‚ª‚È‚¯‚ê‚Î...True‚ğ•Ô‚·
-    'ƒtƒ@ƒCƒ‹‚ªˆÙí‚ª‚ ‚é‚È‚ç...False‚ğ•Ô‚·
+    'ãƒ•ã‚¡ã‚¤ãƒ«æ¤œæŸ»ã‚’è¡Œã†
+    'ãƒ•ã‚¡ã‚¤ãƒ«ã«ç•°å¸¸ãŒãªã‘ã‚Œã°...Trueã‚’è¿”ã™
+    'ãƒ•ã‚¡ã‚¤ãƒ«ãŒç•°å¸¸ãŒã‚ã‚‹ãªã‚‰...Falseã‚’è¿”ã™
     
     Dim retValue As Boolean
     retValue = True
 
     If IsFileExists(path) = False Then
-        retValue = False                    'ƒtƒ@ƒCƒ‹ƒpƒX‚ª•s³‚¾iw’èƒtƒ@ƒCƒ‹ƒpƒX‚ª‘¶İ‚µ‚È‚¢j
+        retValue = False                    'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ãŒä¸æ­£ã ï¼ˆæŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ãŒå­˜åœ¨ã—ãªã„ï¼‰
     Else
         If Right(path, 4) <> compareString Then
-            retValue = False                'ƒtƒ@ƒCƒ‹ƒpƒX‚Í’Ê‚Á‚Ä‚¢‚é‚ªAŠg’£q‚ª•s³‚¾
+            retValue = False                'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã¯é€šã£ã¦ã„ã‚‹ãŒã€æ‹¡å¼µå­ãŒä¸æ­£ã 
         End If
     End If
     
@@ -168,9 +169,9 @@ End Function
 
 Function GetFileName(filePath As String) As String
     
-    '£notice
-    'ƒtƒ‹ƒpƒX‚©‚çAƒtƒ@ƒCƒ‹–¼‚ğæ‚èo‚µ‚Ü‚·
-    'uC:\hoge.xlsv ¨ uhoge.xlsv
+    'â–²notice
+    'ãƒ•ãƒ«ãƒ‘ã‚¹ã‹ã‚‰ã€ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–ã‚Šå‡ºã—ã¾ã™
+    'ã€ŒC:\hoge.xlsã€ â†’ ã€Œhoge.xlsã€
     
     Dim objFSO As Object
     Dim retValue As String
@@ -184,9 +185,9 @@ End Function
 
 Function GetParentFolderPath(filePath As String) As String
 
-    '£notice
-    'ƒtƒ@ƒCƒ‹ƒtƒ‹ƒpƒX‚©‚çAeƒtƒHƒ‹ƒ_ƒpƒX‚ğæ‚èo‚µ‚Ü‚·
-    'uC:\hage\hoge.xlsv ¨ uC:\hagev
+    'â–²notice
+    'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ãƒ«ãƒ‘ã‚¹ã‹ã‚‰ã€è¦ªãƒ•ã‚©ãƒ«ãƒ€ãƒ‘ã‚¹ã‚’å–ã‚Šå‡ºã—ã¾ã™
+    'ã€ŒC:\hage\hoge.xlsã€ â†’ ã€ŒC:\hageã€
     
     Dim objFSO As Object
     Dim retValue As String
@@ -200,11 +201,11 @@ End Function
 
 Function GetParentFolderName(filePath As String) As String
     
-    '£notice
-    'ƒtƒ@ƒCƒ‹ƒpƒX‚©‚çAeƒtƒHƒ‹ƒ_–¼‚ğæ‚èo‚µ‚Ü‚·
-    'uC:\hage\hoge.xlsv ¨ uhagev
-    '‹ï‘Ì“I‚É‚ÍAƒtƒ@ƒCƒ‹ƒpƒX‚ğó‚¯æ‚Á‚ÄAã‚ÌGetParentFolderƒƒ\ƒbƒh‚ÅƒtƒHƒ‹ƒ_ƒpƒX‚ğ“à•”“I‚Éæ“¾
-    '‚»‚µ‚ÄFSO‚ÅAeƒtƒHƒ‹ƒ_‚Ì–¼‘O‚¾‚¯‚ğ•Ô‚·
+    'â–²notice
+    'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‹ã‚‰ã€è¦ªãƒ•ã‚©ãƒ«ãƒ€åã‚’å–ã‚Šå‡ºã—ã¾ã™
+    'ã€ŒC:\hage\hoge.xlsã€ â†’ ã€Œhageã€
+    'å…·ä½“çš„ã«ã¯ã€ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚’å—ã‘å–ã£ã¦ã€ä¸Šã®GetParentFolderãƒ¡ã‚½ãƒƒãƒ‰ã§ãƒ•ã‚©ãƒ«ãƒ€ãƒ‘ã‚¹ã‚’å†…éƒ¨çš„ã«å–å¾—
+    'ãã—ã¦FSOã§ã€è¦ªãƒ•ã‚©ãƒ«ãƒ€ã®åå‰ã ã‘ã‚’è¿”ã™
     
     Dim objFSO As Object
     Dim retValue As String
@@ -218,27 +219,27 @@ End Function
 
 Function ReadHeaderLineByTextFile(textFileFullPath As String) As String
     
-    'ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ì1s–Ú‚ğ“Ç‚ñ‚ÅString‚Å•Ô‚·
+    'ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®1è¡Œç›®ã‚’èª­ã‚“ã§Stringã§è¿”ã™
     
-    '£notice
-    '‚±‚Ìƒƒ\ƒbƒh‚ÍAƒtƒ@ƒCƒ‹‚Ì‘¶İ‰Â”ÛŒŸ¸‚Ís‚í‚È‚¢B
-    '‚±‚Ìƒƒ\ƒbƒh‚É“ü‚é‘O‚ÉAƒtƒ@ƒCƒ‹‚Ì‘¶İ‰Â”Û‚ÍŒŸ¸‚¹‚æB
+    'â–²notice
+    'ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã€ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨å¯å¦æ¤œæŸ»ã¯è¡Œã‚ãªã„ã€‚
+    'ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«å…¥ã‚‹å‰ã«ã€ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨å¯å¦ã¯æ¤œæŸ»ã›ã‚ˆã€‚
     
     Dim objFSO As Object                                                    'FileSysObj
     Dim txtStream As Object                                                 'FileSysObj
     Dim retValue As String
 
-    Dim ioMode As Integer                                                   '“üo—Íƒ‚[ƒh
-    Const MODE_READ_ONLY As Integer = 1                                     '“Ç‚İæ‚èê—p
+    Dim ioMode As Integer                                                   'å…¥å‡ºåŠ›ãƒ¢ãƒ¼ãƒ‰
+    Const MODE_READ_ONLY As Integer = 1                                     'èª­ã¿å–ã‚Šå°‚ç”¨
     
-    Set objFSO = CreateObject("Scripting.FileSystemObject")                 'FSOg—péŒ¾
+    Set objFSO = CreateObject("Scripting.FileSystemObject")                 'FSOä½¿ç”¨å®£è¨€
 
-    ioMode = MODE_READ_ONLY                                                 '“Ç‚İæ‚èê—p‚Å...
-    Set txtStream = objFSO.OpenTextFile(textFileFullPath, ioMode, True)     'ŠJ‚­B
+    ioMode = MODE_READ_ONLY                                                 'èª­ã¿å–ã‚Šå°‚ç”¨ã§...
+    Set txtStream = objFSO.OpenTextFile(textFileFullPath, ioMode, True)     'é–‹ãã€‚
     
-    retValue = txtStream.ReadLine                                           '1s–Ú‚ğ“Ç‚İ‚Ü‚·
+    retValue = txtStream.ReadLine                                           '1è¡Œç›®ã‚’èª­ã¿ã¾ã™
     
-    txtStream.Close                                                         '•Â‚¶‚é
+    txtStream.Close                                                         'é–‰ã˜ã‚‹
     Set txtStream = Nothing
     Set objFSO = Nothing
     
@@ -248,26 +249,26 @@ End Function
 
 Function ReadAllByTextFile(textFileFullPath As String) As String
     
-    '£notice
-    '‚±‚Ìƒƒ\ƒbƒh‚ÍAƒtƒ@ƒCƒ‹‚Ì‘¶İ‰Â”ÛŒŸ¸‚Ís‚í‚È‚¢B
-    '‚±‚Ìƒƒ\ƒbƒh‚É“ü‚é‘O‚ÉAƒtƒ@ƒCƒ‹‚Ì‘¶İ‰Â”Û‚ÍŒŸ¸‚¹‚æB
+    'â–²notice
+    'ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã€ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨å¯å¦æ¤œæŸ»ã¯è¡Œã‚ãªã„ã€‚
+    'ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«å…¥ã‚‹å‰ã«ã€ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨å¯å¦ã¯æ¤œæŸ»ã›ã‚ˆã€‚
     
     Dim objFSO As Object                                                    'FileSysObj
     Dim txtStream As Object                                                 'FileSysObj
 
-    Dim ioMode As Integer                                                   '“üo—Íƒ‚[ƒh
-    Const MODE_READ_ONLY As Integer = 1                                     '“Ç‚İæ‚èê—p
+    Dim ioMode As Integer                                                   'å…¥å‡ºåŠ›ãƒ¢ãƒ¼ãƒ‰
+    Const MODE_READ_ONLY As Integer = 1                                     'èª­ã¿å–ã‚Šå°‚ç”¨
     
     Dim retValue As String
     
-    Set objFSO = CreateObject("Scripting.FileSystemObject")                 'FSOg—péŒ¾
+    Set objFSO = CreateObject("Scripting.FileSystemObject")                 'FSOä½¿ç”¨å®£è¨€
         
-    ioMode = MODE_READ_ONLY                                                 '“Ç‚İæ‚èê—p‚Å...
-    Set txtStream = objFSO.OpenTextFile(textFileFullPath, ioMode, True)     'ŠJ‚­B
+    ioMode = MODE_READ_ONLY                                                 'èª­ã¿å–ã‚Šå°‚ç”¨ã§...
+    Set txtStream = objFSO.OpenTextFile(textFileFullPath, ioMode, True)     'é–‹ãã€‚
     
-    retValue = txtStream.ReadAll                                            '‘S“Ç‚İ
+    retValue = txtStream.ReadAll                                            'å…¨èª­ã¿
     
-    txtStream.Close                                                         '•Â‚¶‚é
+    txtStream.Close                                                         'é–‰ã˜ã‚‹
     Set txtStream = Nothing
     Set objFSO = Nothing
     
@@ -277,17 +278,17 @@ End Function
 
 Function InvokeTextArrayByTextFile(textFileFullPath As String) As String()
     
-    '£notice
-    '‚±‚Ìƒƒ\ƒbƒh‚ÍAƒtƒ@ƒCƒ‹‚Ì‘¶İ‰Â”ÛŒŸ¸‚Ís‚í‚È‚¢B
-    '‚±‚Ìƒƒ\ƒbƒh‚É“ü‚é‘O‚ÉAƒtƒ@ƒCƒ‹‚Ì‘¶İ‰Â”Û‚ÍŒŸ¸‚¹‚æB
+    'â–²notice
+    'ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã€ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨å¯å¦æ¤œæŸ»ã¯è¡Œã‚ãªã„ã€‚
+    'ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«å…¥ã‚‹å‰ã«ã€ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨å¯å¦ã¯æ¤œæŸ»ã›ã‚ˆã€‚
 
     Dim objFSO As Object                                                    'FileSysObj
     Dim txtStream As Object                                                 'FileSysObj
     Dim txt As String
     Dim retValue() As String
 
-    Dim ioMode As Integer                                                   '“üo—Íƒ‚[ƒh
-    Const MODE_READ_ONLY As Integer = 1                                     '“Ç‚İæ‚èê—p
+    Dim ioMode As Integer                                                   'å…¥å‡ºåŠ›ãƒ¢ãƒ¼ãƒ‰
+    Const MODE_READ_ONLY As Integer = 1                                     'èª­ã¿å–ã‚Šå°‚ç”¨
     
     Set objFSO = CreateObject("Scripting.FileSystemObject")
         
