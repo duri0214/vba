@@ -10,6 +10,92 @@ Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
+'ファイルをバイナリで開いてエラーが返ったら「ファイルが開かれている(True)」と返す
+Function IsFileUsing(path As String) As Boolean
+
+    Dim fileSequence as integer
+    Dim retValue as Boolean
+
+    if dir(path) <> "" then
+        fileSequence = FreeFile
+        On Error Resume Next
+        Open path For Binary Lock Read Write As #fileSequence
+        close #fileSequence
+    end if
+
+    if err.number >0 then
+        retValue = true
+        On Error goto 0
+    end if
+
+    IsFileUsing = retValue
+
+End Function
+
+function IsFileExistsAndNotUsing(path as string) as Boolean
+
+    Dim retValue as Boolean
+
+    if IsFileExists(path) and not IsFileUsing(path)
+        retValue = true
+    end if
+
+    IsFileExistsAndNotUsing = retValue
+
+end function
+
+function GetFilelist(folderPath as string) as string()
+
+    dim objFSO as object
+    dim f as object
+    dim retValue() as string
+
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
+
+    if IsfolderExists(folderPath) then
+        For each f in objFSO.GetFolder(folderPath).files
+            if Not IsValidArray(retValue) then  
+                redim retValue(0)
+            Else
+                redim preserve retValue(Ubound(retValue)+1)
+            End if
+            retValue(Ubound(retValue))= folderPath & "\" & f.name
+        next f
+    End if
+
+    GetFilelist = retValue
+    
+end function
+
+Function IsValidArray(targetArray() As String) As Boolean
+    
+    'targetArrayがnullかどうかを調べる関数。
+    '本来この関数はいらなくて if targetArray = null then... とやりたいところだが
+    'vbaでは、配列にnullを仕込むことができないため、わざわざエラー無視の状態にして、
+    '強制的に配列の第一次元目の要素数を求める
+    '配列にアクセスできてなければ（エラーがhitしていれば）falseを返す（配列がnullってるってこと）
+    '配列にアクセスできれば、trueを返す
+    
+    Dim checkValue As Variant
+    Dim retValue As Boolean
+    
+    On Error Resume Next                                            'エラーを無効化
+    
+    checkValue = UBound(targetArray, 1)                             '強制的に配列の第一次元目の要素数を求める
+    
+    If Err.Number > 0 Then                                          'Errorが発生したら、未定義配列です。
+        retValue = False
+    Else                                                            'そうでないなら、1以上の要素が宣言済みです。
+        retValue = True
+    End If
+    Err.Clear                                                       'エラーオブジェクト初期化
+    
+    On Error GoTo 0                                                 'エラーを有効化
+    
+    IsValidArray = retValue                                         '検査結果を返す
+
+End Function
+
 Function DeleteFile(fileFullPath As String) As String
     
     Dim objFSO As Object
