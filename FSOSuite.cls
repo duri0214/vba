@@ -11,7 +11,7 @@ Option Compare Database
 Option Explicit
 
 'path2つを結合します（フォルダ名の末尾の”\”を自動的に付与）
-Function Concat(path1 as string, path2 as string) as string
+Function Combine(path1 as string, path2 as string) as string
     dim objFSO as object
     Set objFSO = CreateObject("Scripting.FileSystemObject")
     Concat = objFso.BuildPath(path1, path2)
