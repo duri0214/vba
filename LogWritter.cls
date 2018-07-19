@@ -13,21 +13,21 @@ Option Explicit
 Private objFSO As Object                                                    'FileSysObj
 Private txtStream As Object                                                 'FileSysObj
 
-Dim lap() As String                                                         'StopWatchƒNƒ‰ƒX—p
-Dim interval() As String                                                    'StopWatchƒNƒ‰ƒX—p
+Dim lap() As String                                                         'StopWatchã‚¯ãƒ©ã‚¹ç”¨
+Dim interval() As String                                                    'StopWatchã‚¯ãƒ©ã‚¹ç”¨
 
 Sub OpenTextStream(Optional logFileFullPath As String)
 
-    'WriteLineLog‚²‚Æ‚ÉƒeƒLƒXƒg•Û‘¶‚³‚ê‚é‚Ì‚ÅCloseTextStream‚ª“­‚­‘O‚É•s³I—¹‚µ‚Ä‚àok‚Å‚·
+    'WriteLineLogã”ã¨ã«ãƒ†ã‚­ã‚¹ãƒˆä¿å­˜ã•ã‚Œã‚‹ã®ã§CloseTextStreamãŒåƒãå‰ã«ä¸æ­£çµ‚äº†ã—ã¦ã‚‚okã§ã™
 
-    Dim logOutPath As String                                                'o—ÍƒpƒXiŠî–{©•ªƒtƒ@ƒCƒ‹‚ÌˆÊ’u‚Éì¬j
-    Dim ioMode As Integer                                                   '“üo—Íƒ‚[ƒh
+    Dim logOutPath As String                                                'å‡ºåŠ›ãƒ‘ã‚¹ï¼ˆåŸºæœ¬è‡ªåˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½ç½®ã«ä½œæˆï¼‰
+    Dim ioMode As Integer                                                   'å…¥å‡ºåŠ›ãƒ¢ãƒ¼ãƒ‰
     
-    Const MODE_NEW_CREATE As Integer = 2                                    'V‹Kì¬ƒ‚[ƒh
-    Const MODE_ADDITIONAL As Integer = 8                                    '’Ç‹Lƒ‚[ƒh
+    Const MODE_NEW_CREATE As Integer = 2                                    'æ–°è¦ä½œæˆãƒ¢ãƒ¼ãƒ‰
+    Const MODE_ADDITIONAL As Integer = 8                                    'è¿½è¨˜ãƒ¢ãƒ¼ãƒ‰
     
     If logFileFullPath = vbNullString Then
-        logOutPath = Application.CurrentProject.path & "\log.txt"           '©ƒpƒXƒtƒHƒ‹ƒ_æ“¾
+        logOutPath = Application.CurrentProject.path & "\log.txt"           'è‡ªãƒ‘ã‚¹ãƒ•ã‚©ãƒ«ãƒ€å–å¾—
     Else
         logOutPath = logFileFullPath
     End If
@@ -35,46 +35,68 @@ Sub OpenTextStream(Optional logFileFullPath As String)
     Set objFSO = CreateObject("Scripting.FileSystemObject")
 
     If Dir(logOutPath) <> "" Then
-        ioMode = MODE_ADDITIONAL                                            'logOutPathƒtƒ@ƒCƒ‹‚ª‚ ‚ê‚Î’Ç‹Lƒ‚[ƒh
+        ioMode = MODE_ADDITIONAL                                            'logOutPathãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Œã°è¿½è¨˜ãƒ¢ãƒ¼ãƒ‰
     Else
-        ioMode = MODE_NEW_CREATE                                            'logOutPathƒtƒ@ƒCƒ‹‚ª‚È‚¢‚È‚çV‹Kì¬
+        ioMode = MODE_NEW_CREATE                                            'logOutPathãƒ•ã‚¡ã‚¤ãƒ«ãŒãªã„ãªã‚‰æ–°è¦ä½œæˆ
     End If
     
-    Set txtStream = objFSO.OpenTextFile(logOutPath, ioMode, True)           'logOutPathƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡AV‚µ‚¢ƒtƒ@ƒCƒ‹‚ğì¬itruej
-    Call GetLap                                                             'šŠJnŠÔ‚ğƒƒ‚
+    Set txtStream = objFSO.OpenTextFile(logOutPath, ioMode, True)           'logOutPathãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„å ´åˆã€æ–°ã—ã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆï¼ˆtrueï¼‰
+    Call GetLap                                                             'â˜…é–‹å§‹æ™‚é–“ã‚’ãƒ¡ãƒ¢
     
 End Sub
 
 Sub CloseTextStream()
     
-    Call GetLap                                                             'šI—¹ŠÔ‚ğƒƒ‚
-    txtStream.WriteLine interval(UBound(interval))                          '‚©‚©‚Á‚½ŠÔ‚ğƒƒO‚Éo—Í
-    txtStream.Close                                                         'ƒXƒgƒŠ[ƒ€ƒIƒuƒWƒFƒNƒgŠJ•ú
+    Call GetLap                                                             'â˜…çµ‚äº†æ™‚é–“ã‚’ãƒ¡ãƒ¢
+    txtStream.WriteLine interval(UBound(interval))                          'ã‹ã‹ã£ãŸæ™‚é–“ã‚’ãƒ­ã‚°ã«å‡ºåŠ›
+    txtStream.Close                                                         'ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé–‹æ”¾
     
-    Set txtStream = Nothing                                                 'Œãn––
-    Set objFSO = Nothing                                                    'Œãn––
+    Set txtStream = Nothing                                                 'å¾Œå§‹æœ«
+    Set objFSO = Nothing                                                    'å¾Œå§‹æœ«
 
 End Sub
 
 Sub WriteLineLog(txt As String)
 
-    txtStream.WriteLine Now & " " & txt                                     'ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Æ‚Æ‚à‚ÉƒƒOo—Í
+    txtStream.WriteLine Now & " " & txt                                     'ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã¨ã¨ã‚‚ã«ãƒ­ã‚°å‡ºåŠ›
     
 End Sub
 
 Sub WriteLine(txt As String)
 
-    txtStream.WriteLine txt                                                 'ƒƒOo—Í
+    txtStream.WriteLine txt                                                 'ãƒ­ã‚°å‡ºåŠ›
+    
+End Sub
+
+Sub WriteLineOneshot(txt As String)
+        
+    Dim logOutPath As String                                                'å‡ºåŠ›ãƒ‘ã‚¹ï¼ˆåŸºæœ¬è‡ªåˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½ç½®ã«ä½œæˆï¼‰
+    Dim ioMode As Integer                                                   'å…¥å‡ºåŠ›ãƒ¢ãƒ¼ãƒ‰
+    Const MODE_NEW_CREATE As Integer = 2                                    'æ–°è¦ä½œæˆãƒ¢ãƒ¼ãƒ‰
+    Const MODE_ADDITIONAL As Integer = 8                                    'è¿½è¨˜ãƒ¢ãƒ¼ãƒ‰
+        
+    If logFileFullPath = vbNullString Then
+          logOutPath = thisworkbook.path & "\log.txt"           'è‡ªãƒ‘ã‚¹ãƒ•ã‚©ãƒ«ãƒ€å–å¾—
+    End If
+    
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
+
+    If Dir(logOutPath) <> "" Then
+        ioMode = MODE_ADDITIONAL                                            'logOutPathãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Œã°è¿½è¨˜ãƒ¢ãƒ¼ãƒ‰
+    Else
+        ioMode = MODE_NEW_CREATE                                            'logOutPathãƒ•ã‚¡ã‚¤ãƒ«ãŒãªã„ãªã‚‰æ–°è¦ä½œæˆ
+    End If
+    
+    Set txtStream = objFSO.OpenTextFile(logOutPath, ioMode, True)           'logOutPathãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„å ´åˆã€æ–°ã—ã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆï¼ˆtrueï¼‰
+    txtStream.WriteLine txt                                                 'ãƒ­ã‚°å‡ºåŠ›
     
 End Sub
 
 
-
-
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
-'/_/_‚±‚±‚©‚ç‰º‚Í@StopWatchƒNƒ‰ƒX@‚ÌƒRƒsƒy_/_/
+'/_/_ã“ã“ã‹ã‚‰ä¸‹ã¯ã€€StopWatchã‚¯ãƒ©ã‚¹ã€€ã®ã‚³ãƒ”ãƒš_/_/
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
@@ -82,8 +104,8 @@ End Sub
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 '/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
-'‚¢‚¿‚¢‚¿ƒXƒgƒbƒvƒEƒHƒbƒ`ƒNƒ‰ƒX‚ğ‚¢‚Á‚µ‚å‚É‚Á‚Ä‚­‚é‚Ì‚ß‚ñ‚Ç‚­‚³‚¢‚Å‚µ‚åH
-'”z—ñNULL‚É‚·‚é‚â‚è‚©‚½‚ª‚í‚©‚ç‚Ë[‚à‚ñ‚ÅAƒŠƒZƒbƒg‹@”\‚Í‚È‚µ‚Å‚·B‚ ‚Æ‚Å‚í‚©‚Á‚½‚ç’Ç‰Á‚µ‚æ‚¤
+'ã„ã¡ã„ã¡ã‚¹ãƒˆãƒƒãƒ—ã‚¦ã‚©ãƒƒãƒã‚¯ãƒ©ã‚¹ã‚’ã„ã£ã—ã‚‡ã«æŒã£ã¦ãã‚‹ã®ã‚ã‚“ã©ãã•ã„ã§ã—ã‚‡ï¼Ÿ
+'é…åˆ—NULLã«ã™ã‚‹ã‚„ã‚Šã‹ãŸãŒã‚ã‹ã‚‰ã­ãƒ¼ã‚‚ã‚“ã§ã€ãƒªã‚»ãƒƒãƒˆæ©Ÿèƒ½ã¯ãªã—ã§ã™ã€‚ã‚ã¨ã§ã‚ã‹ã£ãŸã‚‰è¿½åŠ ã—ã‚ˆã†
 Private Sub GetLap()
     
     If Not IsValidArray(lap) Then
@@ -104,54 +126,54 @@ End Sub
 
 Private Function CalcInterval(stTime As String, enTime As String) As String
     
-    Const ‘ As Integer = 0
-    Const  As Integer = 1
-    Const •ª As Integer = 2
-    Const •b As Integer = 3
+    Const ç· As Integer = 0
+    Const æ™‚ As Integer = 1
+    Const åˆ† As Integer = 2
+    Const ç§’ As Integer = 3
     
-    Dim time(3) As Long   '[0]‘‡Œv(•b)@[1]“à–ó()@[2]“à–ó(•ª)@[3]“à–ó(•b)
+    Dim time(3) As Long   '[0]ç·åˆè¨ˆ(ç§’)ã€€[1]å†…è¨³(æ™‚)ã€€[2]å†…è¨³(åˆ†)ã€€[3]å†…è¨³(ç§’)
     Dim buf As Long
     Dim retValue As String
     
-    buf = DateDiff("s", stTime, enTime)     'ˆ—ŠÔŠÔŒ„æ“¾[•b]
+    buf = DateDiff("s", stTime, enTime)     'å‡¦ç†æ™‚é–“é–“éš™å–å¾—[ç§’]
     
-    time(‘) = buf                          '‘ŠÔŠm’è
-    time() = buf \ 3600                   '•b‚Ì’l‚ğ 3600(=1ŠÔ) ‚ÅŠ„‚Á‚ÄA“à–ó()Šm’è
-    buf = buf - (3600 * time())
-    time(•ª) = buf \ 60                     '1ŠÔ–¢–‚É‚È‚Á‚½’l‚ğ 60(=1•ª) ‚ÅŠ„‚Á‚ÄA“à–ó(•ª)Šm’è
-    buf = buf - (60 * time(•ª))
-    time(•b) = buf                          '“à–ó(•b)Šm’è
+    time(ç·) = buf                          'ç·æ™‚é–“ç¢ºå®š
+    time(æ™‚) = buf \ 3600                   'ç§’ã®å€¤ã‚’ 3600(=1æ™‚é–“) ã§å‰²ã£ã¦ã€å†…è¨³(æ™‚)ç¢ºå®š
+    buf = buf - (3600 * time(æ™‚))
+    time(åˆ†) = buf \ 60                     '1æ™‚é–“æœªæº€ã«ãªã£ãŸå€¤ã‚’ 60(=1åˆ†) ã§å‰²ã£ã¦ã€å†…è¨³(åˆ†)ç¢ºå®š
+    buf = buf - (60 * time(åˆ†))
+    time(ç§’) = buf                          'å†…è¨³(ç§’)ç¢ºå®š
     
-    retValue = time() & "ŠÔ" & time(•ª) & "•ª" & time(•b) & "•b(" & time(‘) & "•b)"
+    retValue = time(æ™‚) & "æ™‚é–“" & time(åˆ†) & "åˆ†" & time(ç§’) & "ç§’(" & time(ç·) & "ç§’)"
     CalcInterval = retValue
     
 End Function
 
 Private Function IsValidArray(targetArray() As String) As Boolean
     
-    'targetArray‚ªnull‚©‚Ç‚¤‚©‚ğ’²‚×‚éŠÖ”B
-    '–{—ˆ‚±‚ÌŠÖ”‚Í‚¢‚ç‚È‚­‚Ä if targetArray = null then... ‚Æ‚â‚è‚½‚¢‚Æ‚±‚ë‚¾‚ª
-    'vba‚Å‚ÍA”z—ñ‚Énull‚ğd‚Ş‚±‚Æ‚ª‚Å‚«‚È‚¢‚½‚ßA‚í‚´‚í‚´ƒGƒ‰[–³‹‚Ìó‘Ô‚É‚µ‚ÄA
-    '‹­§“I‚É”z—ñ‚Ì‘æˆêŸŒ³–Ú‚Ì—v‘f”‚ğ‹‚ß‚é
-    '”z—ñ‚ÉƒAƒNƒZƒX‚Å‚«‚Ä‚È‚¯‚ê‚ÎiƒGƒ‰[‚ªhit‚µ‚Ä‚¢‚ê‚Îjfalse‚ğ•Ô‚·i”z—ñ‚ªnull‚Á‚Ä‚é‚Á‚Ä‚±‚Æj
-    '”z—ñ‚ÉƒAƒNƒZƒX‚Å‚«‚ê‚ÎAtrue‚ğ•Ô‚·
+    'targetArrayãŒnullã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹é–¢æ•°ã€‚
+    'æœ¬æ¥ã“ã®é–¢æ•°ã¯ã„ã‚‰ãªãã¦ if targetArray = null then... ã¨ã‚„ã‚ŠãŸã„ã¨ã“ã‚ã ãŒ
+    'vbaã§ã¯ã€é…åˆ—ã«nullã‚’ä»•è¾¼ã‚€ã“ã¨ãŒã§ããªã„ãŸã‚ã€ã‚ã–ã‚ã–ã‚¨ãƒ©ãƒ¼ç„¡è¦–ã®çŠ¶æ…‹ã«ã—ã¦ã€
+    'å¼·åˆ¶çš„ã«é…åˆ—ã®ç¬¬ä¸€æ¬¡å…ƒç›®ã®è¦ç´ æ•°ã‚’æ±‚ã‚ã‚‹
+    'é…åˆ—ã«ã‚¢ã‚¯ã‚»ã‚¹ã§ãã¦ãªã‘ã‚Œã°ï¼ˆã‚¨ãƒ©ãƒ¼ãŒhitã—ã¦ã„ã‚Œã°ï¼‰falseã‚’è¿”ã™ï¼ˆé…åˆ—ãŒnullã£ã¦ã‚‹ã£ã¦ã“ã¨ï¼‰
+    'é…åˆ—ã«ã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚Œã°ã€trueã‚’è¿”ã™
     
     Dim checkValue As Variant
     Dim retValue As Boolean
     
-    On Error Resume Next                                            'ƒGƒ‰[‚ğ–³Œø‰»
+    On Error Resume Next                                            'ã‚¨ãƒ©ãƒ¼ã‚’ç„¡åŠ¹åŒ–
     
-    checkValue = UBound(targetArray, 1)                             '‹­§“I‚É”z—ñ‚Ì‘æˆêŸŒ³–Ú‚Ì—v‘f”‚ğ‹‚ß‚é
+    checkValue = UBound(targetArray, 1)                             'å¼·åˆ¶çš„ã«é…åˆ—ã®ç¬¬ä¸€æ¬¡å…ƒç›®ã®è¦ç´ æ•°ã‚’æ±‚ã‚ã‚‹
     
-    If Err.Number > 0 Then                                          'Error‚ª”­¶‚µ‚½‚çA–¢’è‹`”z—ñ‚Å‚·B
+    If Err.Number > 0 Then                                          'ErrorãŒç™ºç”Ÿã—ãŸã‚‰ã€æœªå®šç¾©é…åˆ—ã§ã™ã€‚
         retValue = False
-    Else                                                            '‚»‚¤‚Å‚È‚¢‚È‚çA1ˆÈã‚Ì—v‘f‚ªéŒ¾Ï‚İ‚Å‚·B
+    Else                                                            'ãã†ã§ãªã„ãªã‚‰ã€1ä»¥ä¸Šã®è¦ç´ ãŒå®£è¨€æ¸ˆã¿ã§ã™ã€‚
         retValue = True
     End If
-    Err.Clear                                                       'ƒGƒ‰[ƒIƒuƒWƒFƒNƒg‰Šú‰»
+    Err.Clear                                                       'ã‚¨ãƒ©ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåˆæœŸåŒ–
     
-    On Error GoTo 0                                                 'ƒGƒ‰[‚ğ—LŒø‰»
+    On Error GoTo 0                                                 'ã‚¨ãƒ©ãƒ¼ã‚’æœ‰åŠ¹åŒ–
     
-    IsValidArray = retValue                                         'ŒŸ¸Œ‹‰Ê‚ğ•Ô‚·
+    IsValidArray = retValue                                         'æ¤œæŸ»çµæœã‚’è¿”ã™
 
 End Function
