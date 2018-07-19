@@ -14,7 +14,7 @@ Option Explicit
 Function Combine(path1 as string, path2 as string) as string
     dim objFSO as object
     Set objFSO = CreateObject("Scripting.FileSystemObject")
-    Concat = objFso.BuildPath(path1, path2)
+    Combine = objFso.BuildPath(path1, path2)
 End Function
 
 'ファイルをバイナリで開いてエラーが返ったら「ファイルが開かれている(True)」と返す
@@ -43,7 +43,7 @@ function IsFileExistsAndNotUsing(path as string) as Boolean
 
     Dim retValue as Boolean
 
-    if IsFileExists(path) and not IsFileUsing(path)
+    if IsFileExists(path) and not IsFileUsing(path) then
         retValue = true
     end if
 
@@ -52,7 +52,8 @@ function IsFileExistsAndNotUsing(path as string) as Boolean
 end function
 
 function GetFilelist(folderPath as string) as string()
-
+    
+    const HIDDEN as Integer = 2
     dim objFSO as object
     dim f as object
     dim retValue() as string
@@ -61,12 +62,14 @@ function GetFilelist(folderPath as string) as string()
 
     if IsfolderExists(folderPath) then
         For each f in objFSO.GetFolder(folderPath).files
-            if Not IsValidArray(retValue) then  
-                redim retValue(0)
-            Else
-                redim preserve retValue(Ubound(retValue)+1)
-            End if
-            retValue(Ubound(retValue))= folderPath & "\" & f.name
+            if (f.Attributes And HIDDEN) = 0 then
+                if Not IsValidArray(retValue) then  
+                    redim retValue(0)
+                Else
+                    redim preserve retValue(Ubound(retValue)+1)
+                End if
+                retValue(Ubound(retValue))= folderPath & "\" & f.name
+            end if
         next f
     End if
 
