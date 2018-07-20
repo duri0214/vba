@@ -14,5 +14,5 @@ Option Explicit
 Function Combine(path1 as string, path2 as string) as string
     dim objFSO as object
     Set objFSO = CreateObject("Scripting.FileSystemObject")
-    Concat = objFso.BuildPath(path1, path2)
+    Combine = objFso.BuildPath(path1, path2)
 End Function
