@@ -89,6 +89,10 @@ Sub WriteLineOneshot(txt As String)
     
     Set txtStream = objFSO.OpenTextFile(logOutPath, ioMode, True)           'logOutPathファイルが存在しない場合、新しいファイルを作成（true）
     txtStream.WriteLine txt                                                 'ログ出力
+    txtStream.Close                                                         'ストリームオブジェクト開放
+    
+    Set txtStream = Nothing                                                 '後始末
+    Set objFSO = Nothing                                                    '後始末
     
 End Sub
 
