@@ -1,0 +1,90 @@
+Option Explicit
+
+'http://excel.syogyoumujou.com/vba/speed_up.html 「Test_6」のリファクタリングバージョン
+'Depends on "SpLogic_Que" Class
+Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
+
+    '任意のエリア「chunk」の情報
+    Dim data() As Variant
+    Dim jackup() As String      '原点まで下駄を履かせるための補正値（行, 列）
+    Dim chunkRowsCnt As Long    'xを計算確定するための「行数」情報
+    
+    'loopに必要な変数
+    Dim idx As Long             'loop回数
+    Dim y As Long               '原点からの相対位置y
+    Dim x As Long               '原点からの相対位置x
+    
+    'loop処理中の、
+    Dim v As Variant            'Loop：現在の
+    Dim addr As String          'セルアドレスの位置情報
+    Dim q As New SpLogic_Que    'セルアドレスの位置情報を蓄積
+    
+    
+    '任意のエリア「chunk」の原点セルアドレスをRC形式で取得
+    jackup = GetOriginCoordsRC(chunk)
+    
+    '任意のエリア「chunk」をバリアント変数に取得
+    data = chunk.value
+    For Each v In data
+    
+        chunkRowsCnt = chunk.Rows.Count
+        
+        'loop回数
+        idx = idx + 1
+        
+        '★色を塗る条件
+        If InStr(1, v, instrText) Then
+            
+            '▲Notice
+            'Loop処理中、CellObject一切参照しないために爆速
+            
+            'loop回数に対して任意エリアの行数の剰余を取るとタテがわかる
+            y = jackup(0) + ((idx - 1) Mod chunkRowsCnt)
+            
+            'loop回数に対して任意エリアの行数の商を取るとヨコがわかる
+            x = jackup(1) + (idx - 1) \ chunkRowsCnt
+            
+            'セルアドレスの位置情報をR1C1参照として組み立て
+            addr = "R" & y & "C" & x
+            
+            'Rangeオブジェクトに指定できるのは255文字まで
+            If IsOver255(Len(Join(q.ret, ",")) + Len(addr)) Then
+                '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
+                ActiveSheet.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+                '蓄積した位置情報を破棄
+                q.Reset
+            End If
+            
+            'セルアドレスの位置情報を蓄積
+            q.Push addr
+            
+        End If
+    Next
+    
+    If Len(Join(q.ret, ",")) > 0 Then
+        '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
+        ActiveSheet.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+    End If
+
+End Sub
+
+'255文字超を判断するためだけのヘルパーメソッド
+Private Function IsOver255(lenInfo As Integer) As Boolean
+    Dim retValue As Boolean
+    If lenInfo > 255 Then
+        retValue = True
+    End If
+    IsOver255 = retValue
+End Function
+
+'RC形式をA1形式に変換
+'R10C11,R11C12 -> K10,L11
+Private Function ConvertRC2A(concat_addr As String) As String
+    ConvertRC2A = Application.ConvertFormula(concat_addr, xlR1C1, xlA1, xlRelative)
+End Function
+
+'エリア「r」の "原点セルアドレス" をRC形式で取得
+'R10C11 -> [10,11]
+Private Function GetOriginCoordsRC(r As Range) As String()
+    GetOriginCoordsRC = Split(Mid$(r(1, 1).Address(ReferenceStyle:=xlR1C1), 2), "C")
+End Function
