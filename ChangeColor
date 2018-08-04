@@ -1,6 +1,5 @@
 Option Explicit
 
-'http://excel.syogyoumujou.com/vba/speed_up.html 「Test_6」のリファクタリングバージョン
 'Depends on "SpLogic_Que" Class
 Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
 
