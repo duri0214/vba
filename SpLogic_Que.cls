@@ -33,51 +33,55 @@ Function Pop() As String
     Dim retValue As String
     
     If IsValidArray(ary) Then
-        retValue = ary(LBound(ary))             '��LBound!
+        retValue = ary(LBound(ary))             '★LBound!
         If UBound(ary) = 0 Then
             Erase ary
         Else
-            '������changeIndex
+            'ここにchangeIndex
             Dim i As Long
-            For i = 1 To UBound(ary)            '1�`�Y�����ő�l
-                ary(i - 1) = ary(i)             '���Ɉړ�
+            For i = 1 To UBound(ary)            '1～添え字最大値
+                ary(i - 1) = ary(i)             '左に移動
             Next
-            ReDim Preserve ary(UBound(ary) - 1) '�z��v�f��1���炷
+            ReDim Preserve ary(UBound(ary) - 1) '配列要素を1減らす
         End If
     Else
-        MsgBox "PUSH�����񐔂𒴂���POP�����s����܂����B", vbCritical, "ERROR�F�X�^�b�N�z��Null"
-        ary(0) = vbNullString                       '�G���[�ɂ����邽�߂̑[�u
+        MsgBox "PUSHした回数を超えるPOPが実行されました。", vbCritical, "ERROR：スタック配列がNull"
+        ary(0) = vbNullString                       'エラーにさせるための措置
     End If
     
     Pop = retValue
     
 End Function
 
+Sub Reset()
+    Erase ary
+End Sub
+
 Private Function IsValidArray(targetArray() As String) As Boolean
     
-    'targetArray��null���ǂ����𒲂ׂ�֐��B
-    '�{�����̊֐��͂���Ȃ��� if targetArray = null then... �Ƃ�肽���Ƃ��낾��
-    'vba�ł́A�z���null���d���ނ��Ƃ��ł��Ȃ����߁A�킴�킴�G���[�����̏�Ԃɂ��āA
-    '�����I�ɔz��̑�ꎟ���ڂ̗v�f�������߂�
-    '�z��ɃA�N�Z�X�ł��ĂȂ���΁i�G���[��hit���Ă���΁jfalse��Ԃ��i�z��null���Ă���Ă��Ɓj
-    '�z��ɃA�N�Z�X�ł���΁Atrue��Ԃ�
+    'targetArrayがnullかどうかを調べる関数。
+    '本来この関数はいらなくて if targetArray = null then... とやりたいところだが
+    'vbaでは、配列にnullを仕込むことができないため、わざわざエラー無視の状態にして、
+    '強制的に配列の第一次元目の要素数を求める
+    '配列にアクセスできてなければ（エラーがhitしていれば）falseを返す（配列がnullってるってこと）
+    '配列にアクセスできれば、trueを返す
     
     Dim checkValue As Variant
     Dim retValue As Boolean
     
-    On Error Resume Next                                            '�G���[�𖳌���
+    On Error Resume Next                                            'エラーを無効化
     
-    checkValue = UBound(targetArray, 1)                             '�����I�ɔz��̑�ꎟ���ڂ̗v�f�������߂�
+    checkValue = UBound(targetArray, 1)                             '強制的に配列の第一次元目の要素数を求める
     
-    If Err.Number > 0 Then                                          'Error������������A����`�z��ł��B
+    If Err.Number > 0 Then                                          'Errorが発生したら、未定義配列です。
         retValue = False
-    Else                                                            '�����łȂ��Ȃ�A1�ȏ�̗v�f���錾�ς݂ł��B
+    Else                                                            'そうでないなら、1以上の要素が宣言済みです。
         retValue = True
     End If
-    Err.Clear                                                       '�G���[�I�u�W�F�N�g������
+    Err.Clear                                                       'エラーオブジェクト初期化
     
-    On Error GoTo 0                                                 '�G���[��L����
+    On Error GoTo 0                                                 'エラーを有効化
     
-    IsValidArray = retValue                                         '�������ʂ�Ԃ�
+    IsValidArray = retValue                                         '検査結果を返す
 
 End Function
