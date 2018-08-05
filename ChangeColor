@@ -25,9 +25,8 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
     
     '任意のエリア「chunk」をバリアント変数に取得
     data = chunk.value
+    chunkRowsCnt = chunk.Rows.Count
     For Each v In data
-    
-        chunkRowsCnt = chunk.Rows.Count
         
         'loop回数
         idx = idx + 1
