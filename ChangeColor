@@ -1,6 +1,7 @@
 Option Explicit
 
 'Depends on "SpLogic_Que" Class
+'色が塗られるシートは、chunkで指定したrangeのシートです
 Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
 
     '任意のエリア「chunk」の情報
@@ -49,7 +50,7 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
             'Rangeオブジェクトに指定できるのは255文字まで
             If IsOver255(Len(Join(q.ret, ",")) + Len(addr)) Then
                 '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
-                ActiveSheet.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+                chunk.Parent.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
                 '蓄積した位置情報を破棄
                 q.Reset
             End If
@@ -62,7 +63,7 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
     
     If Len(Join(q.ret, ",")) > 0 Then
         '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
-        ActiveSheet.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+        chunk.Parent.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
     End If
 
 End Sub
