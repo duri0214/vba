@@ -67,6 +67,127 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
 
 End Sub
 
+'Depends on "SpLogic_Que" Class
+'色が塗られるシートは、chunkで指定したrangeのシートです
+Sub ChangeColor2(chunk As Range, color As Integer)
+
+    'セルアドレスの位置情報を蓄積
+    Dim q As New SpLogic_Que
+        
+    '【SheetA】色が塗られるシート
+    Dim data() As Variant
+    Dim jackup() As String      '原点まで下駄を履かせるための補正値（行, 列）
+    'タテ検索idxと決定したkey
+    Dim i As Integer
+    Dim key As String
+    'ヨコ検索するヘッダとidxと決定したkey
+    Dim hdr As Variant
+    Dim j As Integer
+    Dim k As Integer
+    Dim addr As String
+    
+    '【SheetB】色塗り対象先リストシート
+    Dim search() As Variant
+    Dim sh As Worksheet
+    Dim r As Range
+    Dim list() As String
+    
+    '任意のエリア「chunk」の原点セルアドレスをRC形式で取得
+    jackup = GetOriginCoordsRC(chunk)
+    
+    '任意のエリア「chunk」をバリアント変数に取得
+    data = chunk.value
+    hdr = chunk(1, 1).Resize(, 22).value
+    For i = LBound(data) To UBound(data)
+        
+        'A）検索キーの確定
+        key = data(i, 1)
+        
+        'B）検索キーで対象先リストが記録されている別シートの範囲をたぐって list を確定
+        Set sh = ThisWorkbook.Worksheets("B")
+        Set r = sh.Range("A2")
+        Set r = sh.Range(r, r.End(xlDown)).Resize(, 2)
+        search = r.value
+        list = GetListByKey(search, key)
+        
+        If IsValidArray(list) Then
+            'C）headerをloopして、値が見つかり次第、セルアドレスの位置情報を蓄積
+            For j = LBound(hdr, 2) To UBound(hdr, 2)
+                For k = 0 To UBound(list)
+                    If hdr(1, j) Like list(k) Then
+                        '▲Notice
+                        'Loop処理中、CellObject一切参照しないために爆速
+            
+                        'セルアドレスの位置情報をR1C1参照として組み立て
+                        addr = "R" & jackup(0) + (i - 1) & "C" & jackup(1) + (j - 1)
+                        'Rangeオブジェクトに指定できるのは255文字まで
+                        If IsOver255(Len(Join(q.ret, ",")) + Len(addr)) Then
+                            '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
+                            chunk.Parent.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+                            '蓄積した位置情報を破棄
+                            q.Reset
+                        End If
+            
+                        'セルアドレスの位置情報を蓄積
+                        q.Push addr
+                    End If
+                Next k
+            Next j
+            If Len(Join(q.ret, ",")) > 0 Then
+                '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
+                chunk.Parent.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+                '蓄積した位置情報を破棄
+                q.Reset
+            End If
+        End If
+
+    Next i
+
+End Sub
+
+Function IsValidArray(targetArray() As String) As Boolean
+    
+    'targetArrayがnullかどうかを調べる関数。
+    '本来この関数はいらなくて if targetArray = null then... とやりたいところだが
+    'vbaでは、配列にnullを仕込むことができないため、わざわざエラー無視の状態にして、
+    '強制的に配列の第一次元目の要素数を求める
+    '配列にアクセスできてなければ（エラーがhitしていれば）falseを返す（配列がnullってるってこと）
+    '配列にアクセスできれば、trueを返す
+    
+    Dim checkValue As Variant
+    Dim retValue As Boolean
+    
+    On Error Resume Next                                            'エラーを無効化
+    
+    checkValue = UBound(targetArray, 1)                             '強制的に配列の第一次元目の要素数を求める
+    
+    If Err.Number > 0 Then                                          'Errorが発生したら、未定義配列です。
+        retValue = False
+    Else                                                            'そうでないなら、1以上の要素が宣言済みです。
+        retValue = True
+    End If
+    Err.Clear                                                       'エラーオブジェクト初期化
+    
+    On Error GoTo 0                                                 'エラーを有効化
+    
+    IsValidArray = retValue                                         '検査結果を返す
+
+End Function
+
+'範囲内のセル（variant）の1列目をkeyで検索して2列目の値を貯めこみ、string配列で返す
+Private Function GetListByKey(search() As Variant, key As String) As String()
+    Dim i As Integer
+    Dim retValue As New SpLogic_Que
+    For i = 1 To UBound(search)
+        '1列目をkeyで検索
+        If search(i, 1) Like key Then
+            '2列目を貯めこみ
+            retValue.Push CStr(search(i, 2))
+        End If
+    Next i
+    GetListByKey = retValue.ret
+End Function
+
 '255文字超を判断するためだけのヘルパーメソッド
 Private Function IsOver255(lenInfo As Integer) As Boolean
     Dim retValue As Boolean
