@@ -114,7 +114,7 @@ Sub ChangeColor2(chunk As Range, color As Integer)
             'C）headerをloopして、値が見つかり次第、セルアドレスの位置情報を蓄積
             For j = LBound(hdr, 2) To UBound(hdr, 2)
                 For k = 0 To UBound(list)
-                    If hdr(1, j) Like list(k) Then
+                    If hdr(1, j) Like "*" & list(k) & "*" Then
                         '▲Notice
                         'Loop処理中、CellObject一切参照しないために爆速
             
