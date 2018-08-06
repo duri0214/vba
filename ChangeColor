@@ -68,8 +68,9 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
 End Sub
 
 'Depends on "SpLogic_Que" Class
-'色が塗られるシートは、chunkで指定したrangeのシートです
-Sub ChangeColor2(chunk As Range, color As Integer)
+'色が塗られるシートは「chunkで指定したrange」のシートです
+'refChunkとは、色を塗る先がリストされているrangeです
+Sub ChangeColor2(chunk As Range, refChunk as Range, color As Integer)
 
     'セルアドレスの位置情報を蓄積
     Dim q As New SpLogic_Que
@@ -97,17 +98,14 @@ Sub ChangeColor2(chunk As Range, color As Integer)
     
     '任意のエリア「chunk」をバリアント変数に取得
     data = chunk.value
-    hdr = chunk(1, 1).Resize(, 22).value
+    hdr = chunk(1, 1).Resize(, chunk.column.count).value
     For i = LBound(data) To UBound(data)
         
         'A）検索キーの確定
         key = data(i, 1)
         
         'B）検索キーで対象先リストが記録されている別シートの範囲をたぐって list を確定
-        Set sh = ThisWorkbook.Worksheets("B")
-        Set r = sh.Range("A2")
-        Set r = sh.Range(r, r.End(xlDown)).Resize(, 2)
-        search = r.value
+        search = refChunk.value
         list = GetListByKey(search, key)
         
         If IsValidArray(list) Then
