@@ -98,7 +98,7 @@ Sub ChangeColor2(chunk As Range, refChunk as Range, color As Integer)
     
     '任意のエリア「chunk」をバリアント変数に取得
     data = chunk.value
-    hdr = chunk(1, 1).Resize(, chunk.column.count).value
+    hdr = chunk(1, 1).Resize(, chunk.columns.count).value
     For i = LBound(data) To UBound(data)
         
         'A）検索キーの確定
