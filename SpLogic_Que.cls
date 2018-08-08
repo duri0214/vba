@@ -48,9 +48,6 @@ Function Pop() As String
             Next
             ReDim Preserve ary(UBound(ary) - 1) '配列要素を1減らす
         End If
-    Else
-        MsgBox "PUSHした回数を超えるPOPが実行されました。", vbCritical, "ERROR：スタック配列がNull"
-        ary(0) = vbNullString                       'エラーにさせるための措置
     End If
     
     Pop = retValue
