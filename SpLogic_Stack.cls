@@ -16,6 +16,10 @@ Property Get Values() As String()
     Values = ary
 End Property
 
+Property Get Join(separate As String) As String
+    Join = Join(ary, ",")
+End Property
+
 Sub Push(value As String)
     
     If Not IsValidArray(ary) Then
