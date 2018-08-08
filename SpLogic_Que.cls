@@ -12,8 +12,8 @@ Option Explicit
 
 Dim ary() As String
 
-Property Get ret() As String()
-    ret = ary
+Property Get Values() As String()
+    Values = ary
 End Property
 
 Sub Push(value As String)
