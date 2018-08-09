@@ -16,8 +16,8 @@ Property Get Values() As String()
     Values = ary
 End Property
 
-Property Get Join(separate As String) As String
-    Join = Join(ary, ",")
+Property Get ValuesJoin(separate As String) As String
+    ValuesJoin = Join(ary, separate)
 End Property
 
 Sub Push(value As String)
