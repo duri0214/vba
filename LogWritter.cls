@@ -75,21 +75,17 @@ Sub WriteLineOneshot(txt As String)
     Const MODE_NEW_CREATE As Integer = 2                                    '新規作成モード
     Const MODE_ADDITIONAL As Integer = 8                                    '追記モード
         
-    If logFileFullPath = vbNullString Then
-          logOutPath = thisworkbook.path & "\log.txt"           '自パスフォルダ取得
-    End If
-    
-    Set objFSO = CreateObject("Scripting.FileSystemObject")
-
+    logOutPath = thisworkbook.path & "\log.txt"                             '自パスフォルダ取得
     If Dir(logOutPath) <> "" Then
         ioMode = MODE_ADDITIONAL                                            'logOutPathファイルがあれば追記モード
     Else
         ioMode = MODE_NEW_CREATE                                            'logOutPathファイルがないなら新規作成
     End If
     
-    Set txtStream = objFSO.OpenTextFile(logOutPath, ioMode, True)           'logOutPathファイルが存在しない場合、新しいファイルを作成（true）
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
+    Set txtStream = objFSO.OpenTextFile(logOutPath, ioMode, True)           'streamを生成
     txtStream.WriteLine txt                                                 'ログ出力
-    txtStream.Close                                                         'ストリームオブジェクト開放
+    txtStream.Close                                                         'streamを解放
     
     Set txtStream = Nothing                                                 '後始末
     Set objFSO = Nothing                                                    '後始末
