@@ -1,0 +1,32 @@
+Option Explicit
+
+'Excel限界を考慮した終端（行または列）を取得
+'ただし、終端（行または列）に移動してから逆方向にEndをかけるため、終端に値が入っている場合はバグる
+'この辺は使い分けだと思います
+Function GetEnd(r As Range, direction As XlDirection) As Range
+
+    Dim retValue As Range
+    
+    Select Case direction
+        Case xlDown
+            'いちど最下行に行ってから Ctrl+↑
+            Set retValue = r.Parent.Cells(r.Parent.Rows.Count, r.Column).End(xlUp)
+        Case xlToLeft
+            'いちど最左端に行ってから Ctrl+ →
+            Set retValue = r.Parent.Cells(r.Row, 1).End(xlToRight)
+        Case xlToRight
+            'いちど最右端に行ってから Ctrl+ ←
+            Set retValue = r.Parent.Cells(r.Row, r.Parent.Columns.Count).End(xlToLeft)
+        Case xlUp
+            'いちど最上端に行ってから Ctrl+ ↓
+            Set retValue = r.Parent.Cells(1, r.Column).End(xlDown)
+    End Select
+    
+    Set GetEnd = retValue
+    
+End Function
+
+'GetEndを利用して基準セル r から、direction 方面に向かってデータの塊領域を取得
+Function GetRegion(r As Range, direction As XlDirection) As Range
+    Set GetRegion = r.Parent.Range(r, GetEnd(r, direction))
+End Function
