@@ -6,7 +6,7 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
 
     '任意のエリア「chunk」の情報
     Dim data() As Variant
-    Dim jackup() As String      '原点まで下駄を履かせるための補正値（行, 列）
+    Dim rcOffset() As String      '原点まで下駄を履かせるための補正値（行, 列）
     Dim chunkRowsCnt As Long    'xを計算確定するための「行数」情報
     
     'loopに必要な変数
@@ -21,7 +21,7 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
     
     
     '任意のエリア「chunk」の原点セルアドレスをRC形式で取得
-    jackup = GetOriginCoordsRC(chunk)
+    rcOffset = GetOriginCoordsRC(chunk)
     
     '任意のエリア「chunk」をバリアント変数に取得
     data = chunk.value
@@ -38,10 +38,10 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
             'Loop処理中、CellObject一切参照しないために爆速
             
             'loop回数に対して任意エリアの行数の剰余を取るとタテがわかる
-            y = jackup(0) + ((idx - 1) Mod chunkRowsCnt)
+            y = rcOffset(0) + ((idx - 1) Mod chunkRowsCnt)
             
             'loop回数に対して任意エリアの行数の商を取るとヨコがわかる
-            x = jackup(1) + (idx - 1) \ chunkRowsCnt
+            x = rcOffset(1) + (idx - 1) \ chunkRowsCnt
             
             'セルアドレスの位置情報をR1C1参照として組み立て
             addr = "R" & y & "C" & x
@@ -77,7 +77,7 @@ Sub ChangeColor2(chunk As Range, refChunk As Range, color As Integer)
         
     '【SheetA】色が塗られるシート
     Dim data() As Variant
-    Dim jackup() As String      '原点まで下駄を履かせるための補正値（行, 列）
+    Dim rcOffset() As String      '原点まで下駄を履かせるための補正値（行, 列）
     'タテ検索idxと決定したkey
     Dim i As Integer
     Dim key As String
@@ -94,7 +94,7 @@ Sub ChangeColor2(chunk As Range, refChunk As Range, color As Integer)
     Dim list() As String
     
     '任意のエリア「chunk」の原点セルアドレスをRC形式で取得
-    jackup = GetOriginCoordsRC(chunk)
+    rcOffset = GetOriginCoordsRC(chunk)
     
     '任意のエリア「chunk」をバリアント変数に取得
     data = chunk.value
@@ -117,7 +117,7 @@ Sub ChangeColor2(chunk As Range, refChunk As Range, color As Integer)
                         'Loop処理中、CellObject一切参照しないために爆速
             
                         'セルアドレスの位置情報をR1C1参照として組み立て
-                        addr = "R" & jackup(0) + (i - 1) & "C" & jackup(1) + (j - 1)
+                        addr = "R" & rcOffset(0) + (i - 1) & "C" & rcOffset(1) + (j - 1)
                         'Rangeオブジェクトに指定できるのは255文字まで
                         If IsOver255(Len(q.ValuesJoin(",")) + Len(addr)) Then
                             '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
