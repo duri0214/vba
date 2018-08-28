@@ -1,6 +1,6 @@
 Option Explicit
 
-'Depends on "SpLogic_Que" Class
+'Depends on "Que" Class
 '色が塗られるシートは、chunkで指定したrangeのシートです
 Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
 
@@ -17,7 +17,7 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
     'loop処理中の、
     Dim v As Variant            'Loop：現在の
     Dim addr As String          'セルアドレスの位置情報
-    Dim q As New SpLogic_Que    'セルアドレスの位置情報を蓄積
+    Dim q As New Que    'セルアドレスの位置情報を蓄積
     
     
     '任意のエリア「chunk」の原点セルアドレスをRC形式で取得
@@ -47,9 +47,9 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
             addr = "R" & y & "C" & x
             
             'Rangeオブジェクトに指定できるのは255文字まで
-            If IsOver255(Len(Join(q.ret, ",")) + Len(addr)) Then
+            If IsOver255(Len(q.ValuesJoin(",")) + Len(addr)) Then
                 '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
-                chunk.Parent.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+                chunk.Parent.Range(ConvertRC2A(q.ValuesJoin(","))).Interior.ColorIndex = color
                 '蓄積した位置情報を破棄
                 q.Reset
             End If
@@ -60,20 +60,20 @@ Sub ChangeColor(chunk As Range, instrText As String, color As Integer)
         End If
     Next
     
-    If Len(Join(q.ret, ",")) > 0 Then
+    If Len(q.ValuesJoin(",")) > 0 Then
         '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
-        chunk.Parent.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+        chunk.Parent.Range(ConvertRC2A(q.ValuesJoin(","))).Interior.ColorIndex = color
     End If
 
 End Sub
 
-'Depends on "SpLogic_Que" Class
+'Depends on "Que" Class
 '色が塗られるシートは「chunkで指定したrange」のシートです
 'refChunkとは、色を塗る先がリストされているrangeです
-Sub ChangeColor2(chunk As Range, refChunk as Range, color As Integer)
+Sub ChangeColor2(chunk As Range, refChunk As Range, color As Integer)
 
     'セルアドレスの位置情報を蓄積
-    Dim q As New SpLogic_Que
+    Dim q As New Que
         
     '【SheetA】色が塗られるシート
     Dim data() As Variant
@@ -98,7 +98,7 @@ Sub ChangeColor2(chunk As Range, refChunk as Range, color As Integer)
     
     '任意のエリア「chunk」をバリアント変数に取得
     data = chunk.value
-    hdr = chunk(1, 1).Resize(, chunk.columns.count).value
+    hdr = chunk(1, 1).Resize(, chunk.Columns.Count).value
     For i = LBound(data) To UBound(data)
         
         'A）検索キーの確定
@@ -119,9 +119,9 @@ Sub ChangeColor2(chunk As Range, refChunk as Range, color As Integer)
                         'セルアドレスの位置情報をR1C1参照として組み立て
                         addr = "R" & jackup(0) + (i - 1) & "C" & jackup(1) + (j - 1)
                         'Rangeオブジェクトに指定できるのは255文字まで
-                        If IsOver255(Len(Join(q.ret, ",")) + Len(addr)) Then
+                        If IsOver255(Len(q.ValuesJoin(",")) + Len(addr)) Then
                             '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
-                            chunk.Parent.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+                            chunk.Parent.Range(ConvertRC2A(q.ValuesJoin(","))).Interior.ColorIndex = color
                             '蓄積した位置情報を破棄
                             q.Reset
                         End If
@@ -131,9 +131,9 @@ Sub ChangeColor2(chunk As Range, refChunk as Range, color As Integer)
                     End If
                 Next k
             Next j
-            If Len(Join(q.ret, ",")) > 0 Then
+            If Len(q.ValuesJoin(",")) > 0 Then
                 '蓄積した位置情報をA1形式に変換してまとめてエフェクトする
-                chunk.Parent.Range(ConvertRC2A(Join(q.ret, ","))).Interior.ColorIndex = color
+                chunk.Parent.Range(ConvertRC2A(q.ValuesJoin(","))).Interior.ColorIndex = color
                 '蓄積した位置情報を破棄
                 q.Reset
             End If
@@ -175,7 +175,7 @@ End Function
 '範囲内のセル（variant）の1列目をkeyで検索して2列目の値を貯めこみ、string配列で返す
 Private Function GetListByKey(search() As Variant, key As String) As String()
     Dim i As Integer
-    Dim retValue As New SpLogic_Que
+    Dim retValue As New Que
     For i = 1 To UBound(search)
         '1列目をkeyで検索
         If search(i, 1) Like key Then
@@ -183,7 +183,7 @@ Private Function GetListByKey(search() As Variant, key As String) As String()
             retValue.Push CStr(search(i, 2))
         End If
     Next i
-    GetListByKey = retValue.ret
+    GetListByKey = retValue.Values
 End Function
 
 '255文字超を判断するためだけのヘルパーメソッド
