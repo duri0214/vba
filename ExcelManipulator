@@ -45,8 +45,6 @@ private Function IsFileExists(filePath As String) As Boolean
     retValue = objFSO.FileExists(filePath)
     IsFileExists = retValue
 End Function
-
-'
 private Function IsFileUsing(path As String) As Boolean
     Dim fileSequence as integer
     Dim retValue as Boolean
@@ -62,7 +60,6 @@ private Function IsFileUsing(path As String) As Boolean
     end if
     IsFileUsing = retValue
 End Function
-
 function IsFileExistsAndNotUsing(path as string) as Boolean
     Dim retValue as Boolean
     if IsFileExists(path) and not IsFileUsing(path) then
