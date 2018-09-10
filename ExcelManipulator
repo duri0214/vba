@@ -30,3 +30,43 @@ End Function
 Function GetRegion(r As Range, direction As XlDirection) As Range
     Set GetRegion = r.Parent.Range(r, GetEnd(r, direction))
 End Function
+
+'IsFileExistsAndNotUsingをFSOSuiteから移管（下のIsFileExistsとIsFileUsingを使用）
+private Function IsFileExists(filePath As String) As Boolean
+    '▲notice
+    'ファイルの存在有無を2値で返します
+    'DIR関数を1ループの中で複数回使いたいときに使用します。
+    'たとえば、フォルダのファイルを全て処理するルーチンで、最初にDIRを使用して
+    'すべてのファイルを処理しようとする中で、さらに単ファイルの存在有無処理が必要に
+    'なったときDIR関数を使うとエラーになります。そのときにこの関数で代替します。
+    Dim objFSO As Object
+    Dim retValue As Boolean
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
+    retValue = objFSO.FileExists(filePath)
+    IsFileExists = retValue
+End Function
+
+'
+private Function IsFileUsing(path As String) As Boolean
+    Dim fileSequence as integer
+    Dim retValue as Boolean
+    if dir(path) <> "" then
+        fileSequence = FreeFile
+        On Error Resume Next
+        Open path For Binary Lock Read Write As #fileSequence
+        close #fileSequence
+    end if
+    if err.number >0 then
+        retValue = true
+        On Error goto 0
+    end if
+    IsFileUsing = retValue
+End Function
+
+function IsFileExistsAndNotUsing(path as string) as Boolean
+    Dim retValue as Boolean
+    if IsFileExists(path) and not IsFileUsing(path) then
+        retValue = true
+    end if
+    IsFileExistsAndNotUsing = retValue
+end function
