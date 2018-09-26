@@ -1,0 +1,69 @@
+Option Explicit
+
+Private header As Range
+Private result As Range
+Private col As Integer
+
+'hdrの座標1,1を基点に、幅・行数が確定する
+'keyには項目名が入ります（例：「取引先名」「ID」など）
+Sub SetInit(hdr As Range, key As String, Optional data As Range = Nothing)
+
+    Set header = hdr
+    col = header.Find(what:=key, LookIn:=xlValues, lookat:=xlWhole).column - (header.Cells(1, 1).column - 1)
+    
+    Dim r As Range
+    
+    If data Is Nothing Then
+        'headerの1行下の行を最初の行としてヘッダー幅の分
+        Set r = header.Offset(1).Resize(, header.Columns.Count)
+        '全量レコードを選択した状態になる
+        Set r = r.Parent.Range(r, r.Cells(1, 1).End(xlDown))
+    Else
+        'Recursiveに2回目以降のときはdataに範囲が入っている前提
+        Set r = data.Resize(, header.Columns.Count)
+    End If
+    
+    Set result = r
+    
+End Sub
+
+'GetCurserの直近の実行結果がここに入ります
+Property Get RecentResult()
+    Set RecentResult = result
+End Property
+
+'resultをベースに検索をかけ、GetRecentResultに再代入します
+'検索結果0の場合はNothingが返ります
+'データは、指定する引数Columnで昇順にする（引数valueと異なった時点で処理完了）
+Function GetCurser(value As String) As Range
+
+    Dim r As Range
+    Dim temp As Variant
+    Dim i As Long
+    Dim cnt As Long
+    
+    'まず、引数で指定された列から単純検索する
+    Set r = result.Cells(, col).EntireColumn.Find(what:=value, LookIn:=xlValues, lookat:=xlWhole)
+    
+    If Not r Is Nothing Then
+    
+        '最初のレコードが確定（検索結果があったらEntireRow選択する）
+        Set r = r.Parent.Cells(r.Row, header.Cells(1, 1).column).Resize(, header.Columns.Count)
+        
+        '引数で指定された列をタテに高速検索していく
+        temp = r.Parent.Range(r, r.End(xlDown))
+        For i = 1 To UBound(temp)
+            If temp(i, col) = value Then
+                cnt = cnt + 1
+            Else
+                '引数valueと異なった時点で脱出（直近のカタマリのみ返す）
+                Exit For
+            End If
+        Next i
+                    
+    End If
+    
+    Set result = r.Resize(cnt)
+    Set GetCurser = r.Resize(cnt)
+    
+End Function
