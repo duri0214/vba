@@ -9,6 +9,9 @@ Private col As Integer
 Sub SetInit(hdr As Range, key As String, Optional data As Range = Nothing)
 
     Set header = hdr
+    
+    'findで見つけた際に手に入る位置情報と、そもそもの表自体がオフセットされていた場合の位置情報が異なるため、差分を取る
+    '例：hdr(A2:A10)に対して検索をかけたときにA3でkeyを見つけた時のkeyの位置はhdr.cells(1, 2)にならなければならない
     col = header.Find(what:=key, LookIn:=xlValues, lookat:=xlWhole).column - (header.Cells(1, 1).column - 1)
     
     Dim r As Range
@@ -42,28 +45,32 @@ Function GetCurser(value As String) As Range
     Dim i As Long
     Dim cnt As Long
     
-    'まず、引数で指定された列から単純検索する
-    Set r = result.Cells(, col).EntireColumn.Find(what:=value, LookIn:=xlValues, lookat:=xlWhole)
-    
-    If Not r Is Nothing Then
-    
-        '最初のレコードが確定（検索結果があったらEntireRow選択する）
-        Set r = r.Parent.Cells(r.Row, header.Cells(1, 1).column).Resize(, header.Columns.Count)
+    If Not result Is Nothing Then
+        'まず、引数で指定された列から単純検索する
+        Set r = result.Cells(, col).EntireColumn.Find(what:=value, LookIn:=xlValues, lookat:=xlWhole)
         
-        '引数で指定された列をタテに高速検索していく
-        temp = r.Parent.Range(r, r.End(xlDown))
-        For i = 1 To UBound(temp)
-            If temp(i, col) = value Then
-                cnt = cnt + 1
-            Else
-                '引数valueと異なった時点で脱出（直近のカタマリのみ返す）
-                Exit For
-            End If
-        Next i
-                    
+        If Not r Is Nothing Then
+        
+            '最初のレコードが確定（検索結果があったらEntireRow選択する）
+            Set r = r.Parent.Cells(r.Row, header.Cells(1, 1).column).Resize(, header.Columns.Count)
+            
+            '引数で指定された列をタテに高速検索していく
+            temp = r.Parent.Range(r, r.End(xlDown))
+            For i = 1 To UBound(temp)
+                If temp(i, col) = value Then
+                    cnt = cnt + 1
+                Else
+                    '引数valueと異なった時点で脱出（直近のカタマリのみ返す）
+                    Exit For
+                End If
+            Next i
+                        
+            Set r = r.Resize(cnt)
+            
+        End If
     End If
     
-    Set result = r.Resize(cnt)
-    Set GetCurser = r.Resize(cnt)
-    
+    Set result = r
+    Set GetCurser = r
+        
 End Function
