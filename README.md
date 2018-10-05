@@ -26,6 +26,29 @@ Private Sub btnSQLServer_Click()
 End Sub
 ```
 
+## ExcelDb
+```Visual Basic:Sample
+    Dim db As New ExcelDb
+    Dim hdr As Range
+    Dim r As Range
+    
+    Set hdr = Target.Parent.Range("B2:O2")
+    db.SetInit hdr:=hdr, key:="タイプ２2"
+    Set r = db.GetCurser("ゴースト")
+    If Not r Is Nothing Then
+        '検索がヒットしたとき
+        db.RecentResult.Select
+        Stop
+    Else
+        '検索が失敗したとき
+        Stop
+    End If
+    
+    db.SetInit hdr:=hdr, key:="通常特性１", data:=r
+    Set r = db.GetCurser("するどいめ")
+    MsgBox db.RecentResult.Address
+```
+
 ## EditString.cls
 ### GetStringLengthB(str As String) As Integer
 Byteで文字カウント
