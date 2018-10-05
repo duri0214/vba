@@ -1,5 +1,31 @@
 # VBA
 
+## SQLServer
+SQLServerからデータを取ってセルにペーストするまでのサンプル
+```
+Private Sub btnSQLServer_Click()
+    
+    Dim r As Range
+    Dim mssql As New SQLServer
+    Dim rs As ADODB.Recordset
+    Dim editSql As String
+    
+    Set r = ActiveSheet.Range("A10")
+    
+    mssql.Connect "localhost\SQLExpress", "db", "python", "python"
+    
+    editSql = "SELECT * FROM [db].[dbo].[顧客]"
+    Set rs = mssql.GetCursor(editSql)
+    
+    If Not rs.EOF Then
+        r.CopyFromRecordset rs
+    End If
+    
+    mssql.DisConnect
+    
+End Sub
+```
+
 ## EditString.cls
 ### GetStringLengthB(str As String) As Integer
 Byteで文字カウント
