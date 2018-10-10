@@ -1,5 +1,22 @@
 # VBA
 
+## ExcelManipulator
+Private Sub btnGraph_Click()
+    
+    Dim u As New ExcelManipulator
+    Dim hanrei As Range
+    Dim header As Range
+    
+    Set hanrei = u.GetRegion(ActiveSheet.Range("A2"), xlDown)
+    Set header = u.GetRegion(ActiveSheet.Range("B1"), xlToRight)
+    
+    '「グラフ 1」の範囲を変更する
+    u.ChangingTheGraphRange "グラフ 1", hanrei, header, xlColumnStacked
+    
+    u.ChangingTheGraphType ActiveSheet, "グラフ 1", "合計", xlLine, xlSecondary, True, , 49407
+    
+End Sub
+
 ## SQLServer
 SQLServerからデータを取ってセルにペーストするまでのサンプル
 ```
