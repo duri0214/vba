@@ -1,5 +1,100 @@
 Option Explicit
 
+'Excel で列番号を英文字に変換する
+'https://support.microsoft.com/ja-jp/help/833402/how-to-convert-excel-column-numbers-into-alphabetical-characters
+Function ConvertToLetter(iCol As Integer) As String
+   Dim iAlpha As Integer
+   Dim iRemainder As Integer
+   iAlpha = Int((iCol - 1) / 26)
+   iRemainder = iCol - (iAlpha * 26)
+   If iAlpha > 0 Then
+      ConvertToLetter = Chr(iAlpha + 64)
+   End If
+   If iRemainder > 0 Then
+      ConvertToLetter = ConvertToLetter & Chr(iRemainder + 64)
+   End If
+End Function
+
+Sub ChangingTheGraphRange(graphName As String, hanreiRange As Range, seriesHeader As Range, graphType As XlChartType)
+
+    Dim seriesCnt As Integer
+    Dim temp As String
+    Dim i As Integer
+    
+    'グラフデータとグラフオブジェクトは、同じシートにある前提
+    With seriesHeader.Parent.ChartObjects(graphName).Chart
+    
+        'シリーズ（データ1行分）の集まりの数を数える
+        seriesCnt = .SeriesCollection.Count
+        
+        'データ1行分が .seriescollection(i) です。それらを削除（グラフはまっしろけになる）
+        For i = seriesCnt To 1 Step -1
+            '先頭から削除するとナンバリングが動的に変わるため、最大Cntから消しにかかる
+            .SeriesCollection(i).Delete
+        Next i
+        
+        'hanreiNameの行数ぶんだけ処理を実行します
+        For i = 1 To hanreiRange.Rows.Count
+            
+            '新しいシリーズデータ
+            .SeriesCollection.NewSeries
+            
+            '新たなデータ参照範囲はseriesHeaderの列数ぶんになります
+            temp = "=SERIES({HANREI},{LABEL},{SERIES},{ORDER})"
+            temp = Replace(temp, "{HANREI}", hanreiRange.Cells(i).Address(external:=True))
+            temp = Replace(temp, "{LABEL}", seriesHeader.Address(external:=True))
+            temp = Replace(temp, "{SERIES}", seriesHeader.Offset(i).Address(external:=True))
+            temp = Replace(temp, "{ORDER}", i)
+            .SeriesCollection(i).Formula = temp
+            .SeriesCollection(i).ChartType = graphType
+            .SeriesCollection(i).axisGroup = xlPrimary
+            
+        Next i
+        
+    End With
+    
+End Sub
+
+Sub ChangingTheGraphType(sh As Worksheet, graphName As String, seriesName As String, graphType As XlChartType, axisGroup As XlAxisGroup, Optional needLabel As Boolean, Optional labelFontSize As Integer = 10, Optional rgbColor As Long)
+
+    Dim i As Integer
+    
+    With sh.ChartObjects(graphName).Chart
+    
+        'TODO：LOOPハズしてシリーズの名前で直接指定できないの？？
+        For i = 1 To .SeriesCollection.Count
+        
+            If .SeriesCollection(i).Name = seriesName Then
+            
+                'グラフの種類
+                .SeriesCollection(i).ChartType = graphType
+                
+                '主軸か第2軸か
+                .SeriesCollection(i).axisGroup = axisGroup
+                
+                'データラベルの表示非表示
+                If needLabel Then
+                    .SeriesCollection(i).HasDataLabels = True
+                    .SeriesCollection(i).DataLabels.ShowValue = True
+                    .SeriesCollection(i).DataLabels.Font.Size = labelFontSize
+                    .SeriesCollection(i).DataLabels.Position = xlLabelPositionAbove
+                Else
+                    .SeriesCollection(i).HasDataLabels = False
+                End If
+                
+                '色の指定
+                If rgbColor <> 0 Then
+                    .SeriesCollection(i).Format.Line.ForeColor.RGB = rgbColor
+                End If
+                
+            End If
+            
+        Next i
+    
+    End With
+
+End Sub
+
 'Excel限界を考慮した終端（行または列）を取得
 'ただし、終端（行または列）に移動してから逆方向にEndをかけるため、終端に値が入っている場合はバグる
 'この辺は使い分けだと思います
@@ -10,7 +105,7 @@ Function GetEnd(r As Range, direction As XlDirection) As Range
     Select Case direction
         Case xlDown
             'いちど最下行に行ってから Ctrl+↑
-            Set retValue = r.Parent.Cells(r.Parent.Rows.Count, r.Column).End(xlUp)
+            Set retValue = r.Parent.Cells(r.Parent.Rows.Count, r.column).End(xlUp)
         Case xlToLeft
             'いちど最左端に行ってから Ctrl+ →
             Set retValue = r.Parent.Cells(r.Row, 1).End(xlToRight)
@@ -19,7 +114,7 @@ Function GetEnd(r As Range, direction As XlDirection) As Range
             Set retValue = r.Parent.Cells(r.Row, r.Parent.Columns.Count).End(xlToLeft)
         Case xlUp
             'いちど最上端に行ってから Ctrl+ ↓
-            Set retValue = r.Parent.Cells(1, r.Column).End(xlDown)
+            Set retValue = r.Parent.Cells(1, r.column).End(xlDown)
     End Select
     
     Set GetEnd = retValue
@@ -32,7 +127,7 @@ Function GetRegion(r As Range, direction As XlDirection) As Range
 End Function
 
 'IsFileExistsAndNotUsingをFSOSuiteから移管（下のIsFileExistsとIsFileUsingを使用）
-private Function IsFileExists(filePath As String) As Boolean
+Private Function IsFileExists(filePath As String) As Boolean
     '▲notice
     'ファイルの存在有無を2値で返します
     'DIR関数を1ループの中で複数回使いたいときに使用します。
@@ -45,25 +140,25 @@ private Function IsFileExists(filePath As String) As Boolean
     retValue = objFSO.FileExists(filePath)
     IsFileExists = retValue
 End Function
-private Function IsFileUsing(path As String) As Boolean
-    Dim fileSequence as integer
-    Dim retValue as Boolean
-    if dir(path) <> "" then
+Private Function IsFileUsing(path As String) As Boolean
+    Dim fileSequence As Integer
+    Dim retValue As Boolean
+    If Dir(path) <> "" Then
         fileSequence = FreeFile
         On Error Resume Next
         Open path For Binary Lock Read Write As #fileSequence
-        close #fileSequence
-    end if
-    if err.number >0 then
-        retValue = true
-        On Error goto 0
-    end if
+        Close #fileSequence
+    End If
+    If Err.Number > 0 Then
+        retValue = True
+        On Error GoTo 0
+    End If
     IsFileUsing = retValue
 End Function
-function IsFileExistsAndNotUsing(path as string) as Boolean
-    Dim retValue as Boolean
-    if IsFileExists(path) and not IsFileUsing(path) then
-        retValue = true
-    end if
+Function IsFileExistsAndNotUsing(path As String) As Boolean
+    Dim retValue As Boolean
+    If IsFileExists(path) And Not IsFileUsing(path) Then
+        retValue = True
+    End If
     IsFileExistsAndNotUsing = retValue
-end function
+End Function
