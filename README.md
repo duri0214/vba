@@ -1,6 +1,8 @@
 # VBA
 
 ## ExcelManipulator
+グラフの範囲変更とグラフ種変更のサンプル
+```
 Private Sub btnGraph_Click()
     
     Dim u As New ExcelManipulator
@@ -16,6 +18,7 @@ Private Sub btnGraph_Click()
     u.ChangingTheGraphType ActiveSheet, "グラフ 1", "合計", xlLine, xlSecondary, True, , 49407
     
 End Sub
+```
 
 ## SQLServer
 SQLServerからデータを取ってセルにペーストするまでのサンプル
