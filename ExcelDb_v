@@ -1,0 +1,126 @@
+Option Explicit
+
+Private header As Variant
+Private result As Variant
+Private col As Long
+
+'前提：あくまでRangeをhdrやdataに代入して「2次元配列」にしないといけません
+'hdrの座標1,1を基点に、幅・行数が確定する
+'keyには項目名が入ります（例：「取引先名」「ID」など）
+Sub SetInit(hdr As Variant, key As String, data As Variant)
+
+    header = hdr
+    
+    Dim i As Integer
+    Dim j As Long
+    
+    'ヘッダーを全部まわって、keyと一致するものがあるか
+    For i = LBound(hdr, 2) To UBound(hdr, 2)
+        If hdr(1, i) = key Then
+            col = i
+        End If
+    Next i
+    
+    '列位置が把握できたらデータを全量持っておく（headerとresultの列方向のサイズは一致する）
+    If col > 0 Then
+    
+        'hdrの列サイズぶんしか配列を持たない
+        ReDim result(LBound(data) To UBound(data), LBound(hdr, 2) To UBound(hdr, 2))
+        
+        For i = LBound(result, 1) To UBound(result, 1)
+            For j = LBound(result, 2) To UBound(result, 2)
+                result(i, j) = data(i, j)
+            Next j
+        Next i
+        
+    End If
+    
+End Sub
+
+Function GetOneLine(data As Variant, row As Long) As Variant
+
+    Dim i As Long
+    Dim retValue As Variant
+    
+    ReDim retValue(LBound(data, 2) To UBound(data, 2))
+    
+    For i = LBound(data, 2) To UBound(data, 2)
+        retValue(i) = data(row, i)
+    Next i
+    
+    GetOneLine = retValue
+    
+End Function
+
+'GetCurserの直近の実行結果がここに入ります
+Property Get RecentResult()
+    Set RecentResult = result
+End Property
+
+Sub AddNewRecord(data As Variant)
+    
+    'http://ivystar.jp/ms-office/how-to-check-the-status-of-before-declaring-an-element-in-the-dynamic-array-of-vba/
+    'Sgn関数は引数にセットした数字の正負を求める関数
+    If IsValidArray(data) Then
+        '追加なら1行増やす
+        ReDim Preserve data(LBound(data) To UBound(data) + 1, 1 To 14) ', LBound(result, 2) To UBound(result, 2))
+    Else
+        '初回なら配列を初期化し（ベースはresult）
+        ReDim data(LBound(result, 1) To LBound(result, 1), LBound(result, 1) To UBound(result, 2))
+    End If
+
+End Sub
+
+'resultをベースに検索をかけ、結果セットをresultに再代入します
+Function GetCurser(value As String) As Variant
+
+    Dim i As Long
+    Dim j As Long
+    Dim retValue As Variant
+    
+    For i = LBound(result) To UBound(result)
+        
+        If result(i, col) = value Then
+        
+            '行が見つかったら retValue の最下段に収録
+            AddNewRecord data:=retValue
+            For j = LBound(result, 2) To UBound(result, 2)
+                retValue(UBound(retValue), j) = result(i, j)
+            Next j
+        End If
+    Next i
+        
+    Set result = retValue
+    Set GetCurser = retValue
+        
+End Function
+
+Private Function IsValidArray(targetArray As Variant) As Boolean
+    
+    'targetArrayがnullかどうかを調べる関数。
+    '本来この関数はいらなくて if targetArray = null then... とやりたいところだが
+    'vbaでは、配列にnullを仕込むことができないため、わざわざエラー無視の状態にして、
+    '強制的に配列の第一次元目の要素数を求める
+    '配列にアクセスできてなければ（エラーがhitしていれば）falseを返す（配列がnullってるってこと）
+    '配列にアクセスできれば、trueを返す
+    
+    Dim checkValue As Variant
+    Dim retValue As Boolean
+    
+    On Error Resume Next                                            'エラーを無効化
+    
+    checkValue = UBound(targetArray, 1)                             '強制的に配列の第一次元目の要素数を求める
+    
+    If Err.Number > 0 Then                                          'Errorが発生したら、未定義配列です。
+        retValue = False
+    Else                                                            'そうでないなら、1以上の要素が宣言済みです。
+        retValue = True
+    End If
+    Err.Clear                                                       'エラーオブジェクト初期化
+    
+    On Error GoTo 0                                                 'エラーを有効化
+    
+    IsValidArray = retValue                                         '検査結果を返す
+
+End Function
+
