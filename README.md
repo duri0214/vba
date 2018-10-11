@@ -83,6 +83,25 @@ End Sub
     MsgBox db.RecentResult.Address
 ```
 
+## ExcelDb_v
+```
+Private Sub btnOneLine_Click()
+
+    Dim db As New ExcelDb_v
+    Dim hdr As Variant
+    Dim key As String
+    Dim data As Variant
+    
+    hdr = ActiveSheet.Range("B2:O2")
+    data = ActiveSheet.Range("B3:O911")
+    
+    db.SetInit hdr:=hdr, key:="タイプ２", data:=data
+    db.GetCurser value:="ゴースト"
+    Stop
+
+End Sub
+```
+
 ## EditString.cls
 ### GetStringLengthB(str As String) As Integer
 Byteで文字カウント
