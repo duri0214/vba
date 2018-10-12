@@ -64,30 +64,6 @@ End Sub
 | 635 | サザンドラ | あく | ドラゴン | ふゆう | 　 | 　 | 92 | 105 | 90 | 125 | 90 | 98 | 600 |
 | 799 | アクジキング | あく | ドラゴン | ビーストブースト | 　 | 　 | 223 | 101 | 53 | 97 | 53 | 43 | 570 |
 
-```vb:Sample
-    Dim db As New ExcelDb
-    Dim hdr As Range
-    Dim r As Range
-    
-    Set hdr = ActiveSheet.Range("B2:O2")
-    db.SetInit hdr:=hdr, key:="タイプ２"
-    Set r = db.GetCurser("ゴースト")
-    If Not r Is Nothing Then
-        '検索がヒットしたとき
-        db.RecentResult.Select
-        Stop
-    Else
-        '検索が失敗したとき
-        Stop
-    End If
-    
-    db.SetInit hdr:=hdr, key:="通常特性１", data:=r
-    Set r = db.GetCurser("するどいめ")
-    MsgBox db.RecentResult.Address
-```
-
-## ExcelDb_v
-シートのB2にExcelDbのサンプルの表を貼り付けてから実行
 ```
 Private Sub btnSearch_v_Click()
 
