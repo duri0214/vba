@@ -3,6 +3,15 @@ Option Explicit
 Private header As Variant
 Private result As Variant
 Private searchCol As Long
+Private origin As Range
+
+ Property Get origin_x() As Long
+    origin_x = origin.column
+ End Property
+
+ Property Get origin_y() As Long
+    origin_y = origin.row
+ End Property
 
 'hdrの列サイズを超えるdataの列は除外される
 Sub SetInit(hdr As Range, data As Range)
@@ -26,6 +35,8 @@ Sub SetInit(hdr As Range, data As Range)
             result(i, j) = temp(i, j)
         Next j
     Next i
+    
+    Set origin = data.Cells(1, 1)
     
 End Sub
 
@@ -78,6 +89,7 @@ Function GetCurser(searchKey As String, searchValue As String) As Variant
     Dim i As Long
     Dim j As Long
     Dim b As Boolean
+    Dim firstFlg As Boolean
     Dim retValue As Variant
     
     'headerを全部まわって、searchKeyと一致するものがあるか
@@ -91,6 +103,7 @@ Function GetCurser(searchKey As String, searchValue As String) As Variant
     Next i
     
     'headerにsearchKeyがあったら検索開始
+    firstFlg = True
     If b Then
         
         'Reset
@@ -102,6 +115,10 @@ Function GetCurser(searchKey As String, searchValue As String) As Variant
                 
                 'Found out
                 b = True
+                If firstFlg Then
+                    Set origin = origin.Cells(i, 1)
+                    firstFlg = False
+                End If
                 
                 'Add New Record
                 retValue = AddNewRecord(retValue)
@@ -121,6 +138,7 @@ Function GetCurser(searchKey As String, searchValue As String) As Variant
     If Not b Then
         retValue = AddNewRecord(retValue)
     End If
+    
     
     result = retValue
     GetCurser = retValue
