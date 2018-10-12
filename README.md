@@ -1,6 +1,4 @@
-# VBA
-
-## ExcelManipulator
+# ExcelManipulator
 グラフの範囲変更とグラフ種変更のサンプル
 ```
 Private Sub btnGraph_Click()
@@ -20,7 +18,7 @@ Private Sub btnGraph_Click()
 End Sub
 ```
 
-## SQLServer
+# SQLServer
 SQLServerからデータを取ってセルにペーストするまでのサンプル
 ```
 Private Sub btnSQLServer_Click()
@@ -46,7 +44,7 @@ Private Sub btnSQLServer_Click()
 End Sub
 ```
 
-## ExcelDb
+# ExcelDb
 シートのB2に以下のサンプルの表を貼り付けてから実行
 
 | 図鑑番号 | ポケモン名 | タイプ１ | タイプ２ | 通常特性１ | 通常特性２ | 夢特性 | HP | こうげき | ぼうぎょ | とくこう | とくぼう | すばやさ | 合計 |
@@ -102,120 +100,120 @@ Private Sub btnSearch_Click()
 End Sub
 ```
 
-## EditString.cls
-### GetStringLengthB(str As String) As Integer
+# EditString.cls
+## GetStringLengthB(str As String) As Integer
 Byteで文字カウント
-### StringCutterForFixed(koteichou As String, separate() As Integer) As String()
+## StringCutterForFixed(koteichou As String, separate() As Integer) As String()
 固定長文字カッター
-### StringCutterForCSV(commaMixString As String) As String()
+## StringCutterForCSV(commaMixString As String) As String()
 Fit(text As String, retLengthB As Integer) As String
 
-## FSOSuite.cls
-### DeleteFile(fileFullPath As String) As String
-### GetFilesCount(folderPath As String) As Integer
-### GetFoldersCount(folderPath As String) As Integer
-### GetFilesCountForCSV(folderPath As String) As Integer
-### GetFilesCountForMDB(folderPath As String) As Integer
-### IsFolderExists(folderPath As String) As Boolean
-### IsFolderExistsAndMakeFolder(folderPath As String)
-### IsFileExists(filePath As String) As Boolean
-### IsValidFileForMdb(mdbPath As String) As Boolean
-### IsValidFileForCSV(csvPath As String) As Boolean
-### GetFileName(filePath As String) As String
-### GetParentFolderPath(filePath As String) As String
-### GetParentFolderName(filePath As String) As String
-### ReadHeaderLineByTextFile(textFileFullPath As String) As String
-### ReadAllByTextFile(textFileFullPath As String) As String
-### InvokeTextArrayByTextFile(textFileFullPath As String) As String()
+# FSOSuite.cls
+## DeleteFile(fileFullPath As String) As String
+## GetFilesCount(folderPath As String) As Integer
+## GetFoldersCount(folderPath As String) As Integer
+## GetFilesCountForCSV(folderPath As String) As Integer
+## GetFilesCountForMDB(folderPath As String) As Integer
+## IsFolderExists(folderPath As String) As Boolean
+## IsFolderExistsAndMakeFolder(folderPath As String)
+## IsFileExists(filePath As String) As Boolean
+## IsValidFileForMdb(mdbPath As String) As Boolean
+## IsValidFileForCSV(csvPath As String) As Boolean
+## GetFileName(filePath As String) As String
+## GetParentFolderPath(filePath As String) As String
+## GetParentFolderName(filePath As String) As String
+## ReadHeaderLineByTextFile(textFileFullPath As String) As String
+## ReadAllByTextFile(textFileFullPath As String) As String
+## InvokeTextArrayByTextFile(textFileFullPath As String) As String()
 
-## Genocider.cls
-### LinkGenocider() As String()
-### LinkGenociderByTheKeywordBeginning(keyword As String) As String()
-### TableGenocider() As String()
-### TableGenociderByTheKeywordBeginning(keyword As String) As String()
-### QueryGenociderByTheKeywordBeginning(keyword As String) As String()
-### FileGenociderForCsvFile(folderPath As String) As String()
-### FileGenociderForExcelFile(folderPath As String) As String()
+# Genocider.cls
+## LinkGenocider() As String()
+## LinkGenociderByTheKeywordBeginning(keyword As String) As String()
+## TableGenocider() As String()
+## TableGenociderByTheKeywordBeginning(keyword As String) As String()
+## QueryGenociderByTheKeywordBeginning(keyword As String) As String()
+## FileGenociderForCsvFile(folderPath As String) As String()
+## FileGenociderForExcelFile(folderPath As String) As String()
 
-## Importer.cls
-### ImportForExcelFiles(folderPath As String, topRecordIsFieldName As Boolean) As String()
-### ImportForCSVFiles(folderPath As String, ImportTeigiMei As String, topRecordIsFieldName As Boolean) As String()
-### ImportForExcelFile(xlFileFullPath As String, topRecordIsFieldName As Boolean) As String
-### ImportForCSVFile(csvFileFullPath As String, ImportTeigiMei As String, topRecordIsFieldName As Boolean) As String
-### ImportForAcTable(ToImportMDBFullPath As String, targetTableName As String) As String
-### ImportForAcTableAndNameEdit(ToImportMDBFullPath As String, targetTableName As String, newName As String) As String
-### ImportForCSVFiles_UsingIni(csvFolder As String) As String()
-### ImportForCSVFile_UsingIni(csvFolder As String, csvFileName As String) As String
+# Importer.cls
+## ImportForExcelFiles(folderPath As String, topRecordIsFieldName As Boolean) As String()
+## ImportForCSVFiles(folderPath As String, ImportTeigiMei As String, topRecordIsFieldName As Boolean) As String()
+## ImportForExcelFile(xlFileFullPath As String, topRecordIsFieldName As Boolean) As String
+## ImportForCSVFile(csvFileFullPath As String, ImportTeigiMei As String, topRecordIsFieldName As Boolean) As String
+## ImportForAcTable(ToImportMDBFullPath As String, targetTableName As String) As String
+## ImportForAcTableAndNameEdit(ToImportMDBFullPath As String, targetTableName As String, newName As String) As String
+## ImportForCSVFiles_UsingIni(csvFolder As String) As String()
+## ImportForCSVFile_UsingIni(csvFolder As String, csvFileName As String) As String
 
-## Linker.cls
-### LinkForExcelFiles(folderPath As String, topRecordIsFieldName As Boolean) As String()
-### LinkForCSVFiles(folderPath As String, linkTeigiMei As String, topRecordIsFieldName As Boolean) As String()
-### LinkForExcelFile(xlFileFullPath As String, topRecordIsFieldName As Boolean) As String
-### LinkForCSVFile(csvFileFullPath As String, linkTeigiMei As String, topRecordIsFieldName As Boolean) As String
-### LinkForAcTable(ToLinkMDBFullPath As String, targetTableName As String) As String
-### LinkForAcTableAndNameEdit(ToLinkMDBFullPath As String, targetTableName As String, newName As String) As String
-### LinkForCSVFiles_UsingIni(csvFolder As String) As String()
-### LinkForCSVFile_UsingIni(csvFolder As String, csvFileName As String) As String
+# Linker.cls
+## LinkForExcelFiles(folderPath As String, topRecordIsFieldName As Boolean) As String()
+## LinkForCSVFiles(folderPath As String, linkTeigiMei As String, topRecordIsFieldName As Boolean) As String()
+## LinkForExcelFile(xlFileFullPath As String, topRecordIsFieldName As Boolean) As String
+## LinkForCSVFile(csvFileFullPath As String, linkTeigiMei As String, topRecordIsFieldName As Boolean) As String
+## LinkForAcTable(ToLinkMDBFullPath As String, targetTableName As String) As String
+## LinkForAcTableAndNameEdit(ToLinkMDBFullPath As String, targetTableName As String, newName As String) As String
+## LinkForCSVFiles_UsingIni(csvFolder As String) As String()
+## LinkForCSVFile_UsingIni(csvFolder As String, csvFileName As String) As String
 
-## LogWritter.cls
-### OpenTextStream(Optional logFileFullPath As String)
-### CloseTextStream()
-### WriteLineLog(txt As String)
-### WriteLine(txt As String)
+# LogWritter.cls
+## OpenTextStream(Optional logFileFullPath As String)
+## CloseTextStream()
+## WriteLineLog(txt As String)
+## WriteLine(txt As String)
 
-## MDBManipulator.cls
+# MDBManipulator.cls
 MDB操作に必要な処理はだいたいこれに詰め込んだ
-### GetOwnFolderPath() As String
-### GetOwnFileName() As String
-### GetOwnFullPath() As String
-### GetQueryNamesByTheKeywordBeginning(keyword As String) As String()
-### ChangeIndexAtThisArray(oldArray() As String, changePlan As String) As String()
-### GetTableSchema(tableName As String, colLikeKeyword As String) As String()
-### CreateMDBFile(newMDBFullPath As String) As String
-### DeleteMDBFile(MDBFullPath As String) As String
-### CreateTable(newTableName As String)
-### AddColumns(tableName As String, columnSchema() As String, typeModel As Integer, Optional columnSize As Integer)
-### AddColumns2(tableName As String, columnSchema() As String)
-### RenameColumns(targetTableName As String, before As String, after As String)
-### RenameTable(targetTableName As String, newTableName As String)
-### DeleteColumn(targetTableName As String, delColumnName As String)
-### DeleteTable(delTableName As String)
-### DeleteQueryObject(delQueryName As String)
-### ExecuteSQL(sql As String)
-### ExecuteQuery(queryName As String)
-### Export2Excel(outputTableOrQuery As String, outputFolder As String) As String
-### Export2ExcelAndNameEdit(outputTableOrQuery As String, newFileFullPath As String) As String
-### CountOfTableRecs(targetTable As String) As Long
-### SetTableDescription(targetTable As String, setumei As String)
-### SetPrimaryKey(targetTable As String, keyString As String)
-### DeletePrimaryKey(targetTable As String)
-### CreateQueryObject(queryContext As String, newQueryName As String)
-### ExportForAcTable(ToExportMDBFullPath As String, targetTableName As String) As String
-### ExportForAcTableAndNameEdit(ToExportMDBFullPath As String, targetTableName As String, newName As String) As String
+## GetOwnFolderPath() As String
+## GetOwnFileName() As String
+## GetOwnFullPath() As String
+## GetQueryNamesByTheKeywordBeginning(keyword As String) As String()
+## ChangeIndexAtThisArray(oldArray() As String, changePlan As String) As String()
+## GetTableSchema(tableName As String, colLikeKeyword As String) As String()
+## CreateMDBFile(newMDBFullPath As String) As String
+## DeleteMDBFile(MDBFullPath As String) As String
+## CreateTable(newTableName As String)
+## AddColumns(tableName As String, columnSchema() As String, typeModel As Integer, Optional columnSize As Integer)
+## AddColumns2(tableName As String, columnSchema() As String)
+## RenameColumns(targetTableName As String, before As String, after As String)
+## RenameTable(targetTableName As String, newTableName As String)
+## DeleteColumn(targetTableName As String, delColumnName As String)
+## DeleteTable(delTableName As String)
+## DeleteQueryObject(delQueryName As String)
+## ExecuteSQL(sql As String)
+## ExecuteQuery(queryName As String)
+## Export2Excel(outputTableOrQuery As String, outputFolder As String) As String
+## Export2ExcelAndNameEdit(outputTableOrQuery As String, newFileFullPath As String) As String
+## CountOfTableRecs(targetTable As String) As Long
+## SetTableDescription(targetTable As String, setumei As String)
+## SetPrimaryKey(targetTable As String, keyString As String)
+## DeletePrimaryKey(targetTable As String)
+## CreateQueryObject(queryContext As String, newQueryName As String)
+## ExportForAcTable(ToExportMDBFullPath As String, targetTableName As String) As String
+## ExportForAcTableAndNameEdit(ToExportMDBFullPath As String, targetTableName As String, newName As String) As String
 
-## UtilYM.cls
+# UtilYM.cls
 日付処理に必要な処理はだいたいこれに詰め込んだ
-### GetFirstYM_InThisPeriod(YYYYAB As String) As String
-### GetLastYM_InThisPeriod(YYYYAB As String) As String
-### GetTheEndOfTheMonth(YYYYMM As String) As String
-### GetTheEndOfTheMonth_RetEM(YYYYMM As String) As String
-### GetNowYM() As String
-### GetAddYM(i As Integer) As String
-### GetAddYM2(YYYYMM As String, i As Integer) As String
-### GetYMInterval(kaishiYM As String, shuryoYM As String) As Integer
-### GetKaikeiNendo(YYYYMM As String) As String
-### GetPeriodYAB(YYYYMM As String) As String
-### GetPeriodEAB(YYYYMM As String) As String
-### GetPeriod_Prev_RetYAB(i As Integer) As String
-### GetPeriod_Prev_RetEAB(i As Integer) As String
-### GetPeriod_Prev_RetFirstYM(i As Integer) As String
-### GetPeriod_Prev_RetFirstEM(i As Integer) As String
-### GetPeriod_Prev_RetLastYM(i As Integer) As String
-### GetPeriod_Prev_RetLastEM(i As Integer) As String
-### GetFormalDate(YYYYMM As String) As String
-### GetFormalDate2(YYYYMMDD As String) As String
-### GetPeriodListYAB(kaishiYM As String, shuryoYM As String) As String()
-### GetPeriodListEAB(kaishiYM As String, shuryoYM As String) As String()
-### GetYesterday() As String
-### ConvertYM2EM(YYYYMM As String) As String
-### ConvertY2E(yyyy As String) As String
+## GetFirstYM_InThisPeriod(YYYYAB As String) As String
+## GetLastYM_InThisPeriod(YYYYAB As String) As String
+## GetTheEndOfTheMonth(YYYYMM As String) As String
+## GetTheEndOfTheMonth_RetEM(YYYYMM As String) As String
+## GetNowYM() As String
+## GetAddYM(i As Integer) As String
+## GetAddYM2(YYYYMM As String, i As Integer) As String
+## GetYMInterval(kaishiYM As String, shuryoYM As String) As Integer
+## GetKaikeiNendo(YYYYMM As String) As String
+## GetPeriodYAB(YYYYMM As String) As String
+## GetPeriodEAB(YYYYMM As String) As String
+## GetPeriod_Prev_RetYAB(i As Integer) As String
+## GetPeriod_Prev_RetEAB(i As Integer) As String
+## GetPeriod_Prev_RetFirstYM(i As Integer) As String
+## GetPeriod_Prev_RetFirstEM(i As Integer) As String
+## GetPeriod_Prev_RetLastYM(i As Integer) As String
+## GetPeriod_Prev_RetLastEM(i As Integer) As String
+## GetFormalDate(YYYYMM As String) As String
+## GetFormalDate2(YYYYMMDD As String) As String
+## GetPeriodListYAB(kaishiYM As String, shuryoYM As String) As String()
+## GetPeriodListEAB(kaishiYM As String, shuryoYM As String) As String()
+## GetYesterday() As String
+## ConvertYM2EM(YYYYMM As String) As String
+## ConvertY2E(yyyy As String) As String
