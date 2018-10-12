@@ -67,7 +67,7 @@ End Sub
 ```
 Private Sub btnSearch_Click()
 
-    'ExcelDb_v のテスト
+    'ExcelDb のテスト
     
     Dim db As New ExcelDb
     Dim hdr As Range
