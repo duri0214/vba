@@ -2,96 +2,128 @@ Option Explicit
 
 Private header As Variant
 Private result As Variant
-Private col As Long
+Private searchCol As Long
 
-'前提：あくまでRangeをhdrやdataに代入して「2次元配列」にしないといけません
-'hdrの座標1,1を基点に、幅・行数が確定する
-'keyには項目名が入ります（例：「取引先名」「ID」など）
-Sub SetInit(hdr As Variant, key As String, data As Variant)
-
-    header = hdr
+'hdrの列サイズを超えるdataの列は除外される
+Sub SetInit(hdr As Range, data As Range)
     
+    Dim temp As Variant
     Dim i As Integer
     Dim j As Long
     
-    'ヘッダーを全部まわって、keyと一致するものがあるか
-    For i = LBound(hdr, 2) To UBound(hdr, 2)
-        If hdr(1, i) = key Then
-            col = i
-        End If
+    'headerの行要素数は必ず1
+    temp = hdr
+    ReDim header(1 To 1, 1 To UBound(temp, 2))
+    For i = 1 To UBound(header, 2)
+        header(1, i) = temp(1, i)
     Next i
-    
-    '列位置が把握できたらデータを全量持っておく（headerとresultの列方向のサイズは一致する）
-    If col > 0 Then
-    
-        'hdrの列サイズぶんしか配列を持たない
-        ReDim result(LBound(data) To UBound(data), LBound(hdr, 2) To UBound(hdr, 2))
-        
-        For i = LBound(result, 1) To UBound(result, 1)
-            For j = LBound(result, 2) To UBound(result, 2)
-                result(i, j) = data(i, j)
-            Next j
-        Next i
-        
-    End If
+
+    'resultの列要素数はheaderの列要素数に依存する
+    temp = data
+    ReDim result(1 To UBound(temp), 1 To UBound(header, 2))
+    For i = 1 To UBound(result)
+        For j = 1 To UBound(result, 2)
+            result(i, j) = temp(i, j)
+        Next j
+    Next i
     
 End Sub
 
-Function GetOneLine(data As Variant, row As Long) As Variant
+'dataのrow行目の1行を返します
+Function GetOneline(data As Variant, row As Long) As Variant
 
     Dim i As Long
     Dim retValue As Variant
     
-    ReDim retValue(LBound(data, 2) To UBound(data, 2))
+    'New
+    ReDim retValue(1 To UBound(data, 2))
     
-    For i = LBound(data, 2) To UBound(data, 2)
+    'Refill
+    For i = 1 To UBound(data, 2)
         retValue(i) = data(row, i)
     Next i
     
-    GetOneLine = retValue
+    GetOneline = retValue
     
 End Function
 
-'GetCurserの直近の実行結果がここに入ります
-Property Get RecentResult()
-    Set RecentResult = result
-End Property
-
-Sub AddNewRecord(data As Variant)
+'dataを1行増やします（dataがnothingの場合、「1行のカラ配列」を戻す）
+Function AddNewRecord(data As Variant)
     
-    'http://ivystar.jp/ms-office/how-to-check-the-status-of-before-declaring-an-element-in-the-dynamic-array-of-vba/
-    'Sgn関数は引数にセットした数字の正負を求める関数
+    Dim retValue As Variant
+    Dim i As Long
+    Dim j As Long
+    
     If IsValidArray(data) Then
-        '追加なら1行増やす
-        ReDim Preserve data(LBound(data) To UBound(data) + 1, 1 To 14) ', LBound(result, 2) To UBound(result, 2))
+        'Add
+        ReDim retValue(1 To UBound(data) + 1, 1 To UBound(result, 2))
+        'Refill
+        For i = 1 To UBound(data)
+            For j = 1 To UBound(data, 2)
+                retValue(i, j) = data(i, j)
+            Next j
+        Next i
     Else
-        '初回なら配列を初期化し（ベースはresult）
-        ReDim data(LBound(result, 1) To LBound(result, 1), LBound(result, 1) To UBound(result, 2))
+        'New
+        ReDim retValue(1 To 1, 1 To UBound(result, 2))
     End If
+    
+    AddNewRecord = retValue
 
-End Sub
+End Function
 
-'resultをベースに検索をかけ、結果セットをresultに再代入します
-Function GetCurser(value As String) As Variant
+'resultにsearchKeyとsearchValueで検索をかけ、結果セットをresultに再代入します
+Function GetCurser(searchKey As String, searchValue As String) As Variant
 
     Dim i As Long
     Dim j As Long
+    Dim b As Boolean
     Dim retValue As Variant
     
-    For i = LBound(result) To UBound(result)
-        
-        If result(i, col) = value Then
-        
-            '行が見つかったら retValue の最下段に収録
-            AddNewRecord data:=retValue
-            For j = LBound(result, 2) To UBound(result, 2)
-                retValue(UBound(retValue), j) = result(i, j)
-            Next j
+    'headerを全部まわって、searchKeyと一致するものがあるか
+    For i = 1 To UBound(header, 2)
+        If header(1, i) = searchKey Then
+            'Found out
+            b = True
+            searchCol = i
+            Exit For
         End If
     Next i
+    
+    'headerにsearchKeyがあったら検索開始
+    If b Then
         
-    Set result = retValue
-    Set GetCurser = retValue
+        'Reset
+        b = False
+        
+        For i = 1 To UBound(result)
+            
+            If result(i, searchCol) = searchValue Then
+                
+                'Found out
+                b = True
+                
+                'Add New Record
+                retValue = AddNewRecord(retValue)
+                
+                'Refill
+                For j = 1 To UBound(result, 2)
+                    retValue(UBound(retValue), j) = result(i, j)
+                Next j
+                
+            End If
+            
+        Next i
+    
+    End If
+    
+    '検索失敗時は「1行のカラ配列」を戻す
+    If Not b Then
+        retValue = AddNewRecord(retValue)
+    End If
+    
+    result = retValue
+    GetCurser = retValue
         
 End Function
 
