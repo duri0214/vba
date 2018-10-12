@@ -69,9 +69,8 @@ Private Sub btnSearch_v_Click()
 
     'ExcelDb_v のテスト
     
-    Dim db As New ExcelDb_v
+    Dim db As New ExcelDb
     Dim hdr As Range
-    Dim key As String
     Dim data As Range
     
     Dim search() As String
