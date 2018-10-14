@@ -1,5 +1,5 @@
 # ExcelManipulator
-グラフの範囲変更とグラフ種変更のサンプル
+## グラフの範囲変更とグラフ種変更のサンプル
 ```
 Private Sub btnGraph_Click()
     
@@ -14,6 +14,49 @@ Private Sub btnGraph_Click()
     u.ChangingTheGraphRange "グラフ 1", hanrei, header, xlColumnStacked
     
     u.ChangingTheGraphType ActiveSheet, "グラフ 1", "合計", xlLine, xlSecondary, True, , 49407
+    
+End Sub
+```
+## オートフィルタ後の範囲をRange取得するサンプル
+```
+Private Sub btnFilter_Click()
+
+    Dim u As New ExcelManipulator
+    Dim r As Range
+    
+    '重ね掛けができます
+    ActiveSheet.AutoFilterMode = False
+    u.GetFilteredRange ActiveSheet.Range("A1:C1"), "MK:1000,9999"
+    Set r = u.GetFilteredRange(ActiveSheet.Range("A1:C1"), "ステータス:B,C")
+    r.Copy ThisWorkbook.Worksheets("Autofiltered").Range("A1")
+    Application.CutCopyMode = False
+    
+End Sub
+```
+## ピボットテーブルを作成するサンプル
+```
+Private Sub btnPivot_Click()
+    
+    Dim u As New ExcelManipulator
+    Dim newSheet As Worksheet
+
+    '作成するシートの決定とシート名の決定
+    Set newSheet = Sheets.Add
+    newSheet.Name = "pvt"
+
+    Dim pvt_name As String
+    Dim pvt_group As String
+    Dim pvt_agg As String
+    Dim pvt_data As Range
+    Dim pvt_destination As Range
+    
+    Set pvt_data = ThisWorkbook.Worksheets("db").Range("J27:L63")
+    
+    pvt_name = "pivot"
+    pvt_group = "MK,ステータス"
+    pvt_agg = "dammy"
+    Set pvt_destination = newSheet.Range("A1")
+    u.CreatePivotTable pvt_name, pvt_group, pvt_agg, pvt_data, pvt_destination
     
 End Sub
 ```
