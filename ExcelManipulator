@@ -15,6 +15,37 @@ Function ConvertToLetter(iCol As Integer) As String
    End If
 End Function
 
+Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_agg As String, pvt_data As Range, pvt_destination As Range)
+    
+    Dim groupby As Variant
+    Dim i As Integer
+    
+    'ピボットテーブルを作成（Excel2010ではVersionは14を指定すること）
+    pvt_destination.Parent.Parent.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=pvt_data, Version:=6).CreatePivotTable TableDestination:=pvt_destination, TableName:=pvt_name, DefaultVersion:=6
+
+    'グループ行の指定
+    groupby = Split(pvt_group, ",")
+    ReDim Preserve groupby(1 To UBound(groupby) + 1)
+    For i = 1 To UBound(groupby)
+        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(groupby(i)).Orientation = xlRowField
+        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(groupby(i)).Position = i
+    Next i
+
+    '集計値の指定
+    pvt_destination.Parent.PivotTables(pvt_name).AddDataField pvt_destination.Parent.PivotTables(pvt_name).PivotFields(pvt_agg), "明細数", xlCount
+
+    '表形式にします
+    pvt_destination.Parent.PivotTables(pvt_name).RowAxisLayout xlTabularRow
+    
+    'グループ行のラベルを繰り返す
+    pvt_destination.Parent.PivotTables(pvt_name).RepeatAllLabels xlRepeatLabels
+    
+    '行と列の集計を行わない（総計を出さない）
+    pvt_destination.Parent.PivotTables(pvt_name).ColumnGrand = False
+    pvt_destination.Parent.PivotTables(pvt_name).RowGrand = False
+
+End Sub
+
 Sub ChangingTheGraphRange(graphName As String, hanreiRange As Range, seriesHeader As Range, graphType As XlChartType)
 
     Dim seriesCnt As Integer
