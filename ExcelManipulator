@@ -15,6 +15,34 @@ Function ConvertToLetter(iCol As Integer) As String
    End If
 End Function
 
+'"項目名:値1,値2,値3"
+Function GetFilteredRange(header As Range, filter As String) As Range
+    
+    Dim temp As Variant
+    
+    Dim i As Integer
+    Dim filter_col As Integer
+    Dim filter_value() As String
+    
+    temp = header
+    
+    '項目名のある列位置を探す
+    For i = 1 To UBound(temp, 2)
+        If temp(1, i) = Split(filter, ":")(0) Then
+            filter_col = header(1, i).column
+        End If
+    Next i
+    
+    '抽出するパラメータ
+    filter_value = Split(Split(filter, ":")(1), ",")
+    
+    'オートフィルタ
+    header.CurrentRegion.AutoFilter filter_col, filter_value, xlFilterValues
+    
+    Set GetFilteredRange = header.CurrentRegion
+    
+End Function
+
 Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_agg As String, pvt_data As Range, pvt_destination As Range)
     
     Dim groupby As Variant
@@ -139,10 +167,10 @@ Function GetEnd(r As Range, direction As XlDirection) As Range
             Set retValue = r.Parent.Cells(r.Parent.Rows.Count, r.column).End(xlUp)
         Case xlToLeft
             'いちど最左端に行ってから Ctrl+ →
-            Set retValue = r.Parent.Cells(r.Row, 1).End(xlToRight)
+            Set retValue = r.Parent.Cells(r.row, 1).End(xlToRight)
         Case xlToRight
             'いちど最右端に行ってから Ctrl+ ←
-            Set retValue = r.Parent.Cells(r.Row, r.Parent.Columns.Count).End(xlToLeft)
+            Set retValue = r.Parent.Cells(r.row, r.Parent.Columns.Count).End(xlToLeft)
         Case xlUp
             'いちど最上端に行ってから Ctrl+ ↓
             Set retValue = r.Parent.Cells(1, r.column).End(xlDown)
