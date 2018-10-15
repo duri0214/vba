@@ -48,8 +48,8 @@ Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_agg As String,
     Dim groupby As Variant
     Dim i As Integer
     
-    'ピボットテーブルを作成（Excel2010ではVersionは14を指定すること）
-    pvt_destination.Parent.Parent.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=pvt_data, Version:=6).CreatePivotTable TableDestination:=pvt_destination, TableName:=pvt_name, DefaultVersion:=6
+    'ピボットテーブルを作成
+    pvt_destination.Parent.Parent.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=pvt_data).CreatePivotTable TableDestination:=pvt_destination, TableName:=pvt_name
 
     'グループ行の指定
     groupby = Split(pvt_group, ",")
