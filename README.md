@@ -52,11 +52,16 @@ Private Sub btnPivot_Click()
     
     Set pvt_data = ThisWorkbook.Worksheets("db").Range("J27:L63")
     
+    'A）Pivotテーブルを仕込む
     pvt_name = "pivot"
     pvt_group = "MK,ステータス"
     pvt_agg = "dammy"
     Set pvt_destination = newSheet.Range("A1")
     u.CreatePivotTable pvt_name, pvt_group, pvt_agg, pvt_data, pvt_destination
+    
+    'A）Pivotテーブルにフィルターを仕込む
+    u.SetFilterOnPivotTable_invisibleList ActiveSheet.PivotTables(1), "ステータス", "A,C"
+    u.SetFilterOnPivotTable_visibleList ActiveSheet.PivotTables(1), "ステータス", "A,C"
     
 End Sub
 ```
