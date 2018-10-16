@@ -60,8 +60,8 @@ Private Sub btnPivot_Click()
     u.CreatePivotTable pvt_name, pvt_group, pvt_agg, pvt_data, pvt_destination
     
     'A）Pivotテーブルにフィルターを仕込む
-    u.SetFilterOnPivotTable_invisibleList ActiveSheet.PivotTables(1), "ステータス", "A,C"
-    u.SetFilterOnPivotTable_visibleList ActiveSheet.PivotTables(1), "ステータス", "A,C"
+    u.SetFilterOnPivotTable ActiveSheet.PivotTables(1), "ステータス", "A,C", False
+    u.SetFilterOnPivotTable ActiveSheet.PivotTables(1), "ステータス", "A,C", True
     
 End Sub
 ```
