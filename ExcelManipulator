@@ -75,7 +75,7 @@ Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_agg As String,
 End Sub
 
 '"値1,値2,値3"
-Sub SetFilterOnPivotTable_visibleList(pvt As PivotTable, filteringColName As String, list As String)
+Sub SetFilterOnPivotTable(pvt As PivotTable, filteringColName As String, list As String, b As Boolean)
     
     Dim temp As Variant
     Dim i As Integer
@@ -87,28 +87,7 @@ Sub SetFilterOnPivotTable_visibleList(pvt As PivotTable, filteringColName As Str
     For Each item In pvt.PivotFields(filteringColName).PivotItems
         For i = 1 To UBound(temp)
             If item.value = temp(i) Then
-                item.Visible = True
-                Exit For
-            End If
-        Next i
-    Next item
-  
-End Sub
-
-'"値1,値2,値3"
-Sub SetFilterOnPivotTable_invisibleList(pvt As PivotTable, filteringColName As String, list As String)
-    
-    Dim temp As Variant
-    Dim i As Integer
-    Dim item As PivotItem
-    
-    temp = Split(list, ",")
-    ReDim Preserve temp(1 To UBound(temp) + 1)
-    
-    For Each item In pvt.PivotFields(filteringColName).PivotItems
-        For i = 1 To UBound(temp)
-            If item.value = temp(i) Then
-                item.Visible = False
+                item.Visible = b
                 Exit For
             End If
         Next i
