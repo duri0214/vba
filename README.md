@@ -66,6 +66,37 @@ Private Sub btnPivot_Click()
 End Sub
 ```
 
+# Array2d_v
+```
+Private Sub btnStart_Click()
+
+    Dim a As New Array2d_v
+
+    Dim u As New ExcelManipulator
+    Dim r As Range
+    Dim data As Variant
+    Dim oneline As Variant
+    
+    '基準セルB10のend.rightとend.downで矩形を範囲取り、variantに代入
+    Set r = u.GetRegion(ActiveSheet.Range("B10"), xlToRight)
+    Set r = u.GetRegion(r, xlDown)
+    data = r
+    
+    '次の行に入れたいonelineを作成する
+    oneline = r.Resize(1).Offset(-1)
+    
+    '追加するonelineと追加されるdataのヨコサイズは一致していないといけない
+    data = a.AddNewRecordAndConcat(data, oneline)
+    
+    '追加された配列をセルに貼り付けるために範囲を把握
+    Set r = r(1, 1).Resize(UBound(data), UBound(data, 2))
+    
+    '貼り付け
+    r = data
+
+End Sub
+```
+
 # SQLServer
 SQLServerからデータを取ってセルにペーストするまでのサンプル
 ```
