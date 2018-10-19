@@ -1,6 +1,6 @@
 # ExcelManipulator
 グラフの範囲変更とグラフ種変更のサンプル
-```
+```vb
 Private Sub btnGraph_Click()
     
     Dim u As New ExcelManipulator
@@ -18,7 +18,7 @@ Private Sub btnGraph_Click()
 End Sub
 ```
 オートフィルタ後の範囲をRange取得するサンプル
-```
+```vb
 Private Sub btnFilter_Click()
 
     Dim u As New ExcelManipulator
@@ -34,7 +34,7 @@ Private Sub btnFilter_Click()
 End Sub
 ```
 ピボットテーブルを作成するサンプル
-```
+```vb
 Private Sub btnPivot_Click()
     
     Dim u As New ExcelManipulator
@@ -68,7 +68,7 @@ End Sub
 
 # Array2d_v
 variant2次元配列を操作します
-```
+```vb
 Private Sub btnStart_Click()
 
     Dim a As New Array2d_v
@@ -100,7 +100,7 @@ End Sub
 
 # SQLServer
 SQLServerからデータを取ってセルにペーストするまでのサンプル
-```
+```vb
 Private Sub btnSQLServer_Click()
     
     Dim r As Range
@@ -142,7 +142,8 @@ End Sub
 | 635 | サザンドラ | あく | ドラゴン | ふゆう | 　 | 　 | 92 | 105 | 90 | 125 | 90 | 98 | 600 |
 | 799 | アクジキング | あく | ドラゴン | ビーストブースト | 　 | 　 | 223 | 101 | 53 | 97 | 53 | 43 | 570 |
 
-```
+```vb
+'Variant返し
 Private Sub btnSearch_Click()
 
     'ExcelDb のテスト
@@ -179,9 +180,33 @@ Private Sub btnSearch_Click()
 
 End Sub
 ```
+```vb
+'Range返し
+Private Sub btnRetRange_Click()
+    
+    Dim db As New ExcelDb
+    Dim hdr As Range
+    Dim data As Range
+    Dim search() As String
+    Dim r As Range
+    
+    Set hdr = ActiveSheet.Range("B2:O2")
+    Set data = ActiveSheet.Range("B3:O14")
+    
+    'Search #Init
+    db.SetInit hdr, data
+    
+    'Search
+    search = Split(InputBox("項目名,検索語句", , "タイプ２,ゴースト"), ",")
+    Set r = db.GetCurser_r(search(0), search(1))
+
+    r.Select
+
+End Sub
+```
 
 # EditString.cls
-```
+```vb
 GetStringLengthB(str As String) As Integer
 Byteで文字カウント
 StringCutterForFixed(koteichou As String, separate() As Integer) As String()
@@ -190,7 +215,7 @@ StringCutterForCSV(commaMixString As String) As String()
 Fit(text As String, retLengthB As Integer) As String
 ```
 # FSOSuite.cls
-```
+```vb
 DeleteFile(fileFullPath As String) As String
 GetFilesCount(folderPath As String) As Integer
 GetFoldersCount(folderPath As String) As Integer
@@ -209,7 +234,7 @@ ReadAllByTextFile(textFileFullPath As String) As String
 InvokeTextArrayByTextFile(textFileFullPath As String) As String()
 ```
 # Genocider.cls
-```
+```vb
 LinkGenocider() As String()
 LinkGenociderByTheKeywordBeginning(keyword As String) As String()
 TableGenocider() As String()
@@ -219,7 +244,7 @@ FileGenociderForCsvFile(folderPath As String) As String()
 FileGenociderForExcelFile(folderPath As String) As String()
 ```
 # Importer.cls
-```
+```vb
 ImportForExcelFiles(folderPath As String, topRecordIsFieldName As Boolean) As String()
 ImportForCSVFiles(folderPath As String, ImportTeigiMei As String, topRecordIsFieldName As Boolean) As String()
 ImportForExcelFile(xlFileFullPath As String, topRecordIsFieldName As Boolean) As String
@@ -230,7 +255,7 @@ ImportForCSVFiles_UsingIni(csvFolder As String) As String()
 ImportForCSVFile_UsingIni(csvFolder As String, csvFileName As String) As String
 ```
 # Linker.cls
-```
+```vb
 LinkForExcelFiles(folderPath As String, topRecordIsFieldName As Boolean) As String()
 LinkForCSVFiles(folderPath As String, linkTeigiMei As String, topRecordIsFieldName As Boolean) As String()
 LinkForExcelFile(xlFileFullPath As String, topRecordIsFieldName As Boolean) As String
@@ -241,7 +266,7 @@ LinkForCSVFiles_UsingIni(csvFolder As String) As String()
 LinkForCSVFile_UsingIni(csvFolder As String, csvFileName As String) As String
 ```
 # LogWritter.cls
-```
+```vb
 OpenTextStream(Optional logFileFullPath As String)
 CloseTextStream()
 WriteLineLog(txt As String)
@@ -250,7 +275,7 @@ WriteLine(txt As String)
 
 # MDBManipulator.cls
 MDB操作に必要な処理はだいたいこれに詰め込んだ
-```
+```vb
 GetOwnFolderPath() As String
 GetOwnFileName() As String
 GetOwnFullPath() As String
@@ -281,7 +306,7 @@ ExportForAcTableAndNameEdit(ToExportMDBFullPath As String, targetTableName As St
 ```
 # UtilYM.cls
 日付処理に必要な処理はだいたいこれに詰め込んだ
-```
+```vb
 GetFirstYM_InThisPeriod(YYYYAB As String) As String
 GetLastYM_InThisPeriod(YYYYAB As String) As String
 GetTheEndOfTheMonth(YYYYMM As String) As String
