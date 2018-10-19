@@ -84,6 +84,7 @@ Function AddNewRecord(data As Variant)
 End Function
 
 'resultにsearchKeyとsearchValueで検索をかけ、結果セットをresultに再代入します
+'見つかった場所の最初の位置がoriginに入ります
 Function GetCurser(searchKey As String, searchValue As String) As Variant
 
     Dim i As Long
@@ -139,10 +140,18 @@ Function GetCurser(searchKey As String, searchValue As String) As Variant
         retValue = AddNewRecord(retValue)
     End If
     
-    
     result = retValue
     GetCurser = retValue
         
+End Function
+
+'resultにsearchKeyとsearchValueで検索をかけ、結果セットをRangeで返します
+Function GetCurser_r(searchKey As String, searchValue As String) As Range
+
+    'resultを更新
+    GetCurser searchKey, searchValue
+    Set GetCurser_r = origin.Resize(UBound(result), UBound(result, 2))
+    
 End Function
 
 Private Function IsValidArray(targetArray As Variant) As Boolean
