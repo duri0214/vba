@@ -1,17 +1,10 @@
 Option Explicit
 
 Private header As Variant
+Private fetch As Variant
 Private result As Variant
 Private searchCol As Long
 Private origin As Range
-
- Property Get origin_x() As Long
-    origin_x = origin.column
- End Property
-
- Property Get origin_y() As Long
-    origin_y = origin.row
- End Property
 
 'hdrの列サイズを超えるdataの列は除外される
 Sub SetInit(hdr As Range, data As Range)
@@ -40,48 +33,31 @@ Sub SetInit(hdr As Range, data As Range)
     
 End Sub
 
-'dataのrow行目の1行を返します
-Function GetOneline(data As Variant, row As Long) As Variant
-
-    Dim i As Long
-    Dim retValue As Variant
+'resultを1行増やします
+Private Sub AddNewRecord()
     
-    'New
-    ReDim retValue(1 To UBound(data, 2))
-    
-    'Refill
-    For i = 1 To UBound(data, 2)
-        retValue(i) = data(row, i)
-    Next i
-    
-    GetOneline = retValue
-    
-End Function
-
-'dataを1行増やします（dataがnothingの場合、「1行のカラ配列」を戻す）
-Function AddNewRecord(data As Variant)
-    
-    Dim retValue As Variant
+    Dim temp As Variant
     Dim i As Long
     Dim j As Long
     
-    If IsValidArray(data) Then
+    If IsValidArray(fetch) Then
         'Add
-        ReDim retValue(1 To UBound(data) + 1, 1 To UBound(result, 2))
+        ReDim temp(1 To UBound(fetch) + 1, 1 To UBound(fetch, 2))
+        
         'Refill
-        For i = 1 To UBound(data)
-            For j = 1 To UBound(data, 2)
-                retValue(i, j) = data(i, j)
+        For i = 1 To UBound(fetch)
+            For j = 1 To UBound(fetch, 2)
+                temp(i, j) = fetch(i, j)
             Next j
         Next i
     Else
         'New
-        ReDim retValue(1 To 1, 1 To UBound(result, 2))
+        ReDim temp(1 To 1, 1 To UBound(result, 2))
     End If
     
-    AddNewRecord = retValue
+    fetch = temp
 
-End Function
+End Sub
 
 'resultにsearchKeyとsearchValueで検索をかけ、結果セットをresultに再代入します
 '見つかった場所の最初の位置がoriginに入ります
@@ -91,57 +67,58 @@ Function GetCurser(searchKey As String, searchValue As String) As Variant
     Dim j As Long
     Dim b As Boolean
     Dim firstFlg As Boolean
-    Dim retValue As Variant
     
-    'headerを全部まわって、searchKeyと一致するものがあるか
-    For i = 1 To UBound(header, 2)
-        If header(1, i) = searchKey Then
-            'Found out
-            b = True
-            searchCol = i
-            Exit For
-        End If
-    Next i
+    'Reset
+    Set fetch = Nothing
     
-    'headerにsearchKeyがあったら検索開始
-    firstFlg = True
-    If b Then
-        
-        'Reset
-        b = False
-        
-        For i = 1 To UBound(result)
-            
-            If result(i, searchCol) = searchValue Then
-                
+    'SetInitをしていないと処理しない
+    If IsValidArray(result) Then
+    
+        'headerを全部まわって、searchKeyと一致するものがあるか
+        For i = 1 To UBound(header, 2)
+            If header(1, i) = searchKey Then
                 'Found out
                 b = True
-                If firstFlg Then
-                    Set origin = origin.Cells(i, 1)
-                    firstFlg = False
+                searchCol = i
+                Exit For
+            End If
+        Next i
+        
+        'headerにsearchKeyがあったら検索開始
+        firstFlg = True
+        If b Then
+            
+            'Reset
+            b = False
+            
+            For i = 1 To UBound(result)
+                
+                If result(i, searchCol) = searchValue Then
+                    
+                    'Found out
+                    b = True
+                    If firstFlg Then
+                        Set origin = origin.Cells(i, 1)
+                        firstFlg = False
+                    End If
+                    
+                    AddNewRecord
+                    
+                    'Refill
+                    For j = 1 To UBound(fetch, 2)
+                        fetch(UBound(fetch), j) = result(i, j)
+                    Next j
+                                        
                 End If
                 
-                'Add New Record
-                retValue = AddNewRecord(retValue)
-                
-                'Refill
-                For j = 1 To UBound(result, 2)
-                    retValue(UBound(retValue), j) = result(i, j)
-                Next j
-                
-            End If
-            
-        Next i
-    
+            Next i
+        
+        End If
+        
     End If
     
-    '検索失敗時は「1行のカラ配列」を戻す
-    If Not b Then
-        retValue = AddNewRecord(retValue)
-    End If
-    
-    result = retValue
-    GetCurser = retValue
+    result = fetch
+    GetCurser = result
         
 End Function
 
