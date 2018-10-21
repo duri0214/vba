@@ -198,7 +198,11 @@ Private Sub btnRetRange_Click()
     search = Split(InputBox("項目名,検索語句", , "タイプ２,ゴースト"), ",")
     Set r = db.GetCurser_r(search(0), search(1))
 
-    r.Select
+    If Not r Is Nothing Then
+        r.Select
+    Else
+        MsgBox "検索結果0件"
+    End If
 
 End Sub
 ```
