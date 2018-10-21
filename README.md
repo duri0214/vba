@@ -203,7 +203,7 @@ Private Sub btnRetRange_Click()
     Else
         MsgBox "検索結果0件"
     End If
-
+    
 End Sub
 ```
 
