@@ -119,10 +119,10 @@ Function GetCurser(searchKey As String, searchValue As String) As Variant
             AddNewRecord
         End If
         
-    End If
-    
     result = fetch
     GetCurser = result
+    
+    End If
         
 End Function
 
@@ -132,8 +132,10 @@ Function GetCurser_r(searchKey As String, searchValue As String) As Range
     'resultを更新
     GetCurser searchKey, searchValue
     
-    If Not IsEmpty(result(1, 1)) Then
-        Set GetCurser_r = origin.Resize(UBound(result), UBound(result, 2))
+    If (IsValidArray(result)) Then
+        If (Not IsEmpty(result(1, 1))) Then
+            Set GetCurser_r = origin.Resize(UBound(result), UBound(result, 2))
+        End If
     End If
     
 End Function
