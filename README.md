@@ -165,18 +165,16 @@ Private Sub btnSearch_Click()
     'Search #1（1発目の検索）
     search = Split(InputBox("項目名,検索語句", , "タイプ２,ゴースト"), ",")
     ret = db.GetCurser(search(0), search(1))
+    '検索結果を書き込む
     Set r = ActiveSheet.Range("B18").Resize(UBound(ret), UBound(ret, 2))
     r = ret
-    ActiveSheet.Cells(db.origin_y, db.origin_x).Resize(UBound(ret), UBound(ret, 2)).Select
-    MsgBox "db.origin_y:" & db.origin_y & ", db.origin_x:" & db.origin_x
     
     'Search #2（1発目の検索結果を使って2発目の検索）
     search = Split(InputBox("項目名,検索語句", , "通常特性１,するどいめ"), ",")
     ret = db.GetCurser(search(0), search(1))
+    '検索結果を書き込む
     Set r = ActiveSheet.Range("B22").Resize(UBound(ret), UBound(ret, 2))
     r = ret
-    ActiveSheet.Cells(db.origin_y, db.origin_x).Resize(UBound(ret), UBound(ret, 2)).Select
-    MsgBox "db.origin_y:" & db.origin_y & ", db.origin_x:" & db.origin_x
 
 End Sub
 ```
