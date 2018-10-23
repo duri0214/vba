@@ -1,5 +1,16 @@
 Option Explicit
 
+'ブックの名前の定義を削除
+Sub GenocideNameInTheBook(bk As Workbook)
+
+    Dim n As Name
+    
+    For Each n In bk.Names
+        n.Delete
+    Next
+    
+End Sub
+
 'エクセルファイルにはびこる「外部ファイルへのリンク」を解除します
 Sub GenocideExternalBookLink(bk As Workbook)
 
