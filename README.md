@@ -1,4 +1,14 @@
 # ExcelManipulator
+ブックの名前の定義を削除
+```
+Private Sub btnNameKill_Click()
+
+    Dim u As New ExcelManipulator
+    
+    u.GenocideNameInTheBook ThisWorkbook
+    
+End Sub
+```
 
 外部ファイルへのリンクを解除
 ```vb
