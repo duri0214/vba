@@ -1,5 +1,10 @@
 Option Explicit
 
+'左上隅をA1に移動する
+Sub MoveA1(sh As Worksheet)
+    sh.Parent.Application.Goto sh.Range("A1"), True
+End Sub
+
 'ブックの名前の定義を削除
 Sub GenocideNameInTheBook(bk As Workbook)
 
