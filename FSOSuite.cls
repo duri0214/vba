@@ -1,81 +1,99 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "FSOSuite"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
-Option Compare Database
 Option Explicit
 
+'pathが誰かによって開かれている場合、ファイル名の末尾に年月日時分秒をつけて返す
+Function GetNewNameIfTheFileIsUsing(path As String) As String
+
+    Dim filename As String
+    Dim idx As Integer
+    Dim ext As String
+    Dim retValue As String
+    
+    retValue = path
+    filename = GetFileName(path)
+    
+    '拡張子があるときに動作条件を満たす
+    idx = InStr(1, filename, ".")
+    If idx > 0 Then
+        
+        '拡張子の決定（例：.xlsx）
+        ext = Mid(filename, idx)
+        
+        If Not IsFileExistsAndNotUsing(path) Then
+            retValue = GetParentFolderName(path) & "\" & Replace(filename, ext, Format(Now(), "_yyyymmddHHMMSS")) & ext
+        End If
+        
+    End If
+    
+    GetNewNameIfTheFileIsUsing = retValue
+
+End Function
+
 'path2つを結合します（フォルダ名の末尾の”\”を自動的に付与）
-Function Combine(path1 as string, path2 as string) as string
-    dim objFSO as object
+Function Combine(path1 As String, path2 As String) As String
+    Dim objFSO As Object
     Set objFSO = CreateObject("Scripting.FileSystemObject")
-    Combine = objFso.BuildPath(path1, path2)
+    Combine = objFSO.BuildPath(path1, path2)
 End Function
 
 'ファイルをバイナリで開いてエラーが返ったら「ファイルが開かれている(True)」と返す
 Function IsFileUsing(path As String) As Boolean
 
-    Dim fileSequence as integer
-    Dim retValue as Boolean
+    Dim fileSequence As Integer
+    Dim retValue As Boolean
 
-    if dir(path) <> "" then
+    If Dir(path) <> "" Then
         fileSequence = FreeFile
         On Error Resume Next
         Open path For Binary Lock Read Write As #fileSequence
-        close #fileSequence
-    end if
+        Close #fileSequence
+    End If
 
-    if err.number >0 then
-        retValue = true
-        On Error goto 0
-    end if
+    If Err.Number > 0 Then
+        retValue = True
+        On Error GoTo 0
+    End If
 
     IsFileUsing = retValue
 
 End Function
 
-function IsFileExistsAndNotUsing(path as string) as Boolean
+Function IsFileExistsAndNotUsing(path As String) As Boolean
 
-    Dim retValue as Boolean
+    Dim retValue As Boolean
 
-    if IsFileExists(path) and not IsFileUsing(path) then
-        retValue = true
-    end if
+    If IsFileExists(path) And Not IsFileUsing(path) Then
+        retValue = True
+    End If
 
     IsFileExistsAndNotUsing = retValue
 
-end function
+End Function
 
-function GetFilelist(folderPath as string) as string()
+Function GetFilelist(folderPath As String) As String()
     
-    const HIDDEN as Integer = 2
-    dim objFSO as object
-    dim f as object
-    dim retValue() as string
+    Const HIDDEN As Integer = 2
+    Dim objFSO As Object
+    Dim f As Object
+    Dim retValue() As String
 
     Set objFSO = CreateObject("Scripting.FileSystemObject")
 
-    if IsfolderExists(folderPath) then
-        For each f in objFSO.GetFolder(folderPath).files
-            if (f.Attributes And HIDDEN) = 0 then
-                if Not IsValidArray(retValue) then  
-                    redim retValue(0)
+    If IsFolderExists(folderPath) Then
+        For Each f In objFSO.GetFolder(folderPath).Files
+            If (f.Attributes And HIDDEN) = 0 Then
+                If Not IsValidArray(retValue) Then
+                    ReDim retValue(0)
                 Else
-                    redim preserve retValue(Ubound(retValue)+1)
-                End if
-                retValue(Ubound(retValue))= folderPath & "\" & f.name
-            end if
-        next f
-    End if
+                    ReDim Preserve retValue(UBound(retValue) + 1)
+                End If
+                retValue(UBound(retValue)) = folderPath & "\" & f.Name
+            End If
+        Next f
+    End If
 
     GetFilelist = retValue
     
-end function
+End Function
 
 Function IsValidArray(targetArray() As String) As Boolean
     
