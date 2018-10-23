@@ -1,5 +1,21 @@
 Option Explicit
 
+'エクセルファイルにはびこる「外部ファイルへのリンク」を解除します
+Sub GenocideExternalBookLink(bk As Workbook)
+
+    Dim aLink As Variant
+    Dim i As Long
+    
+    aLink = bk.LinkSources(Type:=xlLinkTypeExcelLinks)
+
+    If Not IsEmpty(aLink) Then
+        For i = UBound(aLink) To 1 Step -1
+            bk.BreakLink aLink(i), xlLinkTypeExcelLinks
+        Next i
+    End If
+    
+End Sub
+
 Function GetOwnFolderPath() As String
     
     '「C:\hoge\hage.mdb」上で、このメソッドを使用した場合、
