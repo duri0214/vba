@@ -1,4 +1,17 @@
 # ExcelManipulator
+
+外部ファイルへのリンクを解除
+```vb
+Private Sub btnLinkKill_Click()
+
+    Dim u As New ExcelManipulator
+    
+    'エクセルファイルにはびこる「外部ファイルへのリンク」を解除します
+    u.GenocideExternalBookLink ThisWorkbook
+    
+End Sub
+```
+
 各種自パス取得
 ```vb
 Private Sub btnOwnPath_Click()
