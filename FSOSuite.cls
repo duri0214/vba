@@ -1,5 +1,44 @@
 Option Explicit
 
+'そのフォルダのなかで一番新しくできたファイルパスを返す
+Function GetNewestFileInTheFolder(folder As String) As String
+    
+    Dim buf As String
+    Dim d1 As Date
+    Dim d2 As Date
+    Dim firstFlg As Boolean
+    Dim retValue As String
+    
+    firstFlg = True
+    buf = Dir(folder & "\*")
+    Do While buf <> ""
+    
+        If firstFlg Then
+        
+            'Loop初回
+            d1 = FileDateTime(folder & "\" & buf)
+            retValue = folder & "\" & buf
+            firstFlg = False
+            
+        Else
+        
+            'dateで比較
+            d2 = FileDateTime(folder & "\" & buf)
+            If d2 > d1 Then
+                d1 = FileDateTime(folder & "\" & buf)
+                retValue = folder & "\" & buf
+            End If
+            
+        End If
+        
+        buf = Dir()
+        
+    Loop
+    
+    GetNewestFileInTheFolder = retValue
+    
+End Function
+
 'pathが誰かによって開かれている場合、ファイル名の末尾に年月日時分秒をつけて返す
 Function GetNewNameIfTheFileIsUsing(path As String) As String
 
