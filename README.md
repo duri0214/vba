@@ -1,4 +1,16 @@
 # ExcelManipulator
+
+そのフォルダのなかで一番新しくできたファイルパスを返す
+```vb
+Private Sub btnNewestFile_Click()
+
+    Dim fso As New FSOSuite
+    
+    MsgBox fso.GetNewestFileInTheFolder("E:\OneDrive\Desktop")
+    
+End Sub
+```
+
 pathが誰かによって開かれている場合、ファイル名の末尾に年月日時分秒をつけて返す
 ```vb
 Private Sub btnNewname_Click()
