@@ -1,4 +1,14 @@
 # ExcelManipulator
+左上隅をA1に移動する
+```vb
+Private Sub btnMoveA1_Click()
+
+    Dim u As New ExcelManipulator
+    
+    u.MoveA1 ActiveSheet
+
+End Sub
+```
 
 そのフォルダのなかで一番新しくできたファイルパスを返す
 ```vb
