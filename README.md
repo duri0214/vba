@@ -1,4 +1,17 @@
 # ExcelManipulator
+各種自パス取得
+```vb
+Private Sub btnOwnPath_Click()
+    
+    Dim u As New ExcelManipulator
+    
+    MsgBox "u.GetOwnFileName()：" & u.GetOwnFileName()
+    MsgBox "u.GetOwnFolderPath()：" & u.GetOwnFolderPath()
+    MsgBox "u.GetOwnFullPath()：" & u.GetOwnFullPath()
+    
+End Sub
+```
+
 グラフの範囲変更とグラフ種変更のサンプル
 ```vb
 Private Sub btnGraph_Click()
