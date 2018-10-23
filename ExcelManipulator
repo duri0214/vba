@@ -1,5 +1,32 @@
 Option Explicit
 
+Function GetOwnFolderPath() As String
+    
+    '「C:\hoge\hage.mdb」上で、このメソッドを使用した場合、
+    '「C:\hoge」が返る
+    
+    GetOwnFolderPath = ThisWorkbook.path
+    
+End Function
+
+Function GetOwnFileName() As String
+    
+    '「C:\hoge\hage.mdb」上で、このメソッドを使用した場合、
+    '「hage.mdb」が返る
+    
+    GetOwnFileName = ThisWorkbook.Name
+    
+End Function
+
+Function GetOwnFullPath() As String
+    
+    '「C:\hoge\hage.mdb」上で、このメソッドを使用した場合、
+    '「C:\hoge\hage.mdb」が返る
+    
+    GetOwnFullPath = ThisWorkbook.FullName
+    
+End Function
+
 'Excel で列番号を英文字に変換する
 'https://support.microsoft.com/ja-jp/help/833402/how-to-convert-excel-column-numbers-into-alphabetical-characters
 Function ConvertToLetter(iCol As Integer) As String
@@ -94,6 +121,7 @@ Sub SetFilterOnPivotTable(pvt As PivotTable, filteringColName As String, list As
     Next item
   
 End Sub
+
 
 Sub ChangingTheGraphRange(graphName As String, hanreiRange As Range, seriesHeader As Range, graphType As XlChartType)
 
