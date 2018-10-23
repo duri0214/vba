@@ -1,6 +1,17 @@
 # ExcelManipulator
-ブックの名前の定義を削除
+pathが誰かによって開かれている場合、ファイル名の末尾に年月日時分秒をつけて返す
+```vb
+Private Sub btnNewname_Click()
+
+    Dim fso As New FSOSuite
+    
+    MsgBox fso.GetNewNameIfTheFileIsUsing("E:\OneDrive\Desktop\キャッシュフロー計算書.xlsx")
+    
+End Sub
 ```
+
+ブックの名前の定義を削除
+```vb
 Private Sub btnNameKill_Click()
 
     Dim u As New ExcelManipulator
