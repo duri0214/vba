@@ -378,28 +378,100 @@ ExportForAcTableAndNameEdit(ToExportMDBFullPath As String, targetTableName As St
 # UtilYM.cls
 日付処理に必要な処理はだいたいこれに詰め込んだ
 ```vb
-GetFirstYM_InThisPeriod(YYYYAB As String) As String
-GetLastYM_InThisPeriod(YYYYAB As String) As String
-GetTheEndOfTheMonth(YYYYMM As String) As String
-GetTheEndOfTheMonth_RetEM(YYYYMM As String) As String
-GetNowYM() As String
-GetAddYM(i As Integer) As String
-GetAddYM2(YYYYMM As String, i As Integer) As String
-GetYMInterval(kaishiYM As String, shuryoYM As String) As Integer
-GetKaikeiNendo(YYYYMM As String) As String
-GetPeriodYAB(YYYYMM As String) As String
-GetPeriodEAB(YYYYMM As String) As String
-GetPeriod_Prev_RetYAB(i As Integer) As String
-GetPeriod_Prev_RetEAB(i As Integer) As String
-GetPeriod_Prev_RetFirstYM(i As Integer) As String
-GetPeriod_Prev_RetFirstEM(i As Integer) As String
-GetPeriod_Prev_RetLastYM(i As Integer) As String
-GetPeriod_Prev_RetLastEM(i As Integer) As String
-GetFormalDate(YYYYMM As String) As String
-GetFormalDate2(YYYYMMDD As String) As String
-GetPeriodListYAB(kaishiYM As String, shuryoYM As String) As String()
-GetPeriodListEAB(kaishiYM As String, shuryoYM As String) As String()
-GetYesterday() As String
-ConvertYM2EM(YYYYMM As String) As String
-ConvertY2E(yyyy As String) As String
+Private Sub btnUtilYM_Click()
+    
+    Dim ym As New UtilYM
+    
+    Dim yyyyab As String
+    Dim yyyymm As String
+    Dim ym_shift As Integer
+    Dim yyyymmdd As String
+    Dim kaishiYM As String
+    Dim shuryoYM As String
+    Dim yyyy As String
+    
+    '1年には上期(4月-9月)と下期(10月-3月)があり、「上期」「下期」の単語は、ソートすると順番的には逆になってしまう。
+    'そこでそれぞれ「A」「B」になるという経緯があった
+    yyyyab = "2018A"
+    yyyymm = "201806"
+    ym_shift = 3
+    yyyymmdd = "20180714"
+    kaishiYM = "201807"
+    shuryoYM = "201812"
+    yyyy = "2018"
+    
+    '「期」の情報を入力し、その「期」の期初月を返す（例：2018A→201804）
+    MsgBox ym.GetFirstYM_InThisPeriod(yyyyab)
+
+    '「期」の情報を入力し、その「期」の期末月を返す（例：2018A→201809）
+    MsgBox ym.GetLastYM_InThisPeriod(yyyyab)
+
+    '西暦年月を年月の末日に変換する（例：201806 → 20180630）
+    MsgBox ym.GetTheEndOfTheMonth(yyyymm)
+
+    '和暦年月を年月の末日に変換する（例：201806 → 300630）
+    MsgBox ym.GetTheEndOfTheMonth_RetEM(yyyymm)
+
+    'systemYMを返す
+    MsgBox ym.GetNowYM()
+
+    'systemYMに値を加えます（例：201810を現在として、3と引数指定すると201901）
+    MsgBox ym.GetAddYM(ym_shift)
+
+    '基準YMに値を加えます（例：201806を基準として、3と引数指定すると201809）
+    MsgBox ym.GetAddYM2(yyyymm, ym_shift)
+
+    'kaishiYM引数に201807, shuryoYM引数に201812と指定すると、5が返る。
+    MsgBox ym.GetYMInterval(kaishiYM, shuryoYM)
+
+    '指定年月の会計年度を返します（例：201801～201803 → 2017）
+    MsgBox ym.GetKaikeiNendo(yyyymm)
+
+    '引数にYMを入力すると、YYYYAB形式で返る（例：201806 → 2018A）
+    MsgBox ym.GetPeriodYAB(yyyymm)
+
+    '引数にYMを入力すると、YYYYAB形式で返る（例：201806 → 30A）
+    MsgBox ym.GetPeriodEAB(yyyymm)
+
+    '引数値YYYYMMを、YYYY/MM/01のフォーマットに変換
+    MsgBox ym.GetFormalDate(yyyymm)
+
+    '引数値YYYYMMDDフォーマットの年月を、YYYY/MM/DDのフォーマットに変換
+    MsgBox ym.GetFormalDate2(yyyymmdd)
+
+    '昨日の「営業日」を返す。昨日が週末(土, 日)なら再起的に -1 の引き算して平日を返す
+    MsgBox ym.GetYesterday()
+
+    'YMをEMに変換（例：201804 → 3004）
+    MsgBox ym.ConvertYM2EM(yyyymm)
+
+    'YをEに変換（例：2018 → 30）
+    MsgBox ym.ConvertY2E(yyyy)
+    
+    'マニアックなやつ
+    '当月（systemYM - 1）から、期をステップバックした西暦期（YYYYAB）を算出
+    MsgBox ym.GetPeriod_Prev_RetYAB(ym_shift)
+    
+    '当月（systemYM - 1）から、期をステップバックした和暦期（EEAB）を算出
+    MsgBox ym.GetPeriod_Prev_RetEAB(ym_shift)
+    
+    '当月（systemYM - 1）から、期をステップバックした西暦期（YYYYAB）の期初月次を算出
+    MsgBox ym.GetPeriod_Prev_RetFirstYM(ym_shift)
+    
+    '当月（systemYM - 1）から、期をステップバックした和暦期（EEAB）の期初月次を算出
+    MsgBox ym.GetPeriod_Prev_RetFirstEM(ym_shift)
+    
+    '当月（systemYM - 1）から、期をステップバックした西暦期（YYYYAB）の期末月次を算出
+    MsgBox ym.GetPeriod_Prev_RetLastYM(ym_shift)
+    
+    '当月（systemYM - 1）から、期をステップバックした和暦期（EEAB）の期末月次を算出
+    MsgBox ym.GetPeriod_Prev_RetLastEM(ym_shift)
+    
+    '201807～201812までを指定すると「2018A,2018B」という配列を返す
+    MsgBox Join(ym.GetPeriodListYAB(kaishiYM, shuryoYM), ",")
+    
+    '201807～201812までを指定すると、「30A,30B」という配列を返す
+    MsgBox Join(ym.GetPeriodListEAB(kaishiYM, shuryoYM), ",")
+
+End Sub
 ```
