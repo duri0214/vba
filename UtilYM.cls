@@ -1,30 +1,20 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "UtilYM"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
-Option Compare Database
 Option Explicit
 
 Function GetFirstYM_InThisPeriod(YYYYAB As String) As String
     
-    'uŠúv‚Ìî•ñ‚ğ“ü—Í‚µA‚»‚ÌuŠúv‚ÌŠú‰Œ‚ğ•Ô‚·
+    'ã€ŒæœŸã€ã®æƒ…å ±ã‚’å…¥åŠ›ã—ã€ãã®ã€ŒæœŸã€ã®æœŸåˆæœˆã‚’è¿”ã™
     
     Dim retValue As String
     Dim period As String
     
-    period = Right(YYYYAB, 1)               '—áF2008B ‚Ì B
+    period = Right(YYYYAB, 1)               'ä¾‹ï¼š2008B ã® B
     
-    If period = "A" Then                    'ãŠú‚È‚ç
-        retValue = Left(YYYYAB, 4) & "04"   '—áF200804
+    If period = "A" Then                    'ä¸ŠæœŸãªã‚‰
+        retValue = Left(YYYYAB, 4) & "04"   'ä¾‹ï¼š200804
     End If
 
-    If period = "B" Then                    '‰ºŠú‚È‚ç
-        retValue = Left(YYYYAB, 4) & "10"   '—áF200810
+    If period = "B" Then                    'ä¸‹æœŸãªã‚‰
+        retValue = Left(YYYYAB, 4) & "10"   'ä¾‹ï¼š200810
     End If
     
     GetFirstYM_InThisPeriod = retValue
@@ -32,14 +22,14 @@ Function GetFirstYM_InThisPeriod(YYYYAB As String) As String
 End Function
 
 Function GetLastYM_InThisPeriod(YYYYAB As String) As String
-    'uŠúv‚Ìî•ñ‚ğ“ü—Í‚µA‚»‚ÌuŠúv‚ÌŠú––Œ‚ğ•Ô‚·
+    'ã€ŒæœŸã€ã®æƒ…å ±ã‚’å…¥åŠ›ã—ã€ãã®ã€ŒæœŸã€ã®æœŸæœ«æœˆã‚’è¿”ã™
     GetLastYM_InThisPeriod = GetAddYM2(GetFirstYM_InThisPeriod(YYYYAB), 5)
 End Function
 
 Function GetTheEndOfTheMonth(YYYYMM As String) As String
     
-    'YYYYMM‚ğˆø‚«‚ñ‚ÅAŒ––“ú‚ğŠÜ‚ñ‚¾•¶š—ñ‚ğ•Ô‚·
-    '200902 ¨ 20090228
+    'YYYYMMã‚’å¼•ãè¾¼ã‚“ã§ã€æœˆæœ«æ—¥ã‚’å«ã‚“ã æ–‡å­—åˆ—ã‚’è¿”ã™
+    '200902 â†’ 20090228
     
     Dim retValue As String
     
@@ -52,8 +42,8 @@ End Function
 
 Function GetTheEndOfTheMonth_RetEM(YYYYMM As String) As String
 
-    'YYYYMM‚ğˆø‚«‚ñ‚ÅAŒ––“ú‚ğŠÜ‚ñ‚¾•¶š—ñ‚ğ•Ô‚·
-    '200902 ¨ 210228
+    'YYYYMMã‚’å¼•ãè¾¼ã‚“ã§ã€æœˆæœ«æ—¥ã‚’å«ã‚“ã æ–‡å­—åˆ—ã‚’è¿”ã™
+    '200902 â†’ 210228
     
     Dim retValue As String
     
@@ -66,7 +56,7 @@ End Function
 
 Function GetNowYM() As String
     
-    'systemYM‚ğ•Ô‚µ‚Ü‚·
+    'systemYMã‚’è¿”ã—ã¾ã™
     
     GetNowYM = Year(Now) & Format(month(Now), "00")
     
@@ -74,8 +64,8 @@ End Function
 
 Function GetAddYM(i As Integer) As String
     
-    'systemYM‚ÉŒW”‚ğ‰Á–¡‚µ‚½’l‚ğ•Ô‚µ‚Ü‚·B
-    '—á:2008”N01Œ‚ğŒ»İ‚Æ‚µ‚ÄA1‚Æˆø”w’è‚·‚é‚Æ200802, -1‚Æˆø”w’è‚·‚é‚Æ200712
+    'systemYMã«ä¿‚æ•°ã‚’åŠ å‘³ã—ãŸå€¤ã‚’è¿”ã—ã¾ã™ã€‚
+    'ä¾‹:2008å¹´01æœˆã‚’ç¾åœ¨ã¨ã—ã¦ã€1ã¨å¼•æ•°æŒ‡å®šã™ã‚‹ã¨200802, -1ã¨å¼•æ•°æŒ‡å®šã™ã‚‹ã¨200712
     
     Dim kongetu As String
     
@@ -86,8 +76,8 @@ End Function
 
 Function GetAddYM2(YYYYMM As String, i As Integer) As String
     
-    '”CˆÓ‚Ì”NŒ‚ÉŒW”‚ğ‰Á–¡‚µ‚½’l‚ğ•Ô‚µ‚Ü‚·B
-    '—á:yyyymmˆø”‚É2008”N01Œ‚ğ‘ã“ü‚µAiˆø”‚É1‚Æˆø”w’è‚·‚é‚Æ200802, -1‚Æˆø”w’è‚·‚é‚Æ200712
+    'ä»»æ„ã®å¹´æœˆã«ä¿‚æ•°ã‚’åŠ å‘³ã—ãŸå€¤ã‚’è¿”ã—ã¾ã™ã€‚
+    'ä¾‹:yyyymmå¼•æ•°ã«2008å¹´01æœˆã‚’ä»£å…¥ã—ã€iå¼•æ•°ã«1ã¨å¼•æ•°æŒ‡å®šã™ã‚‹ã¨200802, -1ã¨å¼•æ•°æŒ‡å®šã™ã‚‹ã¨200712
     
     Dim retYM As String
     
@@ -98,11 +88,11 @@ End Function
 
 Function GetYMInterval(kaishiYM As String, shuryoYM As String) As Integer
     
-    '”CˆÓ‚Ì”NŒ“¯m‚ÌŠÔŠu‚ğ•Ô‚µ‚Ü‚·B‚ ‚é”NŒ‚©‚ç‚ ‚é”NŒ‚Ü‚Å‚ÌŠÔAƒ‹[ƒv‚·‚éA
-    '‚È‚Ç‚Æ‚¢‚¤ê‡‚É•Ö—˜‚Å‚·B
-    'ˆø”‚ÍYYYYMMŒ`®‚Åw’è‚·‚éB
-    'kaishiYMˆø”‚É200801, shuryoYMˆø”‚É200812‚Æw’è‚·‚é‚ÆA11‚ª•Ô‚éB
-    'ƒ‹[ƒv‚Í0‚ğn“_‚Æ‚µ‚Ä11‰ñƒ‹[ƒv‚³‚¹‚ê‚Î—Ç‚¢B
+    'ä»»æ„ã®å¹´æœˆåŒå£«ã®é–“éš”ã‚’è¿”ã—ã¾ã™ã€‚ã‚ã‚‹å¹´æœˆã‹ã‚‰ã‚ã‚‹å¹´æœˆã¾ã§ã®é–“ã€ãƒ«ãƒ¼ãƒ—ã™ã‚‹ã€
+    'ãªã©ã¨ã„ã†å ´åˆã«ä¾¿åˆ©ã§ã™ã€‚
+    'å¼•æ•°ã¯YYYYMMå½¢å¼ã§æŒ‡å®šã™ã‚‹ã€‚
+    'kaishiYMå¼•æ•°ã«200801, shuryoYMå¼•æ•°ã«200812ã¨æŒ‡å®šã™ã‚‹ã¨ã€11ãŒè¿”ã‚‹ã€‚
+    'ãƒ«ãƒ¼ãƒ—ã¯0ã‚’å§‹ç‚¹ã¨ã—ã¦11å›ãƒ«ãƒ¼ãƒ—ã•ã›ã‚Œã°è‰¯ã„ã€‚
     
     Dim retValue As Integer
     Dim w_kaishiYM As String
@@ -119,10 +109,10 @@ End Function
 
 Function GetKaikeiNendo(YYYYMM As String) As String
     
-    'w’è”NŒ‚Ì‰ïŒv”N“x‚ğ•Ô‚µ‚Ü‚·B
-    '200701`200703 ¨ 2006
-    '200704`200803 ¨ 2007
-    '‚Æ‚¢‚¤Š´‚¶‚É•Ô‚è‚Ü‚·B
+    'æŒ‡å®šå¹´æœˆã®ä¼šè¨ˆå¹´åº¦ã‚’è¿”ã—ã¾ã™ã€‚
+    '200701ï½200703 â†’ 2006
+    '200704ï½200803 â†’ 2007
+    'ã¨ã„ã†æ„Ÿã˜ã«è¿”ã‚Šã¾ã™ã€‚
     
     Dim retYear As String
     Dim retMonth As String
@@ -140,9 +130,9 @@ End Function
 
 Private Function GetPeriod(YYYYMM As String) As String
     
-    'ˆø”‚É¼—ï‚ğ“ü—Í‚·‚é‚ÆAŠú‚ğ•\‚·ƒAƒ‹ƒtƒ@ƒxƒbƒg‚ª•Ô‚è‚Ü‚·
-    '—áF200706‚Æ‚¢‚ê‚½B
-    '•Ô‚Á‚Ä‚­‚é’l‚ÍuAv‚Å‚ ‚éB
+    'å¼•æ•°ã«è¥¿æš¦ã‚’å…¥åŠ›ã™ã‚‹ã¨ã€æœŸã‚’è¡¨ã™ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆãŒè¿”ã‚Šã¾ã™
+    'ä¾‹ï¼š200706ã¨ã„ã‚ŒãŸã€‚
+    'è¿”ã£ã¦ãã‚‹å€¤ã¯ã€ŒAã€ã§ã‚ã‚‹ã€‚
     
     Dim month As Integer
     
@@ -161,13 +151,13 @@ End Function
 
 Function GetPeriodYAB(YYYYMM As String) As String
     
-    'ˆø”‚É¼—ï‚ğ“ü—Í‚·‚é‚ÆAYYYYABŒ`®‚Å•Ô‚µ‚Ü‚·
-    '—áF200706‚Æ‚¢‚ê‚½B
-    '•Ô‚Á‚Ä‚­‚é’l‚Íu2007Av‚Å‚ ‚éB
+    'å¼•æ•°ã«è¥¿æš¦ã‚’å…¥åŠ›ã™ã‚‹ã¨ã€YYYYABå½¢å¼ã§è¿”ã—ã¾ã™
+    'ä¾‹ï¼š200706ã¨ã„ã‚ŒãŸã€‚
+    'è¿”ã£ã¦ãã‚‹å€¤ã¯ã€Œ2007Aã€ã§ã‚ã‚‹ã€‚
     
     Dim retValue As String
     
-    retValue = GetKaikeiNendo(YYYYMM) & GetPeriod(YYYYMM)  'YYYYAB•ÏŠ·
+    retValue = GetKaikeiNendo(YYYYMM) & GetPeriod(YYYYMM)  'YYYYABå¤‰æ›
     
     GetPeriodYAB = retValue
 
@@ -175,9 +165,9 @@ End Function
 
 Function GetPeriodEAB(YYYYMM As String) As String
     
-    'ˆø”‚É¼—ï‚ğ“ü—Í‚·‚é‚ÆA”N†ABŒ`®‚Å•Ô‚µ‚Ü‚·
-    '—áF200706‚Æ‚¢‚ê‚½B
-    '•Ô‚Á‚Ä‚­‚é’l‚Íu19Av‚Å‚ ‚éB
+    'å¼•æ•°ã«è¥¿æš¦ã‚’å…¥åŠ›ã™ã‚‹ã¨ã€å¹´å·ABå½¢å¼ã§è¿”ã—ã¾ã™
+    'ä¾‹ï¼š200706ã¨ã„ã‚ŒãŸã€‚
+    'è¿”ã£ã¦ãã‚‹å€¤ã¯ã€Œ19Aã€ã§ã‚ã‚‹ã€‚
     
     Dim kaikeiNendo As String
     Dim retValue As String
@@ -190,19 +180,19 @@ Function GetPeriodEAB(YYYYMM As String) As String
 End Function
 
 Function GetPeriod_Prev_RetYAB(i As Integer) As String
-    '“–ŒisystemYM - 1j‚©‚çAŠú‚ğƒXƒeƒbƒvƒoƒbƒN‚µ‚½¼—ïŠúiYYYYABj‚ğZo
+    'å½“æœˆï¼ˆsystemYM - 1ï¼‰ã‹ã‚‰ã€æœŸã‚’ã‚¹ãƒ†ãƒƒãƒ—ãƒãƒƒã‚¯ã—ãŸè¥¿æš¦æœŸï¼ˆYYYYABï¼‰ã‚’ç®—å‡º
     GetPeriod_Prev_RetYAB = GetPeriodYAB(GetAddYM(-1 - (6 * i)))
 End Function
 
 Function GetPeriod_Prev_RetEAB(i As Integer) As String
-    '“–ŒisystemYM - 1j‚©‚çAŠú‚ğƒXƒeƒbƒvƒoƒbƒN‚µ‚½˜a—ïŠúiEEABj‚ğZo
+    'å½“æœˆï¼ˆsystemYM - 1ï¼‰ã‹ã‚‰ã€æœŸã‚’ã‚¹ãƒ†ãƒƒãƒ—ãƒãƒƒã‚¯ã—ãŸå’Œæš¦æœŸï¼ˆEEABï¼‰ã‚’ç®—å‡º
     GetPeriod_Prev_RetEAB = GetPeriodEAB(GetAddYM(-1 - (6 * i)))
 End Function
 
 Function GetPeriod_Prev_RetFirstYM(i As Integer) As String
 
-    '“–ŒisystemYM - 1j‚©‚çAŠú‚ğƒXƒeƒbƒvƒoƒbƒN‚µ‚½¼—ïŠúiYYYYABj‚ğZo‚µA
-    'Zo‚µ‚½Šú‚ÌŠú‰ŒŸ‚ğ•Ô‚·
+    'å½“æœˆï¼ˆsystemYM - 1ï¼‰ã‹ã‚‰ã€æœŸã‚’ã‚¹ãƒ†ãƒƒãƒ—ãƒãƒƒã‚¯ã—ãŸè¥¿æš¦æœŸï¼ˆYYYYABï¼‰ã‚’ç®—å‡ºã—ã€
+    'ç®—å‡ºã—ãŸæœŸã®æœŸåˆæœˆæ¬¡ã‚’è¿”ã™
     Dim retValue As String
     
     retValue = GetPeriod_Prev_RetYAB(i)
@@ -215,8 +205,8 @@ End Function
 
 Function GetPeriod_Prev_RetFirstEM(i As Integer) As String
 
-    '“–ŒisystemYM - 1j‚©‚çAŠú‚ğƒXƒeƒbƒvƒoƒbƒN‚µ‚½˜a—ïŠúiEEABj‚ğZo‚µA
-    'Zo‚µ‚½Šú‚ÌŠú‰ŒŸ‚ğ•Ô‚·
+    'å½“æœˆï¼ˆsystemYM - 1ï¼‰ã‹ã‚‰ã€æœŸã‚’ã‚¹ãƒ†ãƒƒãƒ—ãƒãƒƒã‚¯ã—ãŸå’Œæš¦æœŸï¼ˆEEABï¼‰ã‚’ç®—å‡ºã—ã€
+    'ç®—å‡ºã—ãŸæœŸã®æœŸåˆæœˆæ¬¡ã‚’è¿”ã™
     Dim retValue As String
     
     retValue = GetPeriod_Prev_RetEAB(i)
@@ -229,8 +219,8 @@ End Function
 
 Function GetPeriod_Prev_RetLastYM(i As Integer) As String
 
-    '“–ŒisystemYM - 1j‚©‚çAŠú‚ğƒXƒeƒbƒvƒoƒbƒN‚µ‚½¼—ïŠúiYYYYABj‚ğZo‚µA
-    'Zo‚µ‚½Šú‚ÌŠú––ŒŸ‚ğ•Ô‚·
+    'å½“æœˆï¼ˆsystemYM - 1ï¼‰ã‹ã‚‰ã€æœŸã‚’ã‚¹ãƒ†ãƒƒãƒ—ãƒãƒƒã‚¯ã—ãŸè¥¿æš¦æœŸï¼ˆYYYYABï¼‰ã‚’ç®—å‡ºã—ã€
+    'ç®—å‡ºã—ãŸæœŸã®æœŸæœ«æœˆæ¬¡ã‚’è¿”ã™
     Dim retValue As String
     
     retValue = GetAddYM2(GetPeriod_Prev_RetFirstYM(i), 5)
@@ -241,8 +231,8 @@ End Function
 
 Function GetPeriod_Prev_RetLastEM(i As Integer) As String
 
-    '“–ŒisystemYM - 1j‚©‚çAŠú‚ğƒXƒeƒbƒvƒoƒbƒN‚µ‚½˜a—ïŠúiEEABj‚ğZo‚µA
-    'Zo‚µ‚½Šú‚ÌŠú––ŒŸ‚ğ•Ô‚·
+    'å½“æœˆï¼ˆsystemYM - 1ï¼‰ã‹ã‚‰ã€æœŸã‚’ã‚¹ãƒ†ãƒƒãƒ—ãƒãƒƒã‚¯ã—ãŸå’Œæš¦æœŸï¼ˆEEABï¼‰ã‚’ç®—å‡ºã—ã€
+    'ç®—å‡ºã—ãŸæœŸã®æœŸæœ«æœˆæ¬¡ã‚’è¿”ã™
     Dim retValue As String
     
     retValue = ConvertYM2EM(GetAddYM2(GetPeriod_Prev_RetFirstYM(i), 5))
@@ -253,8 +243,8 @@ End Function
 
 Function GetFormalDate(YYYYMM As String) As String
     
-    'ˆø”’lYYYYMMƒtƒH[ƒ}ƒbƒg‚Ì”NŒ‚ğAYYYY/MM/01‚ÌƒtƒH[ƒ}ƒbƒg‚É•ÏŠ·‚·‚éB
-    '”NŒ“¯m‚ğƒRƒ“ƒyƒAŠÖ”‚É‚Ğ‚Á‚©‚¯‚½‚è‚·‚é‚Æ‚«‚Ég—p‚·‚é
+    'å¼•æ•°å€¤YYYYMMãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®å¹´æœˆã‚’ã€YYYY/MM/01ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¤‰æ›ã™ã‚‹ã€‚
+    'å¹´æœˆåŒå£«ã‚’ã‚³ãƒ³ãƒšã‚¢é–¢æ•°ã«ã²ã£ã‹ã‘ãŸã‚Šã™ã‚‹ã¨ãã«ä½¿ç”¨ã™ã‚‹
     Dim retValue As String
     retValue = Left(YYYYMM, 4) & "/" & Right(YYYYMM, 2) & "/01"
     GetFormalDate = retValue
@@ -263,8 +253,8 @@ End Function
 
 Function GetFormalDate2(YYYYMMDD As String) As String
     
-    'ˆø”’lYYYYMMDDƒtƒH[ƒ}ƒbƒg‚Ì”NŒ‚ğAYYYY/MM/DD‚ÌƒtƒH[ƒ}ƒbƒg‚É•ÏŠ·‚·‚éB
-    '”NŒ“¯m‚ğƒRƒ“ƒyƒAŠÖ”‚É‚Ğ‚Á‚©‚¯‚½‚è‚·‚é‚Æ‚«‚Ég—p‚·‚é
+    'å¼•æ•°å€¤YYYYMMDDãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®å¹´æœˆã‚’ã€YYYY/MM/DDã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¤‰æ›ã™ã‚‹ã€‚
+    'å¹´æœˆåŒå£«ã‚’ã‚³ãƒ³ãƒšã‚¢é–¢æ•°ã«ã²ã£ã‹ã‘ãŸã‚Šã™ã‚‹ã¨ãã«ä½¿ç”¨ã™ã‚‹
     Dim retValue As String
     retValue = Left(YYYYMMDD, 4) & "/" & Mid(YYYYMMDD, 5, 2) & "/" & Right(YYYYMMDD, 2)
     GetFormalDate2 = retValue
@@ -273,17 +263,17 @@ End Function
 
 Function GetPeriodListYAB(kaishiYM As String, shuryoYM As String) As String()
     
-    '”z—ñ‚ğnullˆµ‚¢‚É‚Å‚«‚È‚¢‚Ì‚ÅA­X•¡G‰»‚¹‚´‚é‚ğ“¾‚È‚¢
-    '•”•ª“I‚ÉƒGƒ‰[–³‹ó‘Ô‚É‚µ‚ÄA”z—ñ‚Ì0”Ô–Ú‚ÉƒAƒNƒZƒX‚µAƒGƒ‰[‚ª”­¶‚µ‚½‚çA
-    '”z—ñ‚ğ1—v‘f•ª‚Æ‚µ‚Ä‰Šú‰»‚·‚éB
+    'é…åˆ—ã‚’nullæ‰±ã„ã«ã§ããªã„ã®ã§ã€å°‘ã€…è¤‡é›‘åŒ–ã›ã–ã‚‹ã‚’å¾—ãªã„
+    'éƒ¨åˆ†çš„ã«ã‚¨ãƒ©ãƒ¼ç„¡è¦–çŠ¶æ…‹ã«ã—ã¦ã€é…åˆ—ã®0ç•ªç›®ã«ã‚¢ã‚¯ã‚»ã‚¹ã—ã€ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ãŸã‚‰ã€
+    'é…åˆ—ã‚’1è¦ç´ åˆ†ã¨ã—ã¦åˆæœŸåŒ–ã™ã‚‹ã€‚
     
-    '200504`200504‚Ü‚Å‚ğw’è‚·‚é‚ÆAu2005Av‚Æ‚¢‚¤”z—ñ‚ğ•Ô‚·
-    '200504`200712‚Ü‚Å‚ğw’è‚·‚é‚ÆAu2005A,2005B,2006A,2006B,2007A,2007Bv‚Æ‚¢‚¤”z—ñ‚ğ•Ô‚·
+    '200504ï½200504ã¾ã§ã‚’æŒ‡å®šã™ã‚‹ã¨ã€ã€Œ2005Aã€ã¨ã„ã†é…åˆ—ã‚’è¿”ã™
+    '200504ï½200712ã¾ã§ã‚’æŒ‡å®šã™ã‚‹ã¨ã€ã€Œ2005A,2005B,2006A,2006B,2007A,2007Bã€ã¨ã„ã†é…åˆ—ã‚’è¿”ã™
     
     Dim crrYM As String
     Dim crrPeriod As String
     Dim compPeriod As String
-    Dim boundFor As Integer                                             'ƒ‹[ƒv‚Ìs‚«~‚Ü‚è
+    Dim boundFor As Integer                                             'ãƒ«ãƒ¼ãƒ—ã®è¡Œãæ­¢ã¾ã‚Š
     
     Dim retValue() As String
     Dim firstProc As Boolean
@@ -293,7 +283,7 @@ Function GetPeriodListYAB(kaishiYM As String, shuryoYM As String) As String()
     firstProc = True
     compPeriod = vbNullString
     
-    boundFor = GetYMInterval(kaishiYM, shuryoYM)                        'ƒ‹[ƒvI—¹idxZo
+    boundFor = GetYMInterval(kaishiYM, shuryoYM)                        'ãƒ«ãƒ¼ãƒ—çµ‚äº†idxç®—å‡º
     
     For i = 0 To boundFor
     
@@ -304,27 +294,27 @@ Function GetPeriodListYAB(kaishiYM As String, shuryoYM As String) As String()
             
             If firstProc = False Then
                 If IsValidArray(retValue) = False Then
-                    ReDim retValue(0)                                   'ƒGƒ‰[‚µ‚½‚Æ‚¢‚¤‚±‚Æ‚ÍA”z—ñ‚ªnull‚È‚Ì‚Å‰Šú‰»
+                    ReDim retValue(0)                                   'ã‚¨ãƒ©ãƒ¼ã—ãŸã¨ã„ã†ã“ã¨ã¯ã€é…åˆ—ãŒnullãªã®ã§åˆæœŸåŒ–
                 Else
-                    ReDim Preserve retValue(UBound(retValue) + 1)       '”z—ñƒTƒCƒY‘—Ê
+                    ReDim Preserve retValue(UBound(retValue) + 1)       'é…åˆ—ã‚µã‚¤ã‚ºå¢—é‡
                 End If
-                retValue(UBound(retValue)) = compPeriod                 '”z—ñ‚ÌÅŒã‚É”N†‚Ì‘ã“ü
+                retValue(UBound(retValue)) = compPeriod                 'é…åˆ—ã®æœ€å¾Œã«å¹´å·ã®ä»£å…¥
             Else
                 firstProc = False
             End If
                         
-            compPeriod = crrPeriod                                      'compPeriod‚ÌXV
+            compPeriod = crrPeriod                                      'compPeriodã®æ›´æ–°
             
         End If
         
     Next i
       
     If IsValidArray(retValue) = False Then
-        ReDim retValue(0)                                   'ƒGƒ‰[‚µ‚½‚Æ‚¢‚¤‚±‚Æ‚ÍA”z—ñ‚ªnull‚È‚Ì‚Å‰Šú‰»
+        ReDim retValue(0)                                   'ã‚¨ãƒ©ãƒ¼ã—ãŸã¨ã„ã†ã“ã¨ã¯ã€é…åˆ—ãŒnullãªã®ã§åˆæœŸåŒ–
     Else
-        ReDim Preserve retValue(UBound(retValue) + 1)       '”z—ñƒTƒCƒY‘—Ê
+        ReDim Preserve retValue(UBound(retValue) + 1)       'é…åˆ—ã‚µã‚¤ã‚ºå¢—é‡
     End If
-    retValue(UBound(retValue)) = compPeriod                 '”z—ñ‚ÌÅŒã‚É”N†‚Ì‘ã“ü
+    retValue(UBound(retValue)) = compPeriod                 'é…åˆ—ã®æœ€å¾Œã«å¹´å·ã®ä»£å…¥
     
     GetPeriodListYAB = retValue
     
@@ -332,8 +322,8 @@ End Function
 
 Function GetPeriodListEAB(kaishiYM As String, shuryoYM As String) As String()
         
-    '200504`200504‚Ü‚Å‚ğw’è‚·‚é‚ÆAu17Av‚Æ‚¢‚¤”z—ñ‚ğ•Ô‚·
-    '200504`200712‚Ü‚Å‚ğw’è‚·‚é‚ÆAu17A,17B,18A,18B,19A,19Bv‚Æ‚¢‚¤”z—ñ‚ğ•Ô‚·
+    '200504ï½200504ã¾ã§ã‚’æŒ‡å®šã™ã‚‹ã¨ã€ã€Œ17Aã€ã¨ã„ã†é…åˆ—ã‚’è¿”ã™
+    '200504ï½200712ã¾ã§ã‚’æŒ‡å®šã™ã‚‹ã¨ã€ã€Œ17A,17B,18A,18B,19A,19Bã€ã¨ã„ã†é…åˆ—ã‚’è¿”ã™
     
     Dim retValue() As String
     Dim i As Integer
@@ -341,9 +331,9 @@ Function GetPeriodListEAB(kaishiYM As String, shuryoYM As String) As String()
     
     retValue = GetPeriodListYAB(kaishiYM, shuryoYM)
     
-    '£notice
-    'GetPeriodList‚©‚ç•Ô‚Á‚Ä‚«‚½”z—ñ—v‘f‚É‘Î‚µ‚ÄA¼—ïŒ^PeriodiYYYYABj‚Ì¶4Œ…‚ğ˜a—ï‚É•Ï‚¦‚Ä‚¢‚é‚¾‚¯B
-    '2007B ¨ 19B
+    'â–²notice
+    'GetPeriodListã‹ã‚‰è¿”ã£ã¦ããŸé…åˆ—è¦ç´ ã«å¯¾ã—ã¦ã€è¥¿æš¦å‹Periodï¼ˆYYYYABï¼‰ã®å·¦4æ¡ã‚’å’Œæš¦ã«å¤‰ãˆã¦ã„ã‚‹ã ã‘ã€‚
+    '2007B â†’ 19B
     
     For i = 0 To UBound(retValue)
         crrSeireki = Left(retValue(i), 4)
@@ -356,20 +346,20 @@ End Function
 
 Function GetYesterday() As String
     
-    'ğ“ú‰c‹Æ“ú‚ğæ‚èo‚·ŠÖ”
-    '"ğ“ú"‚Ì“ú•t‚ğæ“¾‚µ‚ÄA‚»‚Ì—j“ú‚ªT––(“y, “ú)‚È‚çAÄ‹N“I‚É -1“ú ‚Ìˆø‚«Z‚µ‚Ä
-    '"•½“ú(Œ`‹à)"‚Ì“ú•t[=ğ“ú‰c‹Æ“ú]‚ğæ‚èo‚· YYYY/MM/DD
-    'j“ú–¢‘Î‰
+    'æ˜¨æ—¥å–¶æ¥­æ—¥ã‚’å–ã‚Šå‡ºã™é–¢æ•°
+    '"æ˜¨æ—¥"ã®æ—¥ä»˜ã‚’å–å¾—ã—ã¦ã€ãã®æ›œæ—¥ãŒé€±æœ«(åœŸ, æ—¥)ãªã‚‰ã€å†èµ·çš„ã« -1æ—¥ ã®å¼•ãç®—ã—ã¦
+    '"å¹³æ—¥(æœˆï½é‡‘)"ã®æ—¥ä»˜[=æ˜¨æ—¥å–¶æ¥­æ—¥]ã‚’å–ã‚Šå‡ºã™ YYYY/MM/DD
+    'ç¥æ—¥æœªå¯¾å¿œ
     
     Dim retValue As String
-    Dim —j“ú As Integer
+    Dim æ›œæ—¥ As Integer
     
-    retValue = DateAdd("d", -1, Date)           'ğ“ú
+    retValue = DateAdd("d", -1, Date)           'æ˜¨æ—¥
         
 Looop:
-    —j“ú = Weekday(retValue, vbMonday)          'Œ—j‚ğŠî“_‚Æ‚µ‚Ä 1:Œ`7:“ú ‚Ì’l‚ª•Ô‚é
-    If —j“ú >= 6 Then                           '“y—j“ú(6)‚©“ú—j“ú(7)‚È‚ç
-        retValue = DateAdd("d", -1, retValue)   'Ä‹N“I‚É -1“ú ‚Ìˆø‚«Z
+    æ›œæ—¥ = Weekday(retValue, vbMonday)          'æœˆæ›œã‚’åŸºç‚¹ã¨ã—ã¦ 1:æœˆï½7:æ—¥ ã®å€¤ãŒè¿”ã‚‹
+    If æ›œæ—¥ >= 6 Then                           'åœŸæ›œæ—¥(6)ã‹æ—¥æ›œæ—¥(7)ãªã‚‰
+        retValue = DateAdd("d", -1, retValue)   'å†èµ·çš„ã« -1æ—¥ ã®å¼•ãç®—
         GoTo Looop
     End If
     
@@ -379,44 +369,44 @@ End Function
 
 Private Function IsValidArray(targetArray() As String) As Boolean
     
-    'targetArray‚ªnull‚©‚Ç‚¤‚©‚ğ’²‚×‚éŠÖ”B
-    'vba‚Å‚ÍA”z—ñ‚Énull‚ğd‚Ş‚±‚Æ‚ª‚Å‚«‚È‚¢‚½‚ß
-    '–{—ˆ‚±‚ÌŠÖ”‚Í‚¢‚ç‚È‚­‚Ä if targetArray = null then... ‚Æ‚â‚è‚½‚¢‚Æ‚±‚ë‚¾‚ª
-    '‚»‚ê‚ª‚Å‚«‚È‚­‚ÄA‚í‚´‚í‚´ƒGƒ‰[–³‹‚Ìó‘Ô‚É‚µ‚ÄA
-    '”z—ñ‚Ì‘æˆê—v‘f–Ú‚ÉƒAƒNƒZƒXB
-    '”z—ñ‚ÉƒAƒNƒZƒX‚Å‚«‚Ä‚È‚¯‚ê‚ÎiƒGƒ‰[‚ªhit‚µ‚Ä‚¢‚ê‚Îjfalse‚ğ•Ô‚·i”z—ñ‚ªnull‚Á‚Ä‚é‚Á‚Ä‚±‚Æj
-    '”z—ñ‚ÉƒAƒNƒZƒX‚Å‚«‚ê‚ÎAtrue‚ğ•Ô‚·
+    'targetArrayãŒnullã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹é–¢æ•°ã€‚
+    'vbaã§ã¯ã€é…åˆ—ã«nullã‚’ä»•è¾¼ã‚€ã“ã¨ãŒã§ããªã„ãŸã‚
+    'æœ¬æ¥ã“ã®é–¢æ•°ã¯ã„ã‚‰ãªãã¦ if targetArray = null then... ã¨ã‚„ã‚ŠãŸã„ã¨ã“ã‚ã ãŒ
+    'ãã‚ŒãŒã§ããªãã¦ã€ã‚ã–ã‚ã–ã‚¨ãƒ©ãƒ¼ç„¡è¦–ã®çŠ¶æ…‹ã«ã—ã¦ã€
+    'é…åˆ—ã®ç¬¬ä¸€è¦ç´ ç›®ã«ã‚¢ã‚¯ã‚»ã‚¹ã€‚
+    'é…åˆ—ã«ã‚¢ã‚¯ã‚»ã‚¹ã§ãã¦ãªã‘ã‚Œã°ï¼ˆã‚¨ãƒ©ãƒ¼ãŒhitã—ã¦ã„ã‚Œã°ï¼‰falseã‚’è¿”ã™ï¼ˆé…åˆ—ãŒnullã£ã¦ã‚‹ã£ã¦ã“ã¨ï¼‰
+    'é…åˆ—ã«ã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚Œã°ã€trueã‚’è¿”ã™
     
     Dim checkValue As Variant
     Dim retValue As Boolean
     
-    On Error Resume Next            'ƒGƒ‰[‚ğ–³Œø‰»
+    On Error Resume Next            'ã‚¨ãƒ©ãƒ¼ã‚’ç„¡åŠ¹åŒ–
     
-    checkValue = targetArray(0)     '”z—ñ‚Ì‘æˆê—v‘f‚ÉƒAƒNƒZƒX
+    checkValue = targetArray(0)     'é…åˆ—ã®ç¬¬ä¸€è¦ç´ ã«ã‚¢ã‚¯ã‚»ã‚¹
     
-    If checkValue = Empty Then      'ŒŸ¸’l‚ªEmpty‚ğ¦‚·‚È‚çA–¢’è‹`”z—ñ‚Å‚·B
+    If checkValue = Empty Then      'æ¤œæŸ»å€¤ãŒEmptyã‚’ç¤ºã™ãªã‚‰ã€æœªå®šç¾©é…åˆ—ã§ã™ã€‚
         retValue = False
-    Else                            '‚»‚¤‚Å‚È‚¢‚È‚çA1ˆÈã‚Ì—v‘f‚ªéŒ¾Ï‚İ‚Å‚·B
+    Else                            'ãã†ã§ãªã„ãªã‚‰ã€1ä»¥ä¸Šã®è¦ç´ ãŒå®£è¨€æ¸ˆã¿ã§ã™ã€‚
         retValue = True
     End If
-    Err.Clear                       'ƒGƒ‰[ƒIƒuƒWƒFƒNƒg‰Šú‰»
+    Err.Clear                       'ã‚¨ãƒ©ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåˆæœŸåŒ–
     
-    On Error GoTo 0                 'ƒGƒ‰[‚ğ—LŒø‰»
+    On Error GoTo 0                 'ã‚¨ãƒ©ãƒ¼ã‚’æœ‰åŠ¹åŒ–
     
-    IsValidArray = retValue         'ŒŸ¸Œ‹‰Ê‚ğ•Ô‚·
+    IsValidArray = retValue         'æ¤œæŸ»çµæœã‚’è¿”ã™
 
 End Function
 
 Function ConvertYM2EM(YYYYMM As String) As String
 
-    '—áFu200604v¨u1804v‚Æ•ÏŠ·
+    'ä¾‹ï¼šã€Œ200604ã€â†’ã€Œ1804ã€ã¨å¤‰æ›
     ConvertYM2EM = Format(Left(YYYYMM, 4) & "/" & Right(YYYYMM, 2), "e") & Right(YYYYMM, 2)
     
 End Function
 
 Function ConvertY2E(yyyy As String) As String
     
-    '—áFu2006v¨u18v‚Æ•ÏŠ·
+    'ä¾‹ï¼šã€Œ2006ã€â†’ã€Œ18ã€ã¨å¤‰æ›
     ConvertY2E = Format(yyyy & "/01", "e")
     
 End Function
