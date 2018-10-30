@@ -57,7 +57,7 @@ Function GetNewNameIfTheFileIsUsing(path As String) As String
         '拡張子の決定（例：.xlsx）
         ext = Mid(filename, idx)
         
-        If Not IsFileExistsAndNotUsing(path) Then
+        If IsFileUsing(path) Then
             retValue = GetParentFolderName(path) & "\" & Replace(filename, ext, Format(Now(), "_yyyymmddHHMMSS")) & ext
         End If
         
