@@ -1,5 +1,19 @@
 Option Explicit
 
+'フォルダへのショートカットをつくる
+Function CreateFolderShortCut(targetFolder As String, destinationFolder As String)
+    
+    Dim objWshShell
+    Set objWshShell = CreateObject("WScript.Shell")
+    
+    Dim objShortcut
+    
+    Set objShortcut = objWshShell.CreateShortCut(destinationFolder & "\" & Dir(targetFolder, vbDirectory) & " - ショートカット.lnk")
+    objShortcut.TargetPath = targetFolder
+    objShortcut.Save
+    
+End Function
+        
 'そのフォルダのなかで一番新しくできたファイルパスを返す
 Function GetNewestFileInTheFolder(folder As String) As String
     
