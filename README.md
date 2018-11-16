@@ -1,4 +1,15 @@
 # ExcelManipulator
+そのシート名があるかを bool で返す
+```vb
+Private Sub checkTheSheet_Click()
+
+    Dim u As New ExcelManipulator
+    MsgBox u.IsSheetExists(ThisWorkbook, "A"), vbInformation, "A"
+    MsgBox u.IsSheetExists(ThisWorkbook, "Q"), vbInformation, "Q"
+
+End Sub
+```
+
 左上隅をA1に移動する
 ```vb
 Private Sub btnMoveA1_Click()
