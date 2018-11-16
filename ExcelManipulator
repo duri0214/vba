@@ -1,8 +1,25 @@
 Option Explicit
 
+'シートがあったらTrue
+Function IsSheetExists(bk As Workbook, sh_name As String) As Boolean
+
+    Dim sh As Worksheet
+    Dim retValue As Boolean
+    
+    For Each sh In Worksheets
+        If sh.Name = sh_name Then
+            retValue = True
+            Exit For
+        End If
+    Next sh
+    
+    IsSheetExists = retValue
+
+End Function
+
 '左上隅をA1に移動する
 Sub MoveA1(sh As Worksheet)
-    sh.Parent.Application.Goto sh.Range("A1"), True
+    sh.Parent.Application.GoTo sh.Range("A1"), True
 End Sub
 
 'ブックの名前の定義を削除
