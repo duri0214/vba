@@ -1,4 +1,12 @@
 # ExcelManipulator
+セル範囲を文字結合する
+```vb
+Private Sub btnConcat_Click()
+    Dim u As New ExcelManipulator
+    MsgBox u.ConcatenateRangeValue(ActiveSheet.Range("B23:C24"), ",")
+End Sub
+```
+
 vba本流のCopyFileは、自分自身が開いている場合の別名コピーができない
 ```vb
 Private Sub btnFSOCopy_Click()
