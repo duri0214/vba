@@ -1,5 +1,26 @@
 Option Explicit
 
+'r を連結（単一ディレクションにおいての使用を前提としているが、連結順番としては右に行って1段下がるを繰り返す）
+Function ConcatenateRangeValue(r As Range, delimiter As String) As String
+
+    Dim temp As Range
+    Dim retValue As String
+    Dim firstFlg As Boolean
+    
+    firstFlg = True
+    For Each temp In r
+        If firstFlg Then
+            retValue = temp.value
+            firstFlg = False
+        Else
+            retValue = retValue & delimiter & temp.value
+        End If
+    Next temp
+    
+    ConcatenateRangeValue = retValue
+    
+End Function
+
 'シートがあったらTrue
 Function IsSheetExists(bk As Workbook, sh_name As String) As Boolean
 
