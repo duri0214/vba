@@ -1,5 +1,12 @@
 Option Explicit
 
+'vba本流のCopyFileは、自分自身が開いている場合の別名コピーができない対策
+Sub CopyFile(source As String, destination As String)
+    Dim objFSO As Object
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
+    objFSO.CopyFile source, destination
+End Sub
+
 'フォルダへのショートカットをつくる
 Function CreateFolderShortCut(targetFolder As String, destinationFolder As String)
     
