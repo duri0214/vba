@@ -1,4 +1,12 @@
 # ExcelManipulator
+vba本流のCopyFileは、自分自身が開いている場合の別名コピーができない
+```vb
+Private Sub btnFSOCopy_Click()
+    Dim fso As New FSOSuite
+    fso.CopyFile "C:\Users\yoshi\Desktop\パソコン処分.pdf", "C:\Users\yoshi\Desktop\パソコン処分_cp.pdf"
+End Sub
+```
+
 そのシート名があるかを bool で返す
 ```vb
 Private Sub checkTheSheet_Click()
