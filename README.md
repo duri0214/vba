@@ -108,9 +108,9 @@ Private Sub btnGraph_Click()
     Set header = u.GetRegion(ActiveSheet.Range("B1"), xlToRight)
     
     '「グラフ 1」の範囲を変更する
-    g.ChangingTheGraphRange "グラフ 1", hanrei, header, xlColumnStacked
+    g.SetGraphRange "グラフ 1", hanrei, header, xlColumnStacked
     
-    g.ChangingTheGraphType ActiveSheet, "グラフ 1", "合計", xlLine, xlSecondary, True, , 49407
+    g.SetGraphType ActiveSheet, "グラフ 1", "合計", xlLine, xlSecondary, True, , 49407
     
 End Sub
 ```
