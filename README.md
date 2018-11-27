@@ -100,6 +100,7 @@ End Sub
 Private Sub btnGraph_Click()
     
     Dim u As New ExcelManipulator
+    Dim g As New Graphman
     Dim hanrei As Range
     Dim header As Range
     
@@ -107,9 +108,9 @@ Private Sub btnGraph_Click()
     Set header = u.GetRegion(ActiveSheet.Range("B1"), xlToRight)
     
     '「グラフ 1」の範囲を変更する
-    u.ChangingTheGraphRange "グラフ 1", hanrei, header, xlColumnStacked
+    g.ChangingTheGraphRange "グラフ 1", hanrei, header, xlColumnStacked
     
-    u.ChangingTheGraphType ActiveSheet, "グラフ 1", "合計", xlLine, xlSecondary, True, , 49407
+    g.ChangingTheGraphType ActiveSheet, "グラフ 1", "合計", xlLine, xlSecondary, True, , 49407
     
 End Sub
 ```
