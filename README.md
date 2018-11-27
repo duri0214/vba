@@ -112,6 +112,8 @@ Private Sub btnGraph_Click()
     g.SetGraphRange header, hanrei
     
     g.SetGraphType ActiveSheet, "グラフ 1", "合計", xlLine, xlSecondary, True, , 49407
+    g.SetGraphLabel 1, 9, rgb(191, 191, 191)
+    g.SetGraphLabel_adjustXY 1, 9, -20, -20
     
 End Sub
 ```
