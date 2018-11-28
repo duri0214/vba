@@ -1,0 +1,88 @@
+Option Explicit
+Private shp As Shape
+
+Sub Init(sh As Worksheet, newShapeName As String, initText As String, initMso As MsoAutoShapeType, initLeft As Single, initTop As Single, initWidth As Single, initHeight As Single)
+    Set shp = sh.Shapes.AddShape(initMso, initLeft, initTop, initWidth, initHeight)
+    shp.Name = newShapeName
+    shp.TextFrame2.TextRange.Text = initText
+End Sub
+
+'参照線y（＝手羽元y）
+Property Let ReferenceLine_y(y As Single)
+    shp.Adjustments.item(1) = y
+End Property
+Property Get ReferenceLine_y() As Single
+    ReferenceLine_y = shp.Adjustments.item(1)
+End Property
+
+'参照線x（＝手羽元x）
+Property Let ReferenceLine_x(x As Single)
+    shp.Adjustments.item(2) = x
+End Property
+Property Get ReferenceLine_x() As Single
+    ReferenceLine_x = shp.Adjustments.item(2)
+End Property
+
+'引出線y（＝手羽先y）
+Property Let LeaderLine_y(y As Single)
+    shp.Adjustments.item(3) = y
+End Property
+Property Get LeaderLine_y() As Single
+    LeaderLine_y = shp.Adjustments.item(3)
+End Property
+
+'引出線x（＝手羽先x）
+Property Let LeaderLine_x(x As Single)
+    shp.Adjustments.item(4) = x
+End Property
+Property Get LeaderLine_x() As Single
+    LeaderLine_x = shp.Adjustments.item(4)
+End Property
+
+'Left
+Property Let Left(value As Single)
+    shp.Left = value
+End Property
+Property Get Left() As Single
+    Left = shp.Left
+End Property
+
+'Top
+Property Let Top(value As Single)
+    shp.Top = value
+End Property
+Property Get Top() As Single
+    Top = shp.Top
+End Property
+
+'Width
+Property Let Width(value As Single)
+    shp.Width = value
+End Property
+Property Get Width() As Single
+    Width = shp.Width
+End Property
+
+'Height
+Property Let Height(value As Single)
+    shp.Height = value
+End Property
+Property Get Height() As Single
+    Height = shp.Height
+End Property
+
+'Text Bold
+Property Let Bold(value As Boolean)
+    If value Then
+        shp.TextFrame2.TextRange.Font.Bold = msoTrue
+    Else
+        shp.TextFrame2.TextRange.Font.Bold = msoFalse
+    End If
+End Property
+Property Get Bold() As Boolean
+    Dim b As Boolean
+    If shp.TextFrame2.TextRange.Font.Bold = msoTrue Then
+        b = True
+    End If
+    Bold = b
+End Property
