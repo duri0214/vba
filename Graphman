@@ -11,7 +11,7 @@ End Sub
 Sub SetGraphLabel(series_idx As Integer, data_idx As Integer, rgb As Long)
 
     Dim p As Point
-    Set p = cht.FullSeriesCollection(series_idx).Points(data_idx)
+    Set p = cht.SeriesCollection(series_idx).Points(data_idx)
     p.ApplyDataLabels
     p.DataLabel.Format.AutoShapeType = msoShapeRectangle
     p.DataLabel.Format.Line.Visible = msoTrue
@@ -22,7 +22,7 @@ End Sub
 Sub SetGraphLabel_adjustXY(series_idx As Integer, data_idx As Integer, leftOffset As Single, topOffset As Single)
 
     Dim p As Point
-    Set p = cht.FullSeriesCollection(series_idx).Points(data_idx)
+    Set p = cht.SeriesCollection(series_idx).Points(data_idx)
     
     p.DataLabel.left = p.DataLabel.left + leftOffset
     p.DataLabel.Top = p.DataLabel.Top + topOffset
