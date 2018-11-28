@@ -1,4 +1,27 @@
 # ExcelManipulator
+図形の作成
+```vb
+Private Sub btnCreateShape_Click()
+    
+    '水平の吹き出し線
+    Dim horizontalBalloon As New Shapeman
+    horizontalBalloon.Init ActiveSheet, "hello1", "SAMPLETEXT", msoShapeLineCallout1, 100, 200, 100, 25
+    horizontalBalloon.LeaderLine_x = horizontalBalloon.LeaderLine_x + 1
+    horizontalBalloon.LeaderLine_y = horizontalBalloon.LeaderLine_y + 1
+    
+    '四角形吹き出し
+    Dim rectanglarCallout As New Shapeman
+    rectanglarCallout.Init ActiveSheet, "hello2", "SAMPLETEXT", msoShapeRectangularCallout, 100, 300, 100, 25
+    rectanglarCallout.ReferenceLine_x = rectanglarCallout.ReferenceLine_x + 1
+    rectanglarCallout.ReferenceLine_y = rectanglarCallout.ReferenceLine_y + 1
+    
+    '四角形
+    Dim rectangle As New Shapeman
+    rectangle.Init ActiveSheet, "hello3", "SAMPLETEXT", msoShapeRectangle, 100, 400, 100, 25
+    rectangle.Bold = True
+    
+End Sub
+```
 セル範囲を文字結合する
 ```vb
 Private Sub btnConcat_Click()
