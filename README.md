@@ -124,7 +124,7 @@ Private Sub btnFilter_Click()
     Dim u As New ExcelManipulator
     Dim r As Range
     
-    '重ね掛けができます
+    '重ね掛けができます（空白のフィルタをする場合は'='を指定する）
     ActiveSheet.AutoFilterMode = False
     u.GetFilteredRange ActiveSheet.Range("A1:C1"), "MK:1000,9999"
     Set r = u.GetFilteredRange(ActiveSheet.Range("A1:C1"), "ステータス:B,C")
