@@ -120,6 +120,7 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     Dim i As Integer
     Dim filter_col As Integer
     Dim filter_value() As String
+    Dim b As Boolean
     
     temp = header
     
@@ -132,9 +133,21 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     
     '抽出するパラメータ
     filter_value = Split(Split(filter, ":")(1), ",")
+    For i = 0 To UBound(filter_value)
+        If filter_value(i) = "<>" Then
+            b = True
+            Exit For
+        End If
+    Next i
     
     'オートフィルタ
-    header.CurrentRegion.AutoFilter filter_col, filter_value, xlFilterValues
+    If b Then
+        'パラメータに "<>"（＝空白以外すべて）が含まれているときは、配列で突っ込むと実行時エラーが起きるため対応
+        header.CurrentRegion.AutoFilter filter_col, "<>", xlFilterValues
+    Else
+        '複数パラメータに対応できる
+        header.CurrentRegion.AutoFilter filter_col, filter_value, xlFilterValues
+    End If
     
     Set GetFilteredRange = header.CurrentRegion
     
