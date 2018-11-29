@@ -208,6 +208,7 @@ Private Sub btnStart_Click()
     
     '次の行に入れたいonelineを作成する
     oneline = r.Resize(1).Offset(-1)
+    oneline = a.AddNewRecord(oneline)
     
     '追加するonelineと追加されるdataのヨコサイズは一致していないといけない
     data = a.AddNewRecordAndConcat(data, oneline)
