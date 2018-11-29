@@ -154,6 +154,12 @@ Private Sub btnFilter_Click()
     r.Copy ThisWorkbook.Worksheets("Autofiltered").Range("A1")
     Application.CutCopyMode = False
     
+    '空白以外を拾います
+    ActiveSheet.AutoFilterMode = False
+    Set r = u.GetFilteredRange(ActiveSheet.Range("A1:C1"), "MK:<>")
+    r.Copy ThisWorkbook.Worksheets("Autofiltered").Range("A1")
+    Application.CutCopyMode = False
+    
 End Sub
 ```
 ピボットテーブルを作成するサンプル
