@@ -3,7 +3,7 @@ Option Explicit
 'variant2次元配列を操作します
 
 'dataを1行増やします
-Function AddNewRecord(data As Variant)
+Function AddNewRecord(data As Variant) As Variant
     
     Dim retValue As Variant
     Dim i As Long
