@@ -1,0 +1,24 @@
+Option Explicit
+
+Private reg As Object
+
+Sub Init(reg_pattern As String)
+    
+    Set reg = CreateObject("VBScript.RegExp")
+    reg.pattern = reg_pattern
+    
+End Sub
+
+Function Execute(targettxt As String) As String
+
+    Dim matches As Object
+    Dim retValue As String
+    
+    Set matches = reg.Execute(targettxt)
+    If matches.Count > 0 Then
+        retValue = matches(0).value
+    End If
+    
+    Execute = retValue
+    
+End Function
