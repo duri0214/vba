@@ -1,4 +1,16 @@
 # ExcelManipulator
+ファイルリスト取得
+```vb
+Private Sub btnFilelist_Click()
+    
+    Dim fso As New FSOSuite
+    Dim list() As String
+    list = fso.GetFilelist("D:\OneDrive\兵のじや\CLASSLIBRARY", "xlsm")
+    Stop
+
+End Sub
+```
+
 図形の作成
 ```vb
 Private Sub btnCreateShape_Click()
