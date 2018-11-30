@@ -1,4 +1,19 @@
 # ExcelManipulator
+
+正規表現
+```vb
+Private Sub btnRegex_Click()
+    
+    Dim reg As New Regexman
+    Dim ret As String
+    
+    reg.Init "\d{3}-"
+    ret = reg.Execute("hogetexts123-tring")
+    MsgBox ret
+    
+End Sub
+```
+
 ファイルリスト取得
 ```vb
 Private Sub btnFilelist_Click()
