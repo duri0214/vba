@@ -129,7 +129,7 @@ Function IsFileExistsAndNotUsing(path As String) As Boolean
 
 End Function
 
-Function GetFilelist(folderPath As String) As String()
+Function GetFilelist(folderPath As String, ext As String) As String()
     
     Const HIDDEN As Integer = 2
     Dim objFSO As Object
@@ -140,7 +140,7 @@ Function GetFilelist(folderPath As String) As String()
 
     If IsFolderExists(folderPath) Then
         For Each f In objFSO.GetFolder(folderPath).Files
-            If (f.Attributes And HIDDEN) = 0 Then
+            If (f.Attributes And HIDDEN) = 0 And objFSO.GetExtensionName(f.Name) = ext Then
                 If Not IsValidArray(retValue) Then
                     ReDim retValue(0)
                 Else
