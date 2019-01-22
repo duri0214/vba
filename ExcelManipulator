@@ -169,13 +169,15 @@ Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_col As String,
         pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)).Position = i
     Next i
     
-    'ピボット列の指定
-    temp = Split(pvt_col, ",")
-    ReDim Preserve temp(1 To UBound(temp) + 1)
-    For i = 1 To UBound(temp)
-        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)).Orientation = xlColumnField
-        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)).Position = i
-    Next i
+    If pvt_col <> vbNullString Then
+        'ピボット列の指定
+        temp = Split(pvt_col, ",")
+        ReDim Preserve temp(1 To UBound(temp) + 1)
+        For i = 1 To UBound(temp)
+            pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)).Orientation = xlColumnField
+            pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)).Position = i
+        Next i
+    End If
 
     'ピボット値の指定
     temp = Split(pvt_value, ",")
