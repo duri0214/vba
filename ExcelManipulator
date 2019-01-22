@@ -153,24 +153,36 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     
 End Function
 
-Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_agg As String, pvt_data As Range, pvt_destination As Range)
+Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_col As String, pvt_value As String, aggType As XlConsolidationFunction, pvt_headerAndData As Range, pvt_destination As Range)
     
-    Dim groupby As Variant
     Dim i As Integer
+    Dim temp As Variant
     
     'ピボットテーブルを作成
-    pvt_destination.Parent.Parent.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=pvt_data).CreatePivotTable TableDestination:=pvt_destination, TableName:=pvt_name
+    pvt_destination.Parent.Parent.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=pvt_headerAndData).CreatePivotTable TableDestination:=pvt_destination, TableName:=pvt_name
 
-    'グループ行の指定
-    groupby = Split(pvt_group, ",")
-    ReDim Preserve groupby(1 To UBound(groupby) + 1)
-    For i = 1 To UBound(groupby)
-        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(groupby(i)).Orientation = xlRowField
-        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(groupby(i)).Position = i
+    'ピボット行の指定
+    temp = Split(pvt_group, ",")
+    ReDim Preserve temp(1 To UBound(temp) + 1)
+    For i = 1 To UBound(temp)
+        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)).Orientation = xlRowField
+        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)).Position = i
+    Next i
+    
+    'ピボット列の指定
+    temp = Split(pvt_col, ",")
+    ReDim Preserve temp(1 To UBound(temp) + 1)
+    For i = 1 To UBound(temp)
+        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)).Orientation = xlColumnField
+        pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)).Position = i
     Next i
 
-    '集計値の指定
-    pvt_destination.Parent.PivotTables(pvt_name).AddDataField pvt_destination.Parent.PivotTables(pvt_name).PivotFields(pvt_agg), "明細数", xlCount
+    'ピボット値の指定
+    temp = Split(pvt_value, ",")
+    ReDim Preserve temp(1 To UBound(temp) + 1)
+    For i = 1 To UBound(temp)
+        pvt_destination.Parent.PivotTables(pvt_name).AddDataField pvt_destination.Parent.PivotTables(pvt_name).PivotFields(temp(i)), "集計 / " & temp(i), aggType
+    Next i
 
     '表形式にします
     pvt_destination.Parent.PivotTables(pvt_name).RowAxisLayout xlTabularRow
