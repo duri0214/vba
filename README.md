@@ -190,34 +190,88 @@ Private Sub btnFilter_Click()
 End Sub
 ```
 ピボットテーブルを作成するサンプル
+
+| MK   | ステータス | dammy | QTY |
+|------|------------|-------|-----|
+| 1000 | A          | 情報  | 1   |
+| 1000 | B          | 情報  | 1   |
+| 1000 | B          | 情報  | 1   |
+| 1000 | B          | 情報  | 1   |
+| 1000 | B          | 情報  | 1   |
+| 1000 | C          | 情報  | 1   |
+| 1000 | C          | 情報  | 1   |
+
 ```vb
 Private Sub btnPivot_Click()
     
     Dim u As New ExcelManipulator
     Dim newSheet As Worksheet
 
-    '作成するシートの決定とシート名の決定
-    Set newSheet = Sheets.Add
-    newSheet.Name = "pvt"
-
     Dim pvt_name As String
     Dim pvt_group As String
-    Dim pvt_agg As String
+    Dim pvt_col As String
+    Dim pvt_value As String
     Dim pvt_data As Range
     Dim pvt_destination As Range
     
-    Set pvt_data = ThisWorkbook.Worksheets("db").Range("J27:L63")
+    '前工程）特定のMKをその他セグメントに変換
+    Set pvt_data = ThisWorkbook.Worksheets("db").Range("J27:M34")
+    pvt_data.Replace "9999", "その他"
+    
+    '作成するシートの決定とシート名の決定
+    Set newSheet = Sheets.Add(after:=pvt_data.Parent)
+    newSheet.Name = "pvt"
     
     'A）Pivotテーブルを仕込む
-    pvt_name = "pivot"
-    pvt_group = "MK,ステータス"
-    pvt_agg = "dammy"
+    pvt_name = "the_pivot_name"
+    pvt_group = "MK"
+    pvt_col = "ステータス"
+    pvt_value = "dammy,QTY"
     Set pvt_destination = newSheet.Range("A1")
-    u.CreatePivotTable pvt_name, pvt_group, pvt_agg, pvt_data, pvt_destination
+    u.CreatePivotTable pvt_name, pvt_group, pvt_col, pvt_value, xlCount, pvt_data, pvt_destination
     
     'A）Pivotテーブルにフィルターを仕込む
     u.SetFilterOnPivotTable ActiveSheet.PivotTables(1), "ステータス", "A,C", False
     u.SetFilterOnPivotTable ActiveSheet.PivotTables(1), "ステータス", "A,C", True
+
+    'key列を作る
+    newSheet.Columns("A:A").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    newSheet.Range("A2").Formula = "=B2&C2"
+    newSheet.Range("A2").AutoFill destination:=newSheet.Range("A2:A21"), Type:=xlFillDefault
+    
+    'B）VLOOKUPを仕込む
+    Dim vlk_data As Range
+    Dim vlk_key As String
+    Dim vlk_datasource As String
+    Dim vlk_text As String
+    Dim aggheader As Range
+    Dim i As Integer
+    
+    Set aggheader = ThisWorkbook.Worksheets("db").Range("B27").Resize(, 3)
+    Set vlk_data = ThisWorkbook.Worksheets("db").Range("B28").Resize(, 3)
+    Set vlk_data = ThisWorkbook.Worksheets("db").Range(vlk_data, vlk_data.End(xlDown))
+    vlk_datasource = newSheet.UsedRange.Address(external:=True)
+    For i = 1 To vlk_data.Rows.Count
+        
+        If vlk_data(i, 2).value = "合計" Then
+            vlk_key = vlk_data(i, 1).value & " 集計"
+            vlk_text = "=VLOOKUP({DBL_QUOTE}{VLK_KEY}{DBL_QUOTE},{VLK_DATASOURCE},4,0)"
+            vlk_text = Replace(vlk_text, "{VLK_KEY}", vlk_key)
+            vlk_text = Replace(vlk_text, "{VLK_DATASOURCE}", vlk_datasource)
+            vlk_text = Replace(vlk_text, "{DBL_QUOTE}", Chr(34))
+        Else
+            vlk_key = vlk_data(i, 1).value & vlk_data(i, 2).value
+            vlk_text = "=VLOOKUP({DBL_QUOTE}{VLK_KEY}{DBL_QUOTE},{VLK_DATASOURCE},4,0)"
+            vlk_text = Replace(vlk_text, "{VLK_KEY}", vlk_key)
+            vlk_text = Replace(vlk_text, "{VLK_DATASOURCE}", vlk_datasource)
+            vlk_text = Replace(vlk_text, "{DBL_QUOTE}", Chr(34))
+        End If
+        
+        vlk_data(i, 3).Formula = vlk_text
+        
+    Next i
+    
+    vlk_data.Parent.Activate
     
 End Sub
 ```
