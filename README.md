@@ -181,6 +181,11 @@ Private Sub btnFilter_Click()
     r.Copy ThisWorkbook.Worksheets("Autofiltered").Range("A1")
     Application.CutCopyMode = False
     
+    'filter件数が subtotal > 1 のときに
+    If WorksheetFunction.Subtotal(3, r.Resize(, 1)) > 1 Then
+        MsgBox "オートフィルタされたデータがあります"
+    End If
+    
     '空白以外を拾います
     ActiveSheet.AutoFilterMode = False
     Set r = u.GetFilteredRange(ActiveSheet.Range("A1:C1"), "MK:<>")
