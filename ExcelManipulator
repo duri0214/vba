@@ -27,7 +27,7 @@ Function IsSheetExists(bk As Workbook, sh_name As String) As Boolean
     Dim sh As Worksheet
     Dim retValue As Boolean
     
-    For Each sh In Worksheets
+    For Each sh In bk.Worksheets
         If sh.Name = sh_name Then
             retValue = True
             Exit For
