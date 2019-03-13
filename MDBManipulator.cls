@@ -9,12 +9,12 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
-Const PROVIDER As String = "Provider = Microsoft.Jet.OLEDB.4.0; Data Source = "
+Const PROVIDER As String = "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = "
 
 Function GetOwnFolderPath() As String
     
-    'uC:\hoge\hage.mdbvã‚ÅA‚±‚Ìƒƒ\ƒbƒh‚ğg—p‚µ‚½ê‡A
-    'uC:\hogev‚ª•Ô‚é
+    'ã€ŒC:\hoge\hage.mdbã€ä¸Šã§ã€ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨ã—ãŸå ´åˆã€
+    'ã€ŒC:\hogeã€ãŒè¿”ã‚‹
     
     GetOwnFolderPath = Application.CurrentProject.path
     
@@ -22,8 +22,8 @@ End Function
 
 Function GetOwnFileName() As String
     
-    'uC:\hoge\hage.mdbvã‚ÅA‚±‚Ìƒƒ\ƒbƒh‚ğg—p‚µ‚½ê‡A
-    'uhage.mdbv‚ª•Ô‚é
+    'ã€ŒC:\hoge\hage.mdbã€ä¸Šã§ã€ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨ã—ãŸå ´åˆã€
+    'ã€Œhage.mdbã€ãŒè¿”ã‚‹
     
     GetOwnFileName = Application.CurrentProject.Name
     
@@ -31,8 +31,8 @@ End Function
 
 Function GetOwnFullPath() As String
     
-    'uC:\hoge\hage.mdbvã‚ÅA‚±‚Ìƒƒ\ƒbƒh‚ğg—p‚µ‚½ê‡A
-    'uC:\hoge\hage.mdbv‚ª•Ô‚é
+    'ã€ŒC:\hoge\hage.mdbã€ä¸Šã§ã€ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨ã—ãŸå ´åˆã€
+    'ã€ŒC:\hoge\hage.mdbã€ãŒè¿”ã‚‹
     
     GetOwnFullPath = Application.CurrentProject.FullName
     
@@ -40,24 +40,24 @@ End Function
 
 Function GetQueryNamesByTheKeywordBeginning(keyword As String) As String()
     
-    Dim cat As New ADOX.Catalog                         'ƒJƒ^ƒƒO
-    Dim obj As Variant                                  'ƒe[ƒuƒ‹
-    Dim logMessage As String                            'ƒƒO‚Éo—Í‚·‚éƒƒbƒZ[ƒW
+    Dim cat As New ADOX.Catalog                         'ã‚«ã‚¿ãƒ­ã‚°
+    Dim obj As Variant                                  'ãƒ†ãƒ¼ãƒ–ãƒ«
+    Dim logMessage As String                            'ãƒ­ã‚°ã«å‡ºåŠ›ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
     
-    cat.ActiveConnection = CurrentProject.Connection    'ˆ—‘ÎÛ‚ÍA‰äMDB
-    For Each obj In cat.Procedures                      '‚·‚×‚Ä‚Ì yƒAƒNƒVƒ‡ƒ“ƒNƒGƒŠz ƒIƒuƒWƒFƒNƒg‚ğ‚ß‚®‚Á‚Ä
-        If obj.Name Like (keyword & "*") Then           '‚È‚¨‚©‚Âæ“ª•¶š‚ª keyword ‚Ån‚Ü‚é‚Æ‚«
+    cat.ActiveConnection = CurrentProject.Connection    'å‡¦ç†å¯¾è±¡ã¯ã€æˆ‘MDB
+    For Each obj In cat.Procedures                      'ã™ã¹ã¦ã® ã€ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚¯ã‚¨ãƒªã€‘ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚ãã£ã¦
+        If obj.Name Like (keyword & "*") Then           'ãªãŠã‹ã¤å…ˆé ­æ–‡å­—ãŒ keyword ã§å§‹ã¾ã‚‹ã¨ã
             logMessage = logMessage & obj.Name & ","
         End If
     Next
-    For Each obj In cat.Views                           '‚·‚×‚Ä‚Ì y‘I‘ğƒNƒGƒŠz ƒIƒuƒWƒFƒNƒg‚ğ‚ß‚®‚Á‚Ä
-        If obj.Name Like (keyword & "*") Then           '‚È‚¨‚©‚Âæ“ª•¶š‚ª keyword ‚Ån‚Ü‚é‚Æ‚«
+    For Each obj In cat.Views                           'ã™ã¹ã¦ã® ã€é¸æŠã‚¯ã‚¨ãƒªã€‘ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚ãã£ã¦
+        If obj.Name Like (keyword & "*") Then           'ãªãŠã‹ã¤å…ˆé ­æ–‡å­—ãŒ keyword ã§å§‹ã¾ã‚‹ã¨ã
             logMessage = logMessage & obj.Name & ","
         End If
     Next
     Set cat = Nothing
     
-    If logMessage = vbNullString Then logMessage = "ƒL[ƒ[ƒh‚Ån‚Ü‚éƒNƒGƒŠ‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B"
+    If logMessage = vbNullString Then logMessage = "ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã§å§‹ã¾ã‚‹ã‚¯ã‚¨ãƒªã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚"
 
     GetQueryNamesByTheKeywordBeginning = Split(Left(logMessage, Len(logMessage) - 1), ",")
     Application.RefreshDatabaseWindow
@@ -84,14 +84,14 @@ End Function
 
 Function GetTableSchema(tableName As String, colLikeKeyword As String) As String()
     
-    'colLikeKeyword     :   u"*_" & ym.GetAddYM(-1)v‚È‚ÇAûW‚µ‚½‚¢€–Ú–¼‚ğ“ü—ÍiÜ²ÙÄŞ¶°ÄŞokj
+    'colLikeKeyword     :   ã€Œ"*_" & ym.GetAddYM(-1)ã€ãªã©ã€åé›†ã—ãŸã„é …ç›®åã‚’å…¥åŠ›ï¼ˆï¾œï½²ï¾™ï¾„ï¾ï½¶ï½°ï¾„ï¾okï¼‰
     
-    '£notice
-    '”z—ñ‚É•Ô‚é€–Ú–¼‚ÍA€–Ú–¼‚Ì¸‡‚ÉŸè‚É•À‚Ñ‘Ö‚¦‚ç‚ê‚éB€–Ú‚ª•À‚ñ‚Å‚¢‚é‡”Ô‚Å‚Í‚È‚¢B
+    'â–²notice
+    'é…åˆ—ã«è¿”ã‚‹é …ç›®åã¯ã€é …ç›®åã®æ˜‡é †ã«å‹æ‰‹ã«ä¸¦ã³æ›¿ãˆã‚‰ã‚Œã‚‹ã€‚é …ç›®ãŒä¸¦ã‚“ã§ã„ã‚‹é †ç•ªã§ã¯ãªã„ã€‚
     
-    Dim cat                 As New ADOX.Catalog                     'ƒJƒ^ƒƒO
-    Dim tbl                 As ADOX.TABLE                           'ƒe[ƒuƒ‹
-    Dim col                 As ADOX.Column                          '—ñ
+    Dim cat                 As New ADOX.Catalog                     'ã‚«ã‚¿ãƒ­ã‚°
+    Dim tbl                 As ADOX.TABLE                           'ãƒ†ãƒ¼ãƒ–ãƒ«
+    Dim col                 As ADOX.Column                          'åˆ—
         
     Dim colCount            As Integer
     Dim colCollection()     As String
@@ -103,7 +103,7 @@ Function GetTableSchema(tableName As String, colLikeKeyword As String) As String
         If tbl.Name = tableName Then
             If tbl.Type = "LINK" Or tbl.Type = "TABLE" Then
                 
-                '•K—v‚ÈÅ‰º‘w€–Ú‚Ì”‚ğget
+                'å¿…è¦ãªæœ€ä¸‹å±¤é …ç›®ã®æ•°ã‚’get
                 colCount = 0
                 For Each col In tbl.Columns
                     If col.Name Like colLikeKeyword Then
@@ -112,13 +112,13 @@ Function GetTableSchema(tableName As String, colLikeKeyword As String) As String
                 Next
                 ReDim colCollection(colCount - 1)
                 
-                'Å‰º‘w€–Ú–¼‚ğget
+                'æœ€ä¸‹å±¤é …ç›®åã‚’get
                 colCount = 0
                 For Each col In tbl.Columns
                     For i = LBound(colCollection) To UBound(colCollection)
                         If col.Name Like colLikeKeyword Then
-                            colCollection(colCount) = col.Name      'û”[
-                            colCount = colCount + 1                 'û”[idx + 1
+                            colCollection(colCount) = col.Name      'åç´
+                            colCount = colCount + 1                 'åç´idx + 1
                             Exit For
                         End If
                     Next
@@ -137,14 +137,14 @@ End Function
 
 Function CreateMDBFile(newMDBFullPath As String) As String
     
-    'QÆİ’è@Microsoft ADO Ext 2.x DLL AND Security‚ğ—LŒø‚É‚µ‚Ü‚·
+    'å‚ç…§è¨­å®šã€€Microsoft ADO Ext 2.x DLL AND Securityã‚’æœ‰åŠ¹ã«ã—ã¾ã™
     
     Dim cat As New ADOX.Catalog
     Dim retValue As String
     
     cat.CREATE (PROVIDER & newMDBFullPath)
     
-    retValue = Dir(newMDBFullPath) & "‚ğ¶¬‚µ‚Ü‚µ‚½B"
+    retValue = Dir(newMDBFullPath) & "ã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚"
     
     Set cat = Nothing
     
@@ -164,9 +164,9 @@ Function DeleteMDBFile(MDBFullPath As String) As String
     
     If buf <> "" Then
         objFSO.DeleteFile MDBFullPath
-        retValue = buf & "‚ğíœ‚µ‚Ü‚µ‚½B"
+        retValue = buf & "ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚"
     Else
-        retValue = "íœ‘ÎÛƒtƒ@ƒCƒ‹‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B"
+        retValue = "å‰Šé™¤å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚"
     End If
     
     Set objFSO = Nothing
@@ -177,7 +177,7 @@ End Function
 
 Sub CreateTable(newTableName As String)
     
-    DeleteTable (newTableName)                      '‚±‚ê‚©‚çì‚éƒe[ƒuƒ‹–¼‚ª‚ ‚Á‚½‚çíœ‚µ‚Æ‚­
+    DeleteTable (newTableName)                      'ã“ã‚Œã‹ã‚‰ä½œã‚‹ãƒ†ãƒ¼ãƒ–ãƒ«åãŒã‚ã£ãŸã‚‰å‰Šé™¤ã—ã¨ã
     
     Dim cat As New ADOX.Catalog
     Dim tbl As New ADOX.TABLE
@@ -203,14 +203,14 @@ Sub AddColumns(tableName As String, columnSchema() As String, typeModel As Integ
     
     For Each columnName In columnSchema
     
-        col.Name = columnName                       '—ñ–¼
-        col.Type = typeModel                        'Œ^
+        col.Name = columnName                       'åˆ—å
+        col.Type = typeModel                        'å‹
         
-        col.DefinedSize = columnSize                'ƒtƒB[ƒ‹ƒhƒTƒCƒYicolumnSize‚Ì‰Šú’l‚Í0j
+        col.DefinedSize = columnSize                'ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚µã‚¤ã‚ºï¼ˆcolumnSizeã®åˆæœŸå€¤ã¯0ï¼‰
         
-        col.Attributes = adColNullable              'Null’l‚ğ‹–—e‚µ‚Ü‚·
+        col.Attributes = adColNullable              'Nullå€¤ã‚’è¨±å®¹ã—ã¾ã™
         
-        cat.Tables(tableName).Columns.Append col    'ƒe[ƒuƒ‹‚É—ñ’Ç‰Á
+        cat.Tables(tableName).Columns.Append col    'ãƒ†ãƒ¼ãƒ–ãƒ«ã«åˆ—è¿½åŠ 
         
         Set col = New ADOX.Column                   'objectReset
 
@@ -224,15 +224,15 @@ End Sub
 
 Sub AddColumns2(tableName As String, columnSchema() As String)
 
-    'Še—ñ‚ÉŒÂ•Ê‚ÉƒtƒB[ƒ‹ƒhƒTƒCƒY‚ğ‚Â‚¯‚é‚±‚Æ‚ª‚Å‚«‚é
+    'å„åˆ—ã«å€‹åˆ¥ã«ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚µã‚¤ã‚ºã‚’ã¤ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹
     
-    '£notice
-    '•K‚¸ƒeƒLƒXƒgŒ^‚É‚È‚é
+    'â–²notice
+    'å¿…ãšãƒ†ã‚­ã‚¹ãƒˆå‹ã«ãªã‚‹
     
-    'columnSchema‚Ìw’è‚Ìd•û@uhoge—ñ,10v@‚Æw’è‚·‚é‚Æ
-    'uhoge—ñv‚Æ‚¢‚¤–¼‘O‚Ì—ñ‚ªì¬‚³‚ê
-    'uƒeƒLƒXƒgŒ^v‚Å
-    'uƒtƒB[ƒ‹ƒhƒTƒCƒY‚ª‚P‚Ov‚É‚È‚é
+    'columnSchemaã®æŒ‡å®šã®ä»•æ–¹ã€€ã€Œhogeåˆ—,10ã€ã€€ã¨æŒ‡å®šã™ã‚‹ã¨
+    'ã€Œhogeåˆ—ã€ã¨ã„ã†åå‰ã®åˆ—ãŒä½œæˆã•ã‚Œ
+    'ã€Œãƒ†ã‚­ã‚¹ãƒˆå‹ã€ã§
+    'ã€Œãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚µã‚¤ã‚ºãŒï¼‘ï¼ã€ã«ãªã‚‹
     
     Dim cat As New ADOX.Catalog
     Dim col As New ADOX.Column
@@ -246,10 +246,10 @@ Sub AddColumns2(tableName As String, columnSchema() As String)
         x = Split(columnSchema(i), ",")
         
         col.Name = x(0)
-        col.Type = adVarWChar                       'Œ»óA•K‚¸ƒeƒLƒXƒgŒ^‚Å‚·iƒtƒŒƒLƒVƒuƒ‹‘Î‰‚µ‚½‚¢‚¯‚Çj
+        col.Type = adVarWChar                       'ç¾çŠ¶ã€å¿…ãšãƒ†ã‚­ã‚¹ãƒˆå‹ã§ã™ï¼ˆãƒ•ãƒ¬ã‚­ã‚·ãƒ–ãƒ«å¯¾å¿œã—ãŸã„ã‘ã©ï¼‰
         col.DefinedSize = x(1)
-        col.Attributes = adColNullable              'Null’l‚ğ‹–—e‚µ‚Ü‚·
-        cat.Tables(tableName).Columns.Append col    'ƒe[ƒuƒ‹‚É—ñ’Ç‰Á
+        col.Attributes = adColNullable              'Nullå€¤ã‚’è¨±å®¹ã—ã¾ã™
+        cat.Tables(tableName).Columns.Append col    'ãƒ†ãƒ¼ãƒ–ãƒ«ã«åˆ—è¿½åŠ 
         
         Set col = New ADOX.Column                   'objectReset
         
@@ -263,22 +263,22 @@ End Sub
 
 Sub RenameColumns(targetTableName As String, before As String, after As String)
     
-    Dim cat As New ADOX.Catalog                                     'ƒJƒ^ƒƒO
-    Dim tbl As ADOX.TABLE                                           'ƒe[ƒuƒ‹
-    Dim col As ADOX.Column                                          '—ñ
+    Dim cat As New ADOX.Catalog                                     'ã‚«ã‚¿ãƒ­ã‚°
+    Dim tbl As ADOX.TABLE                                           'ãƒ†ãƒ¼ãƒ–ãƒ«
+    Dim col As ADOX.Column                                          'åˆ—
     
-    cat.ActiveConnection = CurrentProject.Connection                'ƒJƒŒƒ“ƒgƒf[ƒ^ƒx[ƒX‚ÉÚ‘±
+    cat.ActiveConnection = CurrentProject.Connection                'ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã«æ¥ç¶š
     
     If targetTableName = vbNullString Then
-        Exit Sub                                                    'Às—vŒ‚ğ–‚½‚³‚È‚©‚Á‚½...
+        Exit Sub                                                    'å®Ÿè¡Œè¦ä»¶ã‚’æº€ãŸã•ãªã‹ã£ãŸ...
     End If
     
-    For Each tbl In cat.Tables                                      '‚·‚×‚Ä‚Ìƒe[ƒuƒ‹ƒIƒuƒWƒFƒNƒg‚ğ‚ß‚®‚Á‚Ä
-        If tbl.Name = targetTableName Then                          'ƒ†[ƒU‚Ìw’è‚µ‚½ƒe[ƒuƒ‹–¼‚ÌA
-            If tbl.Type = "TABLE" Then                              'ƒe[ƒuƒ‹‚ª‚ ‚Á‚½‚Æ‚«‚É
+    For Each tbl In cat.Tables                                      'ã™ã¹ã¦ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚ãã£ã¦
+        If tbl.Name = targetTableName Then                          'ãƒ¦ãƒ¼ã‚¶ã®æŒ‡å®šã—ãŸãƒ†ãƒ¼ãƒ–ãƒ«åã®ã€
+            If tbl.Type = "TABLE" Then                              'ãƒ†ãƒ¼ãƒ–ãƒ«ãŒã‚ã£ãŸã¨ãã«
             
-                For Each col In tbl.Columns                         '‚·‚×‚Ä‚Ì€–Ú‚ğ‚ß‚®‚Á‚Ä
-                    col.Name = Replace(col.Name, before, after)     '’uŠ·‚µ‚Ä‚¢‚­
+                For Each col In tbl.Columns                         'ã™ã¹ã¦ã®é …ç›®ã‚’ã‚ãã£ã¦
+                    col.Name = Replace(col.Name, before, after)     'ç½®æ›ã—ã¦ã„ã
                 Next
                 
             End If
@@ -293,10 +293,10 @@ End Sub
 
 Sub RenameTable(targetTableName As String, newTableName As String)
 
-    'QÆİ’è@Microsoft ADO Ext 2.x DLL AND Security‚ğ—LŒø‚É‚µ‚Ü‚·
-    Dim cat As New ADOX.Catalog     'ƒJƒ^ƒƒO
+    'å‚ç…§è¨­å®šã€€Microsoft ADO Ext 2.x DLL AND Securityã‚’æœ‰åŠ¹ã«ã—ã¾ã™
+    Dim cat As New ADOX.Catalog     'ã‚«ã‚¿ãƒ­ã‚°
         
-    cat.ActiveConnection = CurrentProject.Connection    'ƒJƒŒƒ“ƒgƒf[ƒ^ƒx[ƒX‚ÉÚ‘±
+    cat.ActiveConnection = CurrentProject.Connection    'ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã«æ¥ç¶š
         
     cat.Tables(targetTableName).Name = newTableName
         
@@ -357,9 +357,9 @@ End Sub
 
 Sub ExecuteSQL(sql As String)
     
-    '£notice
-    'SQLƒeƒLƒXƒg‚©ƒAƒNƒVƒ‡ƒ“ƒNƒGƒŠ[–¼‚ğ‘ã“ü‚µ‚Ü‚·B
-    '‘I‘ğƒNƒGƒŠ‚ÍÀs‚Å‚«‚È‚¢B‰½‚à‚¹‚¸‚ÉI‚í‚é
+    'â–²notice
+    'SQLãƒ†ã‚­ã‚¹ãƒˆã‹ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚¯ã‚¨ãƒªãƒ¼åã‚’ä»£å…¥ã—ã¾ã™ã€‚
+    'é¸æŠã‚¯ã‚¨ãƒªã¯å®Ÿè¡Œã§ããªã„ã€‚ä½•ã‚‚ã›ãšã«çµ‚ã‚ã‚‹
     
     Dim cmd As New ADODB.Command
     
@@ -373,13 +373,13 @@ End Sub
 
 Sub ExecuteQuery(queryName As String)
 
-    '£notice
-    'ƒAƒNƒVƒ‡ƒ“ƒNƒGƒŠ–¼‚Å‚à‘I‘ğƒNƒGƒŠ‚Å‚àÀs‚Å‚«‚éB
-    'o—ˆ‡‚¢‚ÌƒNƒGƒŠ‚ğg‚¤‚¾‚¯‚È‚çExecuteSQL‚æ‚è‚±‚Á‚¿‚Ì•û‚ª—DG
+    'â–²notice
+    'ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚¯ã‚¨ãƒªåã§ã‚‚é¸æŠã‚¯ã‚¨ãƒªã§ã‚‚å®Ÿè¡Œã§ãã‚‹ã€‚
+    'å‡ºæ¥åˆã„ã®ã‚¯ã‚¨ãƒªã‚’ä½¿ã†ã ã‘ãªã‚‰ExecuteSQLã‚ˆã‚Šã“ã£ã¡ã®æ–¹ãŒå„ªç§€
     
-    DoCmd.SetWarnings False                     'ƒVƒXƒeƒ€ ƒƒbƒZ[ƒW‚Ì•\¦‚ğƒIƒt
+    DoCmd.SetWarnings False                     'ã‚·ã‚¹ãƒ†ãƒ  ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è¡¨ç¤ºã‚’ã‚ªãƒ•
     DoCmd.OpenQuery queryName, acViewNormal
-    DoCmd.SetWarnings True                      'ƒVƒXƒeƒ€ ƒƒbƒZ[ƒW‚Ì•\¦‚ğƒIƒ“
+    DoCmd.SetWarnings True                      'ã‚·ã‚¹ãƒ†ãƒ  ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è¡¨ç¤ºã‚’ã‚ªãƒ³
     
     Application.RefreshDatabaseWindow
     
@@ -387,24 +387,24 @@ End Sub
 
 Function Export2Excel(outputTableOrQuery As String, outputFolder As String) As String
 
-    'šã‘‚«—p‚Ìƒtƒ@ƒCƒ‹íœƒƒWƒbƒNŠJn
+    'â˜…ä¸Šæ›¸ãç”¨ã®ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ãƒ­ã‚¸ãƒƒã‚¯é–‹å§‹
     Dim buf As String
     Dim objFSO As Object                                            'FileSysObj
-    Dim retValue As String                                          'ƒƒO‚Éo—Í‚·‚éƒƒbƒZ[ƒW
+    Dim retValue As String                                          'ãƒ­ã‚°ã«å‡ºåŠ›ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
     Set objFSO = CreateObject("Scripting.FileSystemObject")
     buf = Dir(outputFolder & "\" & outputTableOrQuery & ".xls")
     If buf <> "" Then
-        objFSO.DeleteFile outputFolder & "\" & buf                  'ƒGƒNƒXƒ|[ƒg‚·‚é“¯–¼ƒtƒ@ƒCƒ‹‚ğíœ
-        retValue = buf & "‚ğíœ‚µ‚Ü‚µ‚½B"
+        objFSO.DeleteFile outputFolder & "\" & buf                  'ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã™ã‚‹åŒåãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤
+        retValue = buf & "ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚"
     Else
-        retValue = "íœ‘ÎÛƒtƒ@ƒCƒ‹‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B"
+        retValue = "å‰Šé™¤å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚"
     End If
     Set objFSO = Nothing
-    'šã‘‚«—p‚Ìƒtƒ@ƒCƒ‹íœƒƒWƒbƒNI—¹
+    'â˜…ä¸Šæ›¸ãç”¨ã®ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ãƒ­ã‚¸ãƒƒã‚¯çµ‚äº†
 
-    DoCmd.SetWarnings False                     'ƒ[ƒjƒ“ƒOƒIƒt
+    DoCmd.SetWarnings False                     'ãƒ¯ãƒ¼ãƒ‹ãƒ³ã‚°ã‚ªãƒ•
     DoCmd.TransferSpreadsheet acExport, acSpreadsheetTypeExcel9, outputTableOrQuery, outputFolder & "\" & outputTableOrQuery & ".xls", True
-    DoCmd.SetWarnings True                      'ƒ[ƒjƒ“ƒOƒIƒ“
+    DoCmd.SetWarnings True                      'ãƒ¯ãƒ¼ãƒ‹ãƒ³ã‚°ã‚ªãƒ³
 
     Application.RefreshDatabaseWindow           'Refresh
     
@@ -414,24 +414,24 @@ End Function
 
 Function Export2ExcelAndNameEdit(outputTableOrQuery As String, newFileFullPath As String) As String
 
-    'šã‘‚«—p‚Ìƒtƒ@ƒCƒ‹íœƒƒWƒbƒNŠJn
+    'â˜…ä¸Šæ›¸ãç”¨ã®ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ãƒ­ã‚¸ãƒƒã‚¯é–‹å§‹
     Dim buf As String
     Dim objFSO As Object                                            'FileSysObj
-    Dim retValue As String                                          'ƒƒO‚Éo—Í‚·‚éƒƒbƒZ[ƒW
+    Dim retValue As String                                          'ãƒ­ã‚°ã«å‡ºåŠ›ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
     Set objFSO = CreateObject("Scripting.FileSystemObject")
-    buf = Dir(newFileFullPath)                                      'newFileFullPath‚Ìƒtƒ@ƒCƒ‹‚ğ’T‚·
+    buf = Dir(newFileFullPath)                                      'newFileFullPathã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¢ã™
     If buf <> "" Then
-        objFSO.DeleteFile newFileFullPath                           'ƒGƒNƒXƒ|[ƒg‚·‚é“¯–¼ƒtƒ@ƒCƒ‹‚ğíœ
-        retValue = buf & "‚ğíœ‚µ‚Ü‚µ‚½B"
+        objFSO.DeleteFile newFileFullPath                           'ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã™ã‚‹åŒåãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤
+        retValue = buf & "ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚"
     Else
-        retValue = "íœ‘ÎÛƒtƒ@ƒCƒ‹‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B"
+        retValue = "å‰Šé™¤å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚"
     End If
     Set objFSO = Nothing
-    'šã‘‚«—p‚Ìƒtƒ@ƒCƒ‹íœƒƒWƒbƒNI—¹
+    'â˜…ä¸Šæ›¸ãç”¨ã®ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ãƒ­ã‚¸ãƒƒã‚¯çµ‚äº†
 
-    DoCmd.SetWarnings False                     'ƒ[ƒjƒ“ƒOƒIƒt
+    DoCmd.SetWarnings False                     'ãƒ¯ãƒ¼ãƒ‹ãƒ³ã‚°ã‚ªãƒ•
     DoCmd.TransferSpreadsheet acExport, acSpreadsheetTypeExcel9, outputTableOrQuery, newFileFullPath, True
-    DoCmd.SetWarnings True                      'ƒ[ƒjƒ“ƒOƒIƒ“
+    DoCmd.SetWarnings True                      'ãƒ¯ãƒ¼ãƒ‹ãƒ³ã‚°ã‚ªãƒ³
 
     Application.RefreshDatabaseWindow           'Refresh
     Export2ExcelAndNameEdit = retValue
@@ -450,33 +450,33 @@ End Function
 
 Sub SetTableDescription(targetTable As String, setumei As String)
     
-    '£notice
-    'ƒe[ƒuƒ‹‚Éuà–¾:Descriptionv‚ğ‘‚«•t‚¯‚Ü‚·
+    'â–²notice
+    'ãƒ†ãƒ¼ãƒ–ãƒ«ã«ã€Œèª¬æ˜:Descriptionã€ã‚’æ›¸ãä»˜ã‘ã¾ã™
     
     Dim setProps As dao.Property
     
-    Set setProps = CurrentDb.TableDefs(targetTable).CreateProperty      'NullƒvƒƒpƒeƒB¶¬
+    Set setProps = CurrentDb.TableDefs(targetTable).CreateProperty      'Nullãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ç”Ÿæˆ
     
-    setProps.Name = "Description"                                       'y•K{zà–¾ ƒvƒƒpƒeƒB ‚ğ
-    setProps.Type = dbText                                              'y•K{zdbText ƒeƒLƒXƒgŒ^ (Text) ‚Å
-    setProps.value = setumei                                            '‘‚«•t‚¯‚Ü‚·
+    setProps.Name = "Description"                                       'ã€å¿…é ˆã€‘èª¬æ˜ ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ ã‚’
+    setProps.Type = dbText                                              'ã€å¿…é ˆã€‘dbText ãƒ†ã‚­ã‚¹ãƒˆå‹ (Text) ã§
+    setProps.value = setumei                                            'æ›¸ãä»˜ã‘ã¾ã™
     
-    'ƒvƒƒpƒ`[‚ª–³‚¢‚Ì‚ÉÁ‚»‚¤‚Æ‚·‚é‚ÆƒGƒ‰[‚ª‚Å‚é
-    '‚µ‚©‚µAƒvƒƒpƒ`[‚ª‚ ‚é‚Ì‚É’Ç‰Á‚·‚é‚ÆƒGƒ‰[‚ª‚Å‚é
-    '‚µ‚½‚ª‚Á‚ÄAuÁ‚·v‚ğƒGƒ‰[–³‹‚É‚µ‚½
+    'ãƒ—ãƒ­ãƒ‘ãƒãƒ¼ãŒç„¡ã„ã®ã«æ¶ˆãã†ã¨ã™ã‚‹ã¨ã‚¨ãƒ©ãƒ¼ãŒã§ã‚‹
+    'ã—ã‹ã—ã€ãƒ—ãƒ­ãƒ‘ãƒãƒ¼ãŒã‚ã‚‹ã®ã«è¿½åŠ ã™ã‚‹ã¨ã‚¨ãƒ©ãƒ¼ãŒã§ã‚‹
+    'ã—ãŸãŒã£ã¦ã€ã€Œæ¶ˆã™ã€ã‚’ã‚¨ãƒ©ãƒ¼ç„¡è¦–ã«ã—ãŸ
     On Error Resume Next
     CurrentDb.TableDefs(targetTable).Properties.DELETE ("Description")
     On Error GoTo 0
     
-    CurrentDb.TableDefs(targetTable).Properties.Append setProps     'ƒvƒƒpƒeƒBŒ‹‡F‚æ‚Á‚±‚ç‚µ‚å‚Á‚Æ
+    CurrentDb.TableDefs(targetTable).Properties.Append setProps     'ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£çµåˆï¼šã‚ˆã£ã“ã‚‰ã—ã‚‡ã£ã¨
     Application.RefreshDatabaseWindow                               'Refresh
     
 End Sub
 
 Sub SetPrimaryKey(targetTable As String, keyString As String)
     
-    '£notice
-    'SQL‚Ì\•¶ãAsetPrimaryKey‚Æ‚¢‚¤•¶š‚Í”CˆÓ‚Ì "ì¬‚·‚éƒCƒ“ƒfƒbƒNƒX‚Ì–¼‘O" ‚Å‚ ‚éB
+    'â–²notice
+    'SQLã®æ§‹æ–‡ä¸Šã€setPrimaryKeyã¨ã„ã†æ–‡å­—ã¯ä»»æ„ã® "ä½œæˆã™ã‚‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®åå‰" ã§ã‚ã‚‹ã€‚
     
     Dim cmd As New ADODB.Command
     Dim sql As String
@@ -492,12 +492,12 @@ End Sub
 
 Sub DeletePrimaryKey(targetTable As String)
 
-    '£notice
-    '‚µ‚½‚ª‚Á‚ÄA‚ ‚­‚Ü‚ÅASetPrimaryKeyƒƒ\ƒbƒh‚É‚æ‚Á‚Äì¬‚³‚ê‚½Aƒvƒ‰ƒCƒ}ƒŠƒL[‚Ì‚İA
-    'Kill‚·‚é‚±‚Æ‚É‚È‚Á‚Ä‚¢‚éBi‚±‚ê‚ğ–¼Ìw’è‚Å‚«‚é‚æ‚¤‚É‚µ‚Ä‚à‚Ü‚í‚è‚­‚Ç‚¢‚¾‚¯j
-    '‚ ‚­‚Ü‚ÅAsetPrimaryKey‚Æ‚¢‚¤ƒCƒ“ƒfƒbƒNƒX‚ğAíœ‚µ‚Ü‚·B
-    '‚Â‚Ü‚èASetPrimaryKeyƒƒ\ƒbƒh‚ğ‰î‚³‚È‚¢ƒvƒ‰ƒCƒ}ƒŠƒL[i‚½‚Æ‚¦‚ÎAè“®‚ÅƒZƒbƒg‚µ‚½‚Æ‚©j‚ÍA
-    'íœ‚Å‚«‚È‚¢
+    'â–²notice
+    'ã—ãŸãŒã£ã¦ã€ã‚ãã¾ã§ã€SetPrimaryKeyãƒ¡ã‚½ãƒƒãƒ‰ã«ã‚ˆã£ã¦ä½œæˆã•ã‚ŒãŸã€ãƒ—ãƒ©ã‚¤ãƒãƒªã‚­ãƒ¼ã®ã¿ã€
+    'Killã™ã‚‹ã“ã¨ã«ãªã£ã¦ã„ã‚‹ã€‚ï¼ˆã“ã‚Œã‚’åç§°æŒ‡å®šã§ãã‚‹ã‚ˆã†ã«ã—ã¦ã‚‚ã¾ã‚ã‚Šãã©ã„ã ã‘ï¼‰
+    'ã‚ãã¾ã§ã€setPrimaryKeyã¨ã„ã†ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ã€å‰Šé™¤ã—ã¾ã™ã€‚
+    'ã¤ã¾ã‚Šã€SetPrimaryKeyãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä»‹ã•ãªã„ãƒ—ãƒ©ã‚¤ãƒãƒªã‚­ãƒ¼ï¼ˆãŸã¨ãˆã°ã€æ‰‹å‹•ã§ã‚»ãƒƒãƒˆã—ãŸã¨ã‹ï¼‰ã¯ã€
+    'å‰Šé™¤ã§ããªã„
 
     Dim cmd As New ADODB.Command
     Dim sql As String
@@ -520,22 +520,22 @@ Sub CreateQueryObject(queryContext As String, newQueryName As String)
 
     Set cmd = New ADODB.Command
 
-    DeleteQueryObject newQueryName                  'ƒNƒGƒŠ‚ğíœ‚µ‚Ü‚·
+    DeleteQueryObject newQueryName                  'ã‚¯ã‚¨ãƒªã‚’å‰Šé™¤ã—ã¾ã™
 
-    cmd.CommandText = queryContext                          'SQL‚ğˆø‚«“n‚µ‚ÄEEE
-    cat.Views.Append newQueryName, cmd                      'ƒNƒGƒŠ‚ğì¬‚µ‚Ü‚·
+    cmd.CommandText = queryContext                          'SQLã‚’å¼•ãæ¸¡ã—ã¦ãƒ»ãƒ»ãƒ»
+    cat.Views.Append newQueryName, cmd                      'ã‚¯ã‚¨ãƒªã‚’ä½œæˆã—ã¾ã™
     
 End Sub
 
 Function ExportForAcTable(ToExportMDBFullPath As String, targetTableName As String) As String
     
-    '£notice
-    'ToExportMDBFullPath    :”ò‚Î‚µ‚½‚¢æ‚ÌMDBƒpƒX
-    'targetTableName        :”ò‚Î‚µ‚½‚¢ƒe[ƒuƒ‹–¼i©MDBj
+    'â–²notice
+    'ToExportMDBFullPath    :é£›ã°ã—ãŸã„å…ˆã®MDBãƒ‘ã‚¹
+    'targetTableName        :é£›ã°ã—ãŸã„ãƒ†ãƒ¼ãƒ–ãƒ«åï¼ˆè‡ªMDBï¼‰
 
     Dim retValue As String
 
-    'accessƒŠƒ“ƒNBƒŠƒ“ƒNƒ‚[ƒh,ƒf[ƒ^ƒx[ƒXƒ^ƒCƒv‚ÍACCESS, ƒŠƒ“ƒN‚·‚éMDB, ƒe[ƒuƒ‹‚ğƒŠƒ“ƒN‚·‚é, ƒŠƒ“ƒN‚µ‚½‚¢ƒe[ƒuƒ‹–¼, ƒŠƒ“ƒN‚µ‚½Œã‚ÌV‚µ‚¢ƒe[ƒuƒ‹–¼
+    'accessãƒªãƒ³ã‚¯ã€‚ãƒªãƒ³ã‚¯ãƒ¢ãƒ¼ãƒ‰,ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—ã¯ACCESS, ãƒªãƒ³ã‚¯ã™ã‚‹MDB, ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’ãƒªãƒ³ã‚¯ã™ã‚‹, ãƒªãƒ³ã‚¯ã—ãŸã„ãƒ†ãƒ¼ãƒ–ãƒ«å, ãƒªãƒ³ã‚¯ã—ãŸå¾Œã®æ–°ã—ã„ãƒ†ãƒ¼ãƒ–ãƒ«å
     DoCmd.TransferDatabase _
         acExport, _
         "Microsoft Access", _
@@ -552,14 +552,14 @@ End Function
 
 Function ExportForAcTableAndNameEdit(ToExportMDBFullPath As String, targetTableName As String, newName As String) As String
     
-    '£notice
-    'ToExportMDBFullPath    :”ò‚Î‚µ‚½‚¢æ‚ÌMDBƒpƒX
-    'targetTableName        :”ò‚Î‚µ‚½‚¢ƒe[ƒuƒ‹–¼i©MDBj
-    'newName                :ƒe[ƒuƒ‹–¼•ÏXŒã‚Ì–¼‘O
+    'â–²notice
+    'ToExportMDBFullPath    :é£›ã°ã—ãŸã„å…ˆã®MDBãƒ‘ã‚¹
+    'targetTableName        :é£›ã°ã—ãŸã„ãƒ†ãƒ¼ãƒ–ãƒ«åï¼ˆè‡ªMDBï¼‰
+    'newName                :ãƒ†ãƒ¼ãƒ–ãƒ«åå¤‰æ›´å¾Œã®åå‰
 
     Dim retValue As String
 
-    'accessƒŠƒ“ƒNBƒŠƒ“ƒNƒ‚[ƒh,ƒf[ƒ^ƒx[ƒXƒ^ƒCƒv‚ÍACCESS, ƒŠƒ“ƒN‚·‚éMDB, ƒe[ƒuƒ‹‚ğƒŠƒ“ƒN‚·‚é, ƒŠƒ“ƒN‚µ‚½‚¢ƒe[ƒuƒ‹–¼, ƒŠƒ“ƒN‚µ‚½Œã‚ÌV‚µ‚¢ƒe[ƒuƒ‹–¼
+    'accessãƒªãƒ³ã‚¯ã€‚ãƒªãƒ³ã‚¯ãƒ¢ãƒ¼ãƒ‰,ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—ã¯ACCESS, ãƒªãƒ³ã‚¯ã™ã‚‹MDB, ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’ãƒªãƒ³ã‚¯ã™ã‚‹, ãƒªãƒ³ã‚¯ã—ãŸã„ãƒ†ãƒ¼ãƒ–ãƒ«å, ãƒªãƒ³ã‚¯ã—ãŸå¾Œã®æ–°ã—ã„ãƒ†ãƒ¼ãƒ–ãƒ«å
     DoCmd.TransferDatabase _
         acExport, _
         "Microsoft Access", _
