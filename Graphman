@@ -24,7 +24,7 @@ Sub SetGraphLabel_adjustXY(series_idx As Integer, data_idx As Integer, leftOffse
     Dim p As Point
     Set p = cht.SeriesCollection(series_idx).Points(data_idx)
     
-    p.DataLabel.left = p.DataLabel.left + leftOffset
+    p.DataLabel.Left = p.DataLabel.Left + leftOffset
     p.DataLabel.Top = p.DataLabel.Top + topOffset
     
 End Sub
@@ -63,143 +63,70 @@ Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
     
 End Sub
 
-Sub SetGraphType(sh As Worksheet, graphName As String, seriesName As String, graphType As XlChartType, axisGroup As XlAxisGroup, Optional needLabel As Boolean, Optional labelFontSize As Integer = 10, Optional rgbColor As Long)
+Sub SetGraphType(seriesNames() As String, graphType As XlChartType, axisGroup As XlAxisGroup, Optional needLabel As Boolean, Optional labelFontSize As Integer = 10, Optional rgbColor As Long)
 
     Dim i As Integer
         
-    'TODO：LOOPハズしてシリーズの名前で直接指定できないの？？
-    For i = 1 To cht.SeriesCollection.Count
+    For i = 0 To UBound(seriesNames)
     
-        If cht.SeriesCollection(i).Name = seriesName Then
+        'グラフの種類
+        cht.SeriesCollection(seriesNames(i)).ChartType = graphType
         
-            'グラフの種類
-            cht.SeriesCollection(i).ChartType = graphType
-            
-            '主軸か第2軸か
-            cht.SeriesCollection(i).axisGroup = axisGroup
-            
-            'データラベルの表示非表示
-            If needLabel Then
-                cht.SeriesCollection(i).HasDataLabels = True
-                cht.SeriesCollection(i).DataLabels.ShowValue = True
-                cht.SeriesCollection(i).DataLabels.Font.Size = labelFontSize
-                cht.SeriesCollection(i).DataLabels.Position = xlLabelPositionAbove
-            Else
-                cht.SeriesCollection(i).HasDataLabels = False
-            End If
-            
-            '色の指定
-            If rgbColor <> 0 Then
-                cht.SeriesCollection(i).Format.Line.ForeColor.rgb = rgbColor
-            End If
-            
+        '主軸か第2軸か
+        cht.SeriesCollection(seriesNames(i)).axisGroup = axisGroup
+        
+        'データラベルの表示非表示
+        If needLabel Then
+            cht.SeriesCollection(seriesNames(i)).HasDataLabels = True
+            cht.SeriesCollection(seriesNames(i)).DataLabels.ShowValue = True
+            cht.SeriesCollection(seriesNames(i)).DataLabels.Font.Size = labelFontSize
+            cht.SeriesCollection(seriesNames(i)).DataLabels.Position = xlLabelPositionAbove
+        Else
+            cht.SeriesCollection(seriesNames(i)).HasDataLabels = False
+        End If
+        
+        '色の指定
+        If rgbColor <> 0 Then
+            cht.SeriesCollection(seriesNames(i)).Format.Line.ForeColor.rgb = rgbColor
         End If
         
     Next i
     
 End Sub
 
-Option Explicit
-
-Private cht As Chart
-
-Sub Init(sh As Worksheet, graphName As String)
-    'グラフデータがあるシートにグラフオブジェクトを作成する
-    Set cht = sh.ChartObjects(graphName).Chart
-End Sub
-
-'データ系列（＝series_idx）内の単一のデータ要素（＝data_idx）
-Sub SetGraphLabel(series_idx As Integer, data_idx As Integer, rgb As Long)
-
-    Dim p As Point
-    Set p = cht.SeriesCollection(series_idx).Points(data_idx)
-    p.ApplyDataLabels
-    p.DataLabel.Format.AutoShapeType = msoShapeRectangle
-    p.DataLabel.Format.Line.Visible = msoTrue
-    p.DataLabel.Format.Line.ForeColor.rgb = rgb
-    
-End Sub
-
-Sub SetGraphLabel_adjustXY(series_idx As Integer, data_idx As Integer, leftOffset As Single, topOffset As Single)
-
-    Dim p As Point
-    Set p = cht.SeriesCollection(series_idx).Points(data_idx)
-    
-    p.DataLabel.left = p.DataLabel.left + leftOffset
-    p.DataLabel.Top = p.DataLabel.Top + topOffset
-    
-End Sub
-
-Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
-
-    Dim seriesCnt As Integer
-    Dim temp As String
+'前提: seriesNamesとrgbColorの要素数は同じであること。同じidxのseriesNameに対してrgbColorで着色される
+Sub SetGraphColor(seriesNames() As String, rgbColors() As String)
     Dim i As Integer
-    
-    'シリーズ（データ1行分）の集まりの数を数える
-    seriesCnt = cht.SeriesCollection.Count
-    
-    'データ1行分が cht.seriescollection(i) です。それらを削除（グラフはまっしろけになる）
-    For i = seriesCnt To 1 Step -1
-        '先頭から削除するとナンバリングが動的に変わるため、最大Cntから消しにかかる
-        cht.SeriesCollection(i).Delete
+    For i = 0 To UBound(seriesNames)
+        cht.SeriesCollection(seriesNames(i)).Format.Fill.ForeColor.rgb = rgbColors(i)
     Next i
-    
-    'hanreiNameの行数ぶんだけ処理を実行します
-    For i = 1 To hanreiRange.Rows.Count
-        
-        '新しいシリーズデータ
-        cht.SeriesCollection.NewSeries
-        
-        '新たなデータ参照範囲はseriesHeaderの列数ぶんになります
-        temp = "=SERIES({HANREI},{LABEL},{SERIES},{ORDER})"
-        temp = Replace(temp, "{HANREI}", hanreiRange.Cells(i).Address(external:=True))
-        temp = Replace(temp, "{LABEL}", seriesHeader.Address(external:=True))
-        temp = Replace(temp, "{SERIES}", seriesHeader.Offset(i).Address(external:=True))
-        temp = Replace(temp, "{ORDER}", i)
-        cht.SeriesCollection(i).Formula = temp
-        cht.SeriesCollection(i).axisGroup = xlPrimary
-        
-    Next i
-    
 End Sub
 
-Sub SetGraphType(sh As Worksheet, graphName As String, seriesName As String, graphType As XlChartType, axisGroup As XlAxisGroup, Optional needLabel As Boolean, Optional labelFontSize As Integer = 10, Optional rgbColor As Long)
-
+Sub SetGraphColorpattern(seriesNames() As String, Optional ptn As MsoPatternType = msoPatternLightDownwardDiagonal, Optional ptn_color As Long = "255")
     Dim i As Integer
-        
-    'TODO：LOOPハズしてシリーズの名前で直接指定できないの？？
-    For i = 1 To cht.SeriesCollection.Count
-    
-        If cht.SeriesCollection(i).Name = seriesName Then
-        
-            'グラフの種類
-            cht.SeriesCollection(i).ChartType = graphType
-            
-            '主軸か第2軸か
-            cht.SeriesCollection(i).axisGroup = axisGroup
-            
-            'データラベルの表示非表示
-            If needLabel Then
-                cht.SeriesCollection(i).HasDataLabels = True
-                cht.SeriesCollection(i).DataLabels.ShowValue = True
-                cht.SeriesCollection(i).DataLabels.Font.Size = labelFontSize
-                cht.SeriesCollection(i).DataLabels.Position = xlLabelPositionAbove
-            Else
-                cht.SeriesCollection(i).HasDataLabels = False
-            End If
-            
-            '色の指定
-            If rgbColor <> 0 Then
-                cht.SeriesCollection(i).Format.Line.ForeColor.rgb = rgbColor
-            End If
-            
-        End If
-        
+    For i = 0 To UBound(seriesNames)
+        With cht.SeriesCollection(seriesNames(i)).Format.Fill
+            .Visible = msoTrue
+            .ForeColor.rgb = ptn_color
+            .Patterned = ptn
+        End With
     Next i
-    
 End Sub
 
-Property Get HorizonY()
-    HorizonY = cht.PlotArea.Top + cht.PlotArea.Height
+Sub SetGraphLineDashStyle(seriesNames() As String, Optional style As MsoLineDashStyle = msoLineDash)
+    Dim i As Integer
+    For i = 0 To UBound(seriesNames)
+        With Selection.Format.Line
+            .Visible = msoTrue
+            .DashStyle = style
+        End With
+    Next i
+End Sub
+
+Property Get HorizonY() As Single
+    HorizonY = (cht.PlotArea.InsideTop - cht.ChartArea.Top) + cht.PlotArea.InsideHeight
+End Property
+
+Property Get VirticalX() As Single
+    VirticalX = (cht.PlotArea.InsideLeft - cht.ChartArea.Left) + cht.PlotArea.InsideWidth
 End Property
