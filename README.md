@@ -151,19 +151,39 @@ Private Sub btnGraph_Click()
     
     Dim u As New ExcelManipulator
     Dim g As New Graphman
+    
+    Dim sh As Worksheet
     Dim hanrei As Range
     Dim header As Range
     
-    Set hanrei = u.GetRegion(ActiveSheet.Range("A2"), xlDown)
-    Set header = u.GetRegion(ActiveSheet.Range("B1"), xlToRight)
+    Dim seriesNames() As String
+    Dim rgbColors() As String
+    
+    Set sh = ActiveSheet
+    Set hanrei = u.GetRegion(sh.Range("A2"), xlDown)
+    Set header = u.GetRegion(sh.Range("B1"), xlToRight)
     
     '「グラフ 1」の範囲を変更する
-    g.Init ActiveSheet, "グラフ 1"
+    g.Init sh, "グラフ 1"
     g.SetGraphRange header, hanrei
     
-    g.SetGraphType ActiveSheet, "グラフ 1", "合計", xlLine, xlSecondary, True, , 49407
+    seriesNames = Split("トマト,枝豆,きゅうり", ",")
+    g.SetGraphType seriesNames, xlColumnStacked, xlPrimary, False   '棒, 主軸, ラベルなし, fontsize10, 色なし
+    rgbColors = Split("13998939,3243501,10855845", ",")             '青橙灰
+    g.SetGraphColor seriesNames, rgbColors
+    g.SetGraphLineDashStyle seriesNames                             '破線
+    
+    seriesNames = Split("合計", ",")
+    g.SetGraphType seriesNames, xlLine, xlSecondary, True           '線, 2軸, ラベルあり, fontsize10, 色なし
+    rgbColors = Split("49407", ",")                                 '黄
+    g.SetGraphColor seriesNames, rgbColors
+    g.SetGraphColorpattern seriesNames                              '前景色の右下がり対角線
+    
     g.SetGraphLabel 1, 9, rgb(191, 191, 191)
     g.SetGraphLabel_adjustXY 1, 9, -20, -20
+    
+    MsgBox "HorizonY: " & HorizonY
+    MsgBox "VirticalX: " & VirticalX
     
 End Sub
 ```
