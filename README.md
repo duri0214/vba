@@ -146,6 +146,14 @@ End Sub
 ```
 
 グラフの範囲変更とグラフ種変更のサンプル
+
+| 　       | 4/17 | 4/24 | 5/1 | 5/8 | 5/15 | 5/22 | 5/29 | 6/5  | 6/12  |
+|----------|------|------|-----|-----|------|------|------|------|-------|
+| トマト   | 0    | 3    | 5   | 7   | 12.5 | 20   | 32.5 | 41   | 68.5  |
+| 枝豆     | 0    | 0    | 2   | 7   | 9    | 15   | 19.5 | 22.5 | 28    |
+| きゅうり | 0    | 2    | 4   | 8   | 14.5 | 18   | 23.5 | 29   | 36    |
+| 合計     | 0    | 5    | 11  | 22  | 36   | 53   | 75.5 | 92.5 | 132.5 |
+
 ```vb
 Private Sub btnGraph_Click()
     
@@ -167,23 +175,26 @@ Private Sub btnGraph_Click()
     g.Init sh, "グラフ 1"
     g.SetGraphRange header, hanrei
     
+    '軸1
     seriesNames = Split("トマト,枝豆,きゅうり", ",")
     g.SetGraphType seriesNames, xlColumnStacked, xlPrimary, False   '棒, 主軸, ラベルなし, fontsize10, 色なし
     rgbColors = Split("13998939,3243501,10855845", ",")             '青橙灰
     g.SetGraphColor seriesNames, rgbColors
-    g.SetGraphLineDashStyle seriesNames                             '破線
     
+    '軸2
     seriesNames = Split("合計", ",")
     g.SetGraphType seriesNames, xlLine, xlSecondary, True           '線, 2軸, ラベルあり, fontsize10, 色なし
     rgbColors = Split("49407", ",")                                 '黄
     g.SetGraphColor seriesNames, rgbColors
+    g.SetGraphLineDashStyle seriesNames                             '破線
     g.SetGraphColorpattern seriesNames                              '前景色の右下がり対角線
     
+    'データラベル
     g.SetGraphLabel 1, 9, rgb(191, 191, 191)
     g.SetGraphLabel_adjustXY 1, 9, -20, -20
     
-    MsgBox "HorizonY: " & HorizonY
-    MsgBox "VirticalX: " & VirticalX
+    MsgBox "HorizonY: " & g.HorizonY
+    MsgBox "VerticalX: " & g.VerticalX
     
 End Sub
 ```
