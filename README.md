@@ -241,6 +241,8 @@ End Sub
 Private Sub btnPivot_Click()
     
     Dim u As New ExcelManipulator
+    Dim bk As Workbook
+    Dim sh As Worksheet
     Dim newSheet As Worksheet
 
     Dim pvt_name As String
@@ -250,19 +252,27 @@ Private Sub btnPivot_Click()
     Dim pvt_data As Range
     Dim pvt_destination As Range
     
+    Set bk = ThisWorkbook
+    Set sh = bk.Worksheets("db")
+    
     '前工程）特定のMKをその他セグメントに変換
-    Set pvt_data = ThisWorkbook.Worksheets("db").Range("J27:M34")
+    Set pvt_data = sh.Range("J27:M63")
     pvt_data.Replace "9999", "その他"
     
     '作成するシートの決定とシート名の決定
+    pvt_name = "pvt"
+    If u.IsSheetExists(bk, pvt_name) Then
+        Application.DisplayAlerts = False
+        bk.Worksheets(pvt_name).Delete
+        Application.DisplayAlerts = True
+    End If
     Set newSheet = Sheets.Add(after:=pvt_data.Parent)
-    newSheet.Name = "pvt"
+    newSheet.Name = pvt_name
     
     'A）Pivotテーブルを仕込む
-    pvt_name = "the_pivot_name"
-    pvt_group = "MK"
-    pvt_col = "ステータス"
-    pvt_value = "dammy,QTY"
+    pvt_group = "MK,ステータス"
+    pvt_col = ""
+    pvt_value = "dummy,QTY"
     Set pvt_destination = newSheet.Range("A1")
     u.CreatePivotTable pvt_name, pvt_group, pvt_col, pvt_value, xlCount, pvt_data, pvt_destination, False
     
@@ -283,9 +293,9 @@ Private Sub btnPivot_Click()
     Dim aggheader As Range
     Dim i As Integer
     
-    Set aggheader = ThisWorkbook.Worksheets("db").Range("B27").Resize(, 3)
-    Set vlk_data = ThisWorkbook.Worksheets("db").Range("B28").Resize(, 3)
-    Set vlk_data = ThisWorkbook.Worksheets("db").Range(vlk_data, vlk_data.End(xlDown))
+    Set aggheader = sh.Range("B27").Resize(, 3)
+    Set vlk_data = sh.Range("B28").Resize(, 3)
+    Set vlk_data = sh.Range(vlk_data, vlk_data.End(xlDown))
     vlk_datasource = newSheet.UsedRange.Address(External:=True)
     For i = 1 To vlk_data.Rows.Count
         
