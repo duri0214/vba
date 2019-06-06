@@ -102,13 +102,14 @@ Sub SetGraphColor(seriesNames() As String, rgbColors() As String)
     Next i
 End Sub
 
-Sub SetGraphColorpattern(seriesNames() As String, Optional ptn As MsoPatternType = msoPatternLightDownwardDiagonal, Optional ptn_color As Long = "255")
+Sub SetGraphColorpattern(seriesNames() As String, Optional ptn_type As MsoPatternType = msoPatternLightDownwardDiagonal, Optional ptn_color As Long = "255")
     Dim i As Integer
     For i = 0 To UBound(seriesNames)
-        With cht.SeriesCollection(seriesNames(i)).Format.Fill
+        cht.SeriesCollection(seriesNames(i)).Select
+        With Selection.Format.Fill
             .Visible = msoTrue
             .ForeColor.rgb = ptn_color
-            .Patterned = ptn
+            .Patterned ptn_type
         End With
     Next i
 End Sub
@@ -116,6 +117,7 @@ End Sub
 Sub SetGraphLineDashStyle(seriesNames() As String, Optional style As MsoLineDashStyle = msoLineDash)
     Dim i As Integer
     For i = 0 To UBound(seriesNames)
+        cht.SeriesCollection(seriesNames(i)).Select
         With Selection.Format.Line
             .Visible = msoTrue
             .DashStyle = style
@@ -127,6 +129,6 @@ Property Get HorizonY() As Single
     HorizonY = (cht.PlotArea.InsideTop - cht.ChartArea.Top) + cht.PlotArea.InsideHeight
 End Property
 
-Property Get VirticalX() As Single
-    VirticalX = (cht.PlotArea.InsideLeft - cht.ChartArea.Left) + cht.PlotArea.InsideWidth
+Property Get VerticalX() As Single
+    VerticalX = (cht.PlotArea.InsideLeft - cht.ChartArea.Left) + cht.PlotArea.InsideWidth
 End Property
