@@ -153,13 +153,13 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     
 End Function
 
-Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_col As String, pvt_value As String, aggType As XlConsolidationFunction, pvt_headerAndData As Range, pvt_destination As Range)
+Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_col As String, pvt_value As String, aggType As XlConsolidationFunction, pvt_headerAndData As Range, pvt_destination As Range, is_subtotal_unnecessary As Boolean)
     
     Dim i As Integer
     Dim temp As Variant
     
-    'ピボットテーブルを作成
-    pvt_destination.Parent.Parent.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=pvt_headerAndData).CreatePivotTable TableDestination:=pvt_destination, TableName:=pvt_name
+    'ピボットテーブルを作成（データソース指定は文字列なんだそうだ）
+    pvt_destination.Parent.Parent.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=pvt_headerAndData.Address(External:=True)).CreatePivotTable TableDestination:=pvt_destination, TableName:=pvt_name
 
     'ピボット行の指定
     temp = Split(pvt_group, ",")
@@ -195,6 +195,15 @@ Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_col As String,
     '行と列の集計を行わない（総計を出さない）
     pvt_destination.Parent.PivotTables(pvt_name).ColumnGrand = False
     pvt_destination.Parent.PivotTables(pvt_name).RowGrand = False
+    
+    '小計は不要です
+    If is_subtotal_unnecessary Then
+        Dim pv_fld As PivotField
+        For Each pv_fld In ActiveSheet.PivotTables(1).PivotFields
+            pv_fld.Subtotals(1) = True
+            pv_fld.Subtotals(1) = False
+        Next pv_fld
+    End If
 
 End Sub
 
