@@ -264,7 +264,7 @@ Private Sub btnPivot_Click()
     pvt_col = "ステータス"
     pvt_value = "dammy,QTY"
     Set pvt_destination = newSheet.Range("A1")
-    u.CreatePivotTable pvt_name, pvt_group, pvt_col, pvt_value, xlCount, pvt_data, pvt_destination
+    u.CreatePivotTable pvt_name, pvt_group, pvt_col, pvt_value, xlCount, pvt_data, pvt_destination, False
     
     'A）Pivotテーブルにフィルターを仕込む
     u.SetFilterOnPivotTable ActiveSheet.PivotTables(1), "ステータス", "A,C", False
@@ -286,7 +286,7 @@ Private Sub btnPivot_Click()
     Set aggheader = ThisWorkbook.Worksheets("db").Range("B27").Resize(, 3)
     Set vlk_data = ThisWorkbook.Worksheets("db").Range("B28").Resize(, 3)
     Set vlk_data = ThisWorkbook.Worksheets("db").Range(vlk_data, vlk_data.End(xlDown))
-    vlk_datasource = newSheet.UsedRange.Address(external:=True)
+    vlk_datasource = newSheet.UsedRange.Address(External:=True)
     For i = 1 To vlk_data.Rows.Count
         
         If vlk_data(i, 2).value = "合計" Then
