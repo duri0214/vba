@@ -112,7 +112,7 @@ Function ConvertToLetter(iCol As Integer) As String
    End If
 End Function
 
-'"項目名:値1,値2,値3"
+'"項目名:値1,値2,値3"（※シングルアクションです！）
 Function GetFilteredRange(header As Range, filter As String) As Range
     
     Dim temp As Variant
@@ -121,13 +121,17 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     Dim filter_col As Integer
     Dim filter_value() As String
     Dim b As Boolean
+    Dim r As Range
     
     temp = header
     
     '項目名のある列位置を探す
+    Dim colOffset As Integer
     For i = 1 To UBound(temp, 2)
         If temp(1, i) = Split(filter, ":")(0) Then
-            filter_col = header(1, i).column
+            colOffset = header(1, 1).column - 1
+            filter_col = header(1, i).column - colOffset
+            Exit For
         End If
     Next i
     
@@ -141,15 +145,16 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     Next i
     
     'オートフィルタ
+    Set r = header.Parent.Range(header, header.SpecialCells(xlCellTypeLastCell))
     If b Then
         'パラメータに "<>"（＝空白以外すべて）が含まれているときは、配列で突っ込むと実行時エラーが起きるため対応
-        header.CurrentRegion.AutoFilter filter_col, "<>", xlFilterValues
+        r.AutoFilter filter_col, "<>", xlFilterValues
     Else
         '複数パラメータに対応できる
-        header.CurrentRegion.AutoFilter filter_col, filter_value, xlFilterValues
+        r.AutoFilter filter_col, filter_value, xlFilterValues
     End If
     
-    Set GetFilteredRange = header.CurrentRegion
+    Set GetFilteredRange = header.Parent.Range(header, header.SpecialCells(xlCellTypeLastCell))
     
 End Function
 
