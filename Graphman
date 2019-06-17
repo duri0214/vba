@@ -72,30 +72,46 @@ End Sub
 
 Sub SetGraphType(seriesNames() As String, graphType As XlChartType, axisGroup As XlAxisGroup, Optional needLabel As Boolean, Optional labelFontSize As Integer = 10, Optional rgbColor As Long)
 
+    '▲Caution:
+    '操作対象のグラフのあるシートがアクティブ化されていること
+    'LOOPハズしてSeriesCollectionに対してシリーズの名前で直接指定...はできなかった（確認済み）
+    
     Dim i As Integer
-        
+    Dim j As Integer
+    
     For i = 0 To UBound(seriesNames)
     
-        'グラフの種類
-        cht.SeriesCollection(seriesNames(i)).ChartType = graphType
+        For j = 1 To cht.SeriesCollection.Count
+    
+            'seriesNameを見つけた！
+            If cht.SeriesCollection(j).Name = seriesNames(i) Then
         
-        '主軸か第2軸か
-        cht.SeriesCollection(seriesNames(i)).axisGroup = axisGroup
-        
-        'データラベルの表示非表示
-        If needLabel Then
-            cht.SeriesCollection(seriesNames(i)).HasDataLabels = True
-            cht.SeriesCollection(seriesNames(i)).DataLabels.ShowValue = True
-            cht.SeriesCollection(seriesNames(i)).DataLabels.Font.Size = labelFontSize
-            cht.SeriesCollection(seriesNames(i)).DataLabels.Position = xlLabelPositionAbove
-        Else
-            cht.SeriesCollection(seriesNames(i)).HasDataLabels = False
-        End If
-        
-        '色の指定
-        If rgbColor <> 0 Then
-            cht.SeriesCollection(seriesNames(i)).Format.Line.ForeColor.rgb = rgbColor
-        End If
+                'グラフの種類
+                 cht.SeriesCollection(j).ChartType = graphType
+                
+                '主軸か第2軸か
+                cht.SeriesCollection(j).axisGroup = axisGroup
+                
+                'データラベルの表示非表示
+                If needLabel Then
+                    cht.SeriesCollection(j).HasDataLabels = True
+                    cht.SeriesCollection(j).DataLabels.ShowValue = True
+                    cht.SeriesCollection(j).DataLabels.Font.Size = labelFontSize
+                    cht.SeriesCollection(j).DataLabels.Position = xlLabelPositionAbove
+                Else
+                    cht.SeriesCollection(j).HasDataLabels = False
+                End If
+                
+                '色の指定
+                If rgbColor <> 0 Then
+                    cht.SeriesCollection(j).Format.Line.ForeColor.rgb = rgbColor
+                End If
+                
+                Exit For    'つぎのseriesNameへ（※同じseriesNameは無い前提とする）
+            
+            End If
+    
+        Next j
         
     Next i
     
@@ -103,33 +119,62 @@ End Sub
 
 '前提: seriesNamesとrgbColorの要素数は同じであること。同じidxのseriesNameに対してrgbColorで着色される
 Sub SetGraphColor(seriesNames() As String, rgbColors() As String)
+
     Dim i As Integer
+    Dim j As Integer
+    
     For i = 0 To UBound(seriesNames)
-        cht.SeriesCollection(seriesNames(i)).Format.Fill.ForeColor.rgb = rgbColors(i)
+        For j = 1 To cht.SeriesCollection.Count
+            'seriesNameを見つけた！
+            If cht.SeriesCollection(j).Name = seriesNames(i) Then
+                cht.SeriesCollection(j).Format.Fill.ForeColor.rgb = rgbColors(i)
+                Exit For    'つぎのseriesNameへ（※同じseriesNameは無い前提とする）
+            End If
+        Next j
     Next i
+    
 End Sub
 
 Sub SetGraphColorpattern(seriesNames() As String, Optional ptn_type As MsoPatternType = msoPatternLightDownwardDiagonal, Optional ptn_color As Long = "255")
+
     Dim i As Integer
+    Dim j As Integer
+    
     For i = 0 To UBound(seriesNames)
-        cht.SeriesCollection(seriesNames(i)).Select
-        With Selection.Format.Fill
-            .Visible = msoTrue
-            .ForeColor.rgb = ptn_color
-            .Patterned ptn_type
-        End With
+        For j = 1 To cht.SeriesCollection.Count
+            'seriesNameを見つけた！
+            If cht.SeriesCollection(j).Name = seriesNames(i) Then
+                cht.SeriesCollection(j).Select
+                With Selection.Format.Fill
+                    .Visible = msoTrue
+                    .ForeColor.rgb = ptn_color
+                    .Patterned ptn_type
+                End With
+            End If
+            
+        Next j
     Next i
+    
 End Sub
 
 Sub SetGraphLineDashStyle(seriesNames() As String, Optional style As MsoLineDashStyle = msoLineDash)
+
     Dim i As Integer
+    Dim j As Integer
+    
     For i = 0 To UBound(seriesNames)
-        cht.SeriesCollection(seriesNames(i)).Select
-        With Selection.Format.Line
-            .Visible = msoTrue
-            .DashStyle = style
-        End With
+        For j = 1 To cht.SeriesCollection.Count
+            'seriesNameを見つけた！
+            If cht.SeriesCollection(j).Name = seriesNames(i) Then
+                cht.SeriesCollection(j).Select
+                With Selection.Format.Line
+                    .Visible = msoTrue
+                    .DashStyle = style
+                End With
+            End If
+        Next j
     Next i
+    
 End Sub
 
 Property Get Name() As String
@@ -138,7 +183,6 @@ End Property
 Property Get HorizonY() As Single
     HorizonY = (cht.PlotArea.InsideTop - cht.ChartArea.Top) + cht.PlotArea.InsideHeight
 End Property
-
 Property Get VerticalX() As Single
     VerticalX = (cht.PlotArea.InsideLeft - cht.ChartArea.Left) + cht.PlotArea.InsideWidth
 End Property
