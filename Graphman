@@ -3,7 +3,14 @@ Option Explicit
 Private cht As Chart
 
 Sub Init(sh As Worksheet, graphName As String)
+
     'グラフデータがあるシートにグラフオブジェクトを作成する
+    
+    '▲Caution:
+    ' .Chart でオブジェクトを取得するときになぜかコンテナのシート（sh）を無視して
+    ' ActiveSheet の graphName を取得することが発覚。LOOPで各シートのグラフを変えて回るようなときにunsafe。
+    sh.Activate
+    
     Set cht = sh.ChartObjects(graphName).Chart
 End Sub
 
@@ -52,9 +59,9 @@ Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
         
         '新たなデータ参照範囲はseriesHeaderの列数ぶんになります
         temp = "=SERIES({HANREI},{LABEL},{SERIES},{ORDER})"
-        temp = Replace(temp, "{HANREI}", hanreiRange.Cells(i).Address(external:=True))
-        temp = Replace(temp, "{LABEL}", seriesHeader.Address(external:=True))
-        temp = Replace(temp, "{SERIES}", seriesHeader.Offset(i).Address(external:=True))
+        temp = Replace(temp, "{HANREI}", hanreiRange.Cells(i).Address(External:=True))
+        temp = Replace(temp, "{LABEL}", seriesHeader.Address(External:=True))
+        temp = Replace(temp, "{SERIES}", seriesHeader.Offset(i).Address(External:=True))
         temp = Replace(temp, "{ORDER}", i)
         cht.SeriesCollection(i).Formula = temp
         cht.SeriesCollection(i).axisGroup = xlPrimary
@@ -125,6 +132,9 @@ Sub SetGraphLineDashStyle(seriesNames() As String, Optional style As MsoLineDash
     Next i
 End Sub
 
+Property Get Name() As String
+    Name = cht.Name
+End Property
 Property Get HorizonY() As Single
     HorizonY = (cht.PlotArea.InsideTop - cht.ChartArea.Top) + cht.PlotArea.InsideHeight
 End Property
