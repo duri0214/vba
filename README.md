@@ -193,8 +193,8 @@ Private Sub btnGraph_Click()
     g.SetGraphLabel 1, 9, rgb(191, 191, 191)
     g.SetGraphLabel_adjustXY 1, 9, -20, -20
     
-    MsgBox "HorizonY: " & g.HorizonY
-    MsgBox "VerticalX: " & g.VerticalX
+'    MsgBox "HorizonY: " & g.HorizonY
+'    MsgBox "VerticalX: " & g.VerticalX
     
 End Sub
 ```
