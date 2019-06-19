@@ -41,6 +41,7 @@ Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
     Dim seriesCnt As Integer
     Dim temp As String
     Dim i As Integer
+    Dim series_range As Range
     
     'シリーズ（データ1行分）の集まりの数を数える
     seriesCnt = cht.SeriesCollection.Count
@@ -53,6 +54,9 @@ Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
     
     'hanreiNameの行数ぶんだけ処理を実行します
     For i = 1 To hanreiRange.Rows.Count
+    
+        'シリーズ範囲
+        Set series_range = hanreiRange.Parent.Cells(hanreiRange(i).row, seriesHeader(1, 1).column).Resize(1, seriesHeader.Columns.Count)
         
         '新しいシリーズデータ
         cht.SeriesCollection.NewSeries
@@ -61,7 +65,7 @@ Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
         temp = "=SERIES({HANREI},{LABEL},{SERIES},{ORDER})"
         temp = Replace(temp, "{HANREI}", hanreiRange.Cells(i).Address(External:=True))
         temp = Replace(temp, "{LABEL}", seriesHeader.Address(External:=True))
-        temp = Replace(temp, "{SERIES}", seriesHeader.Offset(i).Address(External:=True))
+        temp = Replace(temp, "{SERIES}", series_range.Address(External:=True))
         temp = Replace(temp, "{ORDER}", i)
         cht.SeriesCollection(i).Formula = temp
         cht.SeriesCollection(i).axisGroup = xlPrimary
@@ -144,8 +148,7 @@ Sub SetGraphColorpattern(seriesNames() As String, Optional ptn_type As MsoPatter
         For j = 1 To cht.SeriesCollection.Count
             'seriesNameを見つけた！
             If cht.SeriesCollection(j).Name = seriesNames(i) Then
-                cht.SeriesCollection(j).Select
-                With Selection.Format.Fill
+                With cht.SeriesCollection(j).Format.Fill
                     .Visible = msoTrue
                     .ForeColor.rgb = ptn_color
                     .Patterned ptn_type
@@ -166,8 +169,7 @@ Sub SetGraphLineDashStyle(seriesNames() As String, Optional style As MsoLineDash
         For j = 1 To cht.SeriesCollection.Count
             'seriesNameを見つけた！
             If cht.SeriesCollection(j).Name = seriesNames(i) Then
-                cht.SeriesCollection(j).Select
-                With Selection.Format.Line
+                With cht.SeriesCollection(j).Format.Line
                     .Visible = msoTrue
                     .DashStyle = style
                 End With
