@@ -38,16 +38,13 @@ End Sub
 
 Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
 
-    Dim seriesCnt As Integer
-    Dim temp As String
+    Dim cnt As Integer
     Dim i As Integer
-    Dim series_range As Range
-    
-    'シリーズ（データ1行分）の集まりの数を数える
-    seriesCnt = cht.SeriesCollection.Count
+    Dim r As Range
     
     'データ1行分が cht.seriescollection(i) です。それらを削除（グラフはまっしろけになる）
-    For i = seriesCnt To 1 Step -1
+    cnt = cht.SeriesCollection.Count
+    For i = cnt To 1 Step -1
         '先頭から削除するとナンバリングが動的に変わるため、最大Cntから消しにかかる
         cht.SeriesCollection(i).Delete
     Next i
@@ -55,20 +52,14 @@ Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
     'hanreiNameの行数ぶんだけ処理を実行します
     For i = 1 To hanreiRange.Rows.Count
     
-        'シリーズ範囲
-        Set series_range = hanreiRange.Parent.Cells(hanreiRange(i).row, seriesHeader(1, 1).column).Resize(1, seriesHeader.Columns.Count)
-        
-        '新しいシリーズデータ
+        'シリーズ範囲（新たなデータ参照範囲はseriesHeaderの列sizeになります）
+        Set r = hanreiRange.Parent.Cells(hanreiRange(i).row, seriesHeader(1, 1).column).Resize(1, seriesHeader.Columns.Count)
         cht.SeriesCollection.NewSeries
-        
-        '新たなデータ参照範囲はseriesHeaderの列数ぶんになります
-        temp = "=SERIES({HANREI},{LABEL},{SERIES},{ORDER})"
-        temp = Replace(temp, "{HANREI}", hanreiRange.Cells(i).Address(External:=True))
-        temp = Replace(temp, "{LABEL}", seriesHeader.Address(External:=True))
-        temp = Replace(temp, "{SERIES}", series_range.Address(External:=True))
-        temp = Replace(temp, "{ORDER}", i)
-        cht.SeriesCollection(i).Formula = temp
-        cht.SeriesCollection(i).axisGroup = xlPrimary
+        With cht.SeriesCollection(i)
+            .Name = "=" & hanreiRange.Cells(i).Address(External:=True)
+            .Values = "=" & r.Address(External:=True)
+            .XValues = "=" & seriesHeader.Address(External:=True)
+        End With
         
     Next i
     
