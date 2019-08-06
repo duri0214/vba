@@ -123,6 +123,7 @@ Sub SetGraphColor(seriesNames() As String, rgbColors() As String)
             'seriesNameを見つけた！
             If cht.SeriesCollection(j).Name = seriesNames(i) Then
                 cht.SeriesCollection(j).Format.Fill.ForeColor.rgb = rgbColors(i)
+                cht.SeriesCollection(j).Format.Line.ForeColor.rgb = rgbColors(i)
                 Exit For    'つぎのseriesNameへ（※同じseriesNameは無い前提とする）
             End If
         Next j
