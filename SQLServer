@@ -12,10 +12,6 @@ Sub Connect(ipOrServername As String, dbname As String, usrId As String, pwd As 
 
 End Sub
 
-Function GetCon() As ADODB.Connection
-    Set GetCon = con
-End Function
-
 Function GetCursor(sql As String) As ADODB.Recordset
 
     'adOpenStaticは、レコード件数を保持します
@@ -24,6 +20,20 @@ Function GetCursor(sql As String) As ADODB.Recordset
     Set GetCursor = rs
 
 End Function
+
+'ドハマリ注意！顔を取得してLOOPしながら一時テーブルを作って～なんてやるときは
+'顔を取得する new SQLServer と アクションクエリを発行する new SQLServer とで変数を分ける必要があります
+'ConnectionをクローズしてもOKです
+'https://qa.itmedia.co.jp/qa7544490.html
+Sub Execute(sql As String)
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    cmd.ActiveConnection = con
+    cmd.CommandText = sql
+    cmd.Execute
+    
+End Sub
 
 Sub DisConnect()
     con.Close
