@@ -302,3 +302,18 @@ Function IsFileExistsAndNotUsing(path As String) As Boolean
     End If
     IsFileExistsAndNotUsing = retValue
 End Function
+
+'範囲r の最左列を検索して相対的な位置を返す（見つからない場合は0）
+'e.g. r:="B3:C5", search_at:="hoge" ... B4にhoge => 2
+Function get_relative_row(r As Range, search_at As String) As Long
+
+    Dim buf As Range
+    Dim offset_at As Long
+    Dim retValue As Long
+    Set buf = r.Find(search_at) 'B4
+    If Not buf Is Nothing Then
+        retValue = buf.row - (r(1, 1).row - 1) '4-(3-1)
+    End If
+    get_relative_row = retValue
+
+End Function
