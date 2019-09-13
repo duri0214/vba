@@ -15,6 +15,7 @@ End Sub
 ```
 
 相対位置取得
+```vb
 Private Sub btnRelativerow_Click()
     Dim u As New ExcelManipulator
     Dim r As Range
@@ -22,6 +23,7 @@ Private Sub btnRelativerow_Click()
     r.Select
     MsgBox u.get_relative_row(r, 3)
 End Sub
+```
 
 ファイルリスト取得
 ```vb
