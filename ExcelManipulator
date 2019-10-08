@@ -262,8 +262,12 @@ Function GetEnd(r As Range, direction As XlDirection) As Range
 End Function
 
 'GetEndを利用して基準セル r から、direction 方面に向かってデータの塊領域を取得
-Function GetRegion(r As Range, direction As XlDirection) As Range
-    Set GetRegion = r.Parent.Range(r, GetEnd(r, direction))
+Function GetRegion(r As Range, direction As XlDirection, Optional inverse = False) As Range
+    If Not inverse Then
+        Set GetRegion = r.Parent.Range(r, r.End(direction))
+    Else
+        Set GetRegion = r.Parent.Range(r, GetEnd(r, direction))
+    End If
 End Function
 
 'IsFileExistsAndNotUsingをFSOSuiteから移管（下のIsFileExistsとIsFileUsingを使用）
