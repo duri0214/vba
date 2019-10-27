@@ -2,6 +2,10 @@ Option Explicit
 
 Private cht As Chart
 
+Property Get Title() As String
+    Title = cht.ChartTitle.Caption
+End Property
+
 Sub Init(sh As Worksheet, graphName As String)
 
     'グラフデータがあるシートにグラフオブジェクトを作成する
