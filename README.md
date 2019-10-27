@@ -185,6 +185,7 @@ Private Sub btnGraph_Click()
     '「グラフ 1」の範囲を変更する
     g.Init sh, "グラフ 1"
     g.SetGraphRange header, hanrei
+    MsgBox g.Title
     
     '軸1
     seriesNames = Split("トマト,枝豆,きゅうり", ",")
