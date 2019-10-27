@@ -268,7 +268,7 @@ Private Sub btnPivot_Click()
     Set sh = bk.Worksheets("db")
     
     '前工程）特定のMKをその他セグメントに変換
-    Set pvt_data = sh.Range("J27:M63")
+    Set pvt_data = u.GetRegion(sh.Range("J27:M27"), xlDown)
     pvt_data.Replace "9999", "その他"
     
     '作成するシートの決定とシート名の決定
@@ -290,7 +290,9 @@ Private Sub btnPivot_Click()
     
     'A）Pivotテーブルにフィルターを仕込む
     u.SetFilterOnPivotTable ActiveSheet.PivotTables(1), "ステータス", "A,C", False
-    u.SetFilterOnPivotTable ActiveSheet.PivotTables(1), "ステータス", "A,C", True
+'    u.SetFilterOnPivotTable ActiveSheet.PivotTables(1), "ステータス", "A,C", True
+    u.SetSortOnPivotTable ActiveSheet.PivotTables(1), "ステータス", "dummy", xlDescending
+    u.SetFilterTop10OnPivotTable ActiveSheet.PivotTables(1), "ステータス", "dummy"
 
     'key列を作る
     newSheet.Columns("A:A").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
