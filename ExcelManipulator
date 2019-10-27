@@ -234,6 +234,12 @@ Sub SetFilterOnPivotTable(pvt As PivotTable, filteringColName As String, list As
     Next item
   
 End Sub
+Sub SetFilterTop10OnPivotTable(pvt As PivotTable, sorted_col As String, sorted_value As String)
+    pvt.PivotFields(sorted_col).PivotFilters.Add Type:=xlTopCount, DataField:=pvt.PivotFields("集計 / " & sorted_value), Value1:=10
+End Sub
+Sub SetSortOnPivotTable(pvt As PivotTable, sorted_col As String, sorted_value As String, direction As XlSortOrder)
+    pvt.PivotFields(sorted_col).AutoSort direction, "集計 / " & sorted_value
+End Sub
 
 'Excel限界を考慮した終端（行または列）を取得
 'ただし、終端（行または列）に移動してから逆方向にEndをかけるため、終端に値が入っている場合はバグる
