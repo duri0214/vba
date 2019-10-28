@@ -60,7 +60,7 @@ Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
         Set r = hanreiRange.Parent.Cells(hanreiRange(i).row, seriesHeader(1, 1).column).Resize(1, seriesHeader.Columns.Count)
         cht.SeriesCollection.NewSeries
         With cht.SeriesCollection(i)
-            .Name = "=" & hanreiRange.Cells(i).Address(External:=True)
+            .Name = "=" & hanreiRange(i, 1).Resize(, hanreiRange.Columns.Count).Address(External:=True)
             .Values = "=" & r.Address(External:=True)
             .XValues = "=" & seriesHeader.Address(External:=True)
         End With
