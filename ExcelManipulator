@@ -213,7 +213,7 @@ Sub CreatePivotTable(pvt_name As String, pvt_group As String, pvt_col As String,
 End Sub
 
 'filteringColName の列の "値1,値2,値3" のパラメータを b にして、listの値以外をすべて b の反対にする
-Sub SetFilterOnPivotTable(pvt As PivotTable, filteringColName As String, list As String, b As Boolean)
+Sub SetFilterOnPivotTable(pvt As PivotTable, filteringColName As String, list As String, b As Boolean, Optional isReportFilter As Boolean)
     
     Dim temp As Variant
     Dim i As Integer
@@ -232,8 +232,13 @@ Sub SetFilterOnPivotTable(pvt As PivotTable, filteringColName As String, list As
             End If
         Next i
     Next item
+    
+    If isReportFilter Then
+        pvt.PivotFields(filteringColName).Orientation = xlPageField
+    End If
   
 End Sub
+
 Sub SetFilterTop10OnPivotTable(pvt As PivotTable, sorted_col As String, sorted_value As String)
     pvt.PivotFields(sorted_col).PivotFilters.Add Type:=xlTopCount, DataField:=pvt.PivotFields("集計 / " & sorted_value), Value1:=10
 End Sub
