@@ -175,6 +175,13 @@ Sub SetGraphLineDashStyle(seriesNames() As String, Optional style As MsoLineDash
     
 End Sub
 
+Sub SetMinScale(minvalue As Integer)
+    cht.Axes(xlValue).MinimumScale = minvalue
+End Sub
+Sub SetMaxScale(maxvalue As Long)
+    cht.Axes(xlValue).MaximumScale = maxvalue
+End Sub
+
 Property Get Name() As String
     Name = cht.Name
 End Property
