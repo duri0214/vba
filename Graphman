@@ -5,6 +5,9 @@ Private cht As Chart
 Property Get Title() As String
     Title = cht.ChartTitle.Caption
 End Property
+Property Let Title(value As String)
+    cht.ChartTitle.Caption = value
+End Property
 
 Sub Init(sh As Worksheet, graphName As String)
 
