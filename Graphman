@@ -47,7 +47,6 @@ Sub ClearGraphRange()
 
     Dim cnt As Integer
     Dim i As Integer
-    Dim r As Range
     
     'データ1行分が cht.seriescollection(i) です。それらを削除（グラフはまっしろけになる）
     cnt = cht.SeriesCollection.Count
