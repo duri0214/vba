@@ -43,6 +43,21 @@ Sub SetGraphLabel_adjustXY(series_idx As Integer, data_idx As Integer, leftOffse
     
 End Sub
 
+Sub ClearGraphRange()
+
+    Dim cnt As Integer
+    Dim i As Integer
+    Dim r As Range
+    
+    'データ1行分が cht.seriescollection(i) です。それらを削除（グラフはまっしろけになる）
+    cnt = cht.SeriesCollection.Count
+    For i = cnt To 1 Step -1
+        '先頭から削除するとナンバリングが動的に変わるため、最大Cntから消しにかかる
+        cht.SeriesCollection(i).Delete
+    Next i
+
+End Sub
+
 Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
 
     Dim cnt As Integer
