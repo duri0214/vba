@@ -19,6 +19,8 @@ Sub Init(sh As Worksheet, graphName As String)
     sh.Activate
     
     Set cht = sh.ChartObjects(graphName).Chart
+    cht.Activate
+    
 End Sub
 
 'データ系列（＝series_idx）内の単一のデータ要素（＝data_idx）
