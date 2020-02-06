@@ -7,14 +7,14 @@ Sub Connect(ipOrServername As String, dbname As String, usrId As String, pwd As 
     con_string = Replace(con_string, "{0}", ipOrServername)
     con_string = Replace(con_string, "{1}", dbname)
 
-    con.provider = "SQLOLEDB"
+    con.Provider = "SQLOLEDB"
     con.Open ConnectionString:=con_string, UserID:=usrId, Password:=pwd
 
 End Sub
 
-Function GetConnectionObj() As ADODB.Connection
-    Set GetConnectionObj = con
-End Function
+Property Get connectionObj() As ADODB.Connection
+    Set Get connectionObj = con
+End Property
 
 Function GetCursor(sql As String) As ADODB.Recordset
 
