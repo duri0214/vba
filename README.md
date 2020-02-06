@@ -341,31 +341,35 @@ variant2次元配列を操作します
 ```vb
 Private Sub btnStart_Click()
 
-    Dim a As New Array2d_v
-
     Dim u As New ExcelManipulator
     Dim r As Range
+    Dim col As Integer
     Dim data As Variant
-    Dim oneline As Variant
+    Dim record As Variant
+    Dim a As New Array2d_v
     
-    '基準セルB10のend.rightとend.downで矩形を範囲取り、variantに代入
-    Set r = u.GetRegion(ActiveSheet.Range("B10"), xlToRight)
-    Set r = u.GetRegion(r, xlDown)
+    ' data がカラのとき
+    Set r = u.GetRegion(ActiveSheet.Range("B2"), xlToRight)
+    ReDim record(1 To r.Columns.Count)
+    For col = 1 To r.Columns.Count
+        record(col) = r(1, col).value
+    Next col
+    data = a.AddRecord(data, record)
+    Debug.Print Join(a.GetRecord(data:=data, row:=0), ",")
+    
+    ' data がカラではないとき
+    Erase data
+    Set r = ActiveSheet.Range("B2").CurrentRegion
     data = r
+    ReDim record(1 To r.Columns.Count)
+    For col = 1 To r.Columns.Count
+        record(col) = r(1, col).value
+    Next col
+    data = a.AddRecord(data, record)
+    Debug.Print Join(a.GetRecord(data:=data, row:=13), ",")
+    Set r = ActiveSheet.Range("V2")
+    r.Resize(UBound(data), UBound(data, 2)) = data
     
-    '次の行に入れたいonelineを作成する
-    oneline = r.Resize(1).Offset(-1)
-    oneline = a.AddNewRecord(oneline)
-    
-    '追加するonelineと追加されるdataのヨコサイズは一致していないといけない
-    data = a.AddNewRecordAndConcat(data, oneline)
-    
-    '追加された配列をセルに貼り付けるために範囲を把握
-    Set r = r(1, 1).Resize(UBound(data), UBound(data, 2))
-    
-    '貼り付け
-    r = data
-
 End Sub
 ```
 
