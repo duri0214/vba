@@ -372,7 +372,6 @@ Private Sub btnStart_Click()
         record(col) = r(1, col).value
     Next col
     data = a.AddRecord(data, record)
-    Debug.Print Join(a.GetRecord(data:=data, row:=13), ",")
     Set r = ActiveSheet.Range("V2")
     r.Resize(UBound(data), UBound(data, 2)) = data
     
