@@ -1,3 +1,5 @@
+Option Explicit
+
 Private con As New ADODB.Connection
 
 Sub Connect(ipOrServername As String, dbname As String, usrId As String, pwd As String)
