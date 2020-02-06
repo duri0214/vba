@@ -348,6 +348,10 @@ Private Sub btnStart_Click()
     Dim record As Variant
     Dim a As New Array2d_v
     
+    ' 初期化
+    ActiveSheet.Range("V2").CurrentRegion.ClearContents
+    Stop
+    
     ' data がカラのとき
     Set r = u.GetRegion(ActiveSheet.Range("B2"), xlToRight)
     ReDim record(1 To r.Columns.Count)
@@ -355,7 +359,9 @@ Private Sub btnStart_Click()
         record(col) = r(1, col).value
     Next col
     data = a.AddRecord(data, record)
-    Debug.Print Join(a.GetRecord(data:=data, row:=0), ",")
+    Set r = ActiveSheet.Range("V2")
+    r.Resize(UBound(data) + 1, UBound(data, 2)) = data
+    Stop
     
     ' data がカラではないとき
     Erase data
