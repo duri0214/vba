@@ -3,7 +3,7 @@ Option Explicit
 'variant2次元配列を操作します
 
 'dataを1行増やします
-Function AddNewRecord(data As Variant) As Variant
+Private Function AddNewRecord(data As Variant, template As Variant) As Variant
     
     Dim retValue As Variant
     Dim i As Long
@@ -19,6 +19,9 @@ Function AddNewRecord(data As Variant) As Variant
                 retValue(i, j) = data(i, j)
             Next j
         Next i
+    Else
+        'Add New Record
+        ReDim retValue(0, LBound(template) To UBound(template))
     End If
     
     AddNewRecord = retValue
@@ -26,7 +29,7 @@ Function AddNewRecord(data As Variant) As Variant
 End Function
 
 'dataのrow行目の1行を返します
-Function GetOneline(data As Variant, row As Long) As Variant
+Function GetRecord(data As Variant, row As Long) As Variant
 
     Dim i As Long
     Dim retValue As Variant
@@ -39,32 +42,43 @@ Function GetOneline(data As Variant, row As Long) As Variant
         retValue(i) = data(row, i)
     Next i
     
-    GetOneline = retValue
+    GetRecord = retValue
     
 End Function
 
 'onelineをdataの最終行にくっつける
-Function AddNewRecordAndConcat(data As Variant, oneline As Variant) As Variant
+Function AddRecord(data As Variant, record As Variant) As Variant
 
-    Dim i As Long
+    Dim col As Integer
     Dim retValue As Variant
     
-    '列数が同じ場合のみ処理をし、そうでない場合は data の配列をそのまま返す
-    If UBound(data, 2) = UBound(oneline, 2) Then
-    
+    'IsArray?
+    If IsValidArray(data) Then
+        '列数が同じ場合のみ処理をし、そうでない場合は data の配列をそのまま返す
+        If UBound(data, 2) = UBound(record) Then
+        
+            'New
+            retValue = AddNewRecord(data, record)
+            
+            'Refill
+            For col = LBound(retValue, 2) To UBound(retValue, 2)
+                retValue(UBound(retValue, 1), col) = record(col)
+            Next col
+            
+        Else
+            retValue = data
+        End If
+    Else
         'New
-        retValue = AddNewRecord(data)
+        retValue = AddNewRecord(data, record)
         
         'Refill
-        For i = LBound(retValue, 2) To UBound(retValue, 2)
-            retValue(UBound(retValue, 1), i) = oneline(LBound(oneline), i)
-        Next i
-        
-    Else
-        retValue = data
+        For col = LBound(retValue, 2) To UBound(retValue, 2)
+            retValue(UBound(retValue, 1), col) = record(col)
+        Next col
     End If
     
-    AddNewRecordAndConcat = retValue
+    AddRecord = retValue
     
 End Function
 
@@ -96,5 +110,3 @@ Private Function IsValidArray(targetArray As Variant) As Boolean
     IsValidArray = retValue                                         '検査結果を返す
 
 End Function
-
-
