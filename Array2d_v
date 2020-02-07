@@ -46,7 +46,7 @@ Function GetRecord(data As Variant, row As Long) As Variant
     
 End Function
 
-'onelineをdataの最終行にくっつける
+'recordをdataの最終行にくっつける
 Function AddRecord(data As Variant, record As Variant) As Variant
 
     Dim col As Integer
