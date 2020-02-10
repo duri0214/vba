@@ -22,6 +22,7 @@ Function GetCursor(sql As String) As ADODB.Recordset
 
     'adOpenStaticは、レコード件数を保持します
     Dim rs As New ADODB.Recordset
+    rs.CursorLocation = adUseClient
     rs.Open sql, con, adOpenStatic, adLockReadOnly
     Set GetCursor = rs
 
