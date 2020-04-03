@@ -138,7 +138,7 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     '抽出するパラメータ
     filter_value = Split(Split(filter, ":")(1), ",")
     For i = 0 To UBound(filter_value)
-        If filter_value(i) = "<>" Then
+        If Left(filter_value(i), 1) = "<" or Left(filter_value(i), 1) = ">" Then
             b = True
             Exit For
         End If
@@ -148,7 +148,7 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     Set r = header.Parent.Range(header, header.SpecialCells(xlCellTypeLastCell))
     If b Then
         'パラメータに "<>"（＝空白以外すべて）が含まれているときは、配列で突っ込むと実行時エラーが起きるため対応
-        r.AutoFilter filter_col, "<>", xlFilterValues
+        r.AutoFilter filter_col, Split(filter, ":")(1), xlFilterValues
     Else
         '複数パラメータに対応できる
         r.AutoFilter filter_col, filter_value, xlFilterValues
