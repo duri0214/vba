@@ -129,8 +129,8 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     Dim colOffset As Integer
     For i = 1 To UBound(temp, 2)
         If temp(1, i) = Split(filter, ":")(0) Then
-            colOffset = header(1, 1).column - 1
-            filter_col = header(1, i).column - colOffset
+            colOffset = header(1, 1).Column - 1
+            filter_col = header(1, i).Column - colOffset
             Exit For
         End If
     Next i
@@ -138,7 +138,7 @@ Function GetFilteredRange(header As Range, filter As String) As Range
     '抽出するパラメータ
     filter_value = Split(Split(filter, ":")(1), ",")
     For i = 0 To UBound(filter_value)
-        If Left(filter_value(i), 1) = "<" or Left(filter_value(i), 1) = ">" Then
+        If Left(filter_value(i), 1) = "<" Or Left(filter_value(i), 1) = ">" Then
             b = True
             Exit For
         End If
