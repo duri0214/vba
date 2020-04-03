@@ -256,7 +256,7 @@ Function GetEnd(r As Range, direction As XlDirection) As Range
     Select Case direction
         Case xlDown
             'いちど最下行に行ってから Ctrl+↑
-            Set retValue = r.Parent.Cells(r.Parent.Rows.Count, r.column).End(xlUp)
+            Set retValue = r.Parent.Cells(r.Parent.Rows.Count, r.Column).End(xlUp)
         Case xlToLeft
             'いちど最左端に行ってから Ctrl+ →
             Set retValue = r.Parent.Cells(r.row, 1).End(xlToRight)
@@ -265,7 +265,7 @@ Function GetEnd(r As Range, direction As XlDirection) As Range
             Set retValue = r.Parent.Cells(r.row, r.Parent.Columns.Count).End(xlToLeft)
         Case xlUp
             'いちど最上端に行ってから Ctrl+ ↓
-            Set retValue = r.Parent.Cells(1, r.column).End(xlDown)
+            Set retValue = r.Parent.Cells(1, r.Column).End(xlDown)
     End Select
     
     Set GetEnd = retValue
