@@ -22,6 +22,14 @@ Sub Push(value As String)
     
 End Sub
 
+Sub Push_set(value As String)
+    
+    If InStr(Join(ary), value) >0 Then
+        Push(value)
+    End If
+    
+End Sub
+
 Function Pop() As String
     
     Dim retValue As String
