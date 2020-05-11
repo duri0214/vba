@@ -24,7 +24,7 @@ End Sub
 
 Sub Push_set(value As String)
     
-    If InStr(Join(ary), value) >0 Then
+    If InStr(Join(ary), value) = 0 Then
         Push(value)
     End If
     
