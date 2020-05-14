@@ -10,17 +10,8 @@ Property Let Title(value As String)
 End Property
 
 Sub Init(sh As Worksheet, graphName As String)
-
-    'グラフデータがあるシートにグラフオブジェクトを作成する
-    
-    '▲Caution:
-    ' .Chart でオブジェクトを取得するときになぜかコンテナのシート（sh）を無視して
-    ' ActiveSheet の graphName を取得することが発覚。LOOPで各シートのグラフを変えて回るようなときにunsafe。
-    sh.Activate
-    
     Set cht = sh.ChartObjects(graphName).Chart
-    cht.Activate
-    
+    sh.ChartObjects(graphName).Activate
 End Sub
 
 'データ系列（＝series_idx）内の単一のデータ要素（＝data_idx）
