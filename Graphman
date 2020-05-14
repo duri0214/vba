@@ -1,6 +1,7 @@
 Option Explicit
 
 Private cht As Chart
+Private axis As Integer
 
 Property Get Title() As String
     Title = cht.ChartTitle.Caption
@@ -9,9 +10,10 @@ Property Let Title(value As String)
     cht.ChartTitle.Caption = value
 End Property
 
-Sub Init(sh As Worksheet, graphName As String)
+Sub Init(sh As Worksheet, graphName As String, axis As Integer)
     Set cht = sh.ChartObjects(graphName).Chart
     sh.ChartObjects(graphName).Activate
+    axis = axis
 End Sub
 
 'データ系列（＝series_idx）内の単一のデータ要素（＝data_idx）
@@ -63,11 +65,26 @@ Sub SetGraphRange(seriesHeader As Range, hanreiRange As Range)
         cht.SeriesCollection(i).Delete
     Next i
     
+    Dim hanreiCnt As Long
+    Dim seriesCnt As Long
+    If axis = 0 Then
+        hanreiCnt = hanreiRange.Columns.Count
+        seriesCnt = seriesHeader.Rows.Count
+    Else
+        hanreiCnt = hanreiRange.Rows.Count
+        seriesCnt = seriesHeader.Columns.Count
+    End If
+    
     'hanreiNameの行数ぶんだけ処理を実行します
-    For i = 1 To hanreiRange.Rows.Count
+    For i = 1 To hanreiCnt
     
         'シリーズ範囲（新たなデータ参照範囲はseriesHeaderの列sizeになります）
-        Set r = hanreiRange.Parent.Cells(hanreiRange(i).row, seriesHeader(1, 1).column).Resize(1, seriesHeader.Columns.Count)
+        If axis = 0 Then
+            Set r = hanreiRange.Parent.Cells(seriesHeader(1, 1).row, hanreiRange(, i).column).Resize(seriesCnt, 1)
+        Else
+            Set r = hanreiRange.Parent.Cells(hanreiRange(i).row, seriesHeader(1, 1).column).Resize(1, seriesCnt)
+        End If
+        
         cht.SeriesCollection.NewSeries
         With cht.SeriesCollection(i)
             .Name = "=" & hanreiRange(i, 1).Resize(, hanreiRange.Columns.Count).Address(External:=True)
