@@ -10,10 +10,10 @@ Property Let Title(value As String)
     cht.ChartTitle.Caption = value
 End Property
 
-Sub Init(sh As Worksheet, graphName As String, axis As Integer)
+Sub Init(sh As Worksheet, graphName As String, axis_ As Integer)
     Set cht = sh.ChartObjects(graphName).Chart
     sh.ChartObjects(graphName).Activate
-    axis = axis
+    axis = axis_
 End Sub
 
 'データ系列（＝series_idx）内の単一のデータ要素（＝data_idx）
