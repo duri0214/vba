@@ -81,10 +81,10 @@ Sub SetGraphRange(seriesRange As Range, hanreiRange As Range)
     
         'シリーズ範囲（新たなデータ参照範囲はseriesRangeの列sizeになります）
         If axis = 0 Then
-            Set a_series_name = hanreiRange(1, i).Resize(, hanreiRange.Rows.Count)
+            Set a_series_name = hanreiRange(1, i).Resize(hanreiRange.Rows.Count, 1)
             Set a_series_data = hanreiRange.Parent.Cells(seriesRange(1, 1).row, hanreiRange(1, i).column).Resize(seriesCnt, 1)
         Else
-            Set a_series_name = hanreiRange(i, 1).Resize(, hanreiRange.Columns.Count)
+            Set a_series_name = hanreiRange(i, 1).Resize(1, hanreiRange.Columns.Count)
             Set a_series_data = hanreiRange.Parent.Cells(hanreiRange(i, 1).row, seriesRange(1, 1).column).Resize(1, seriesCnt)
         End If
         
