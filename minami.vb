@@ -1,42 +1,34 @@
 Option Explicit
 
-Sub sample2()
+Sub sort_for_graphical_display()
     
- '前処理
-    
+    'TODO: トリガーボタンはどのシートにありますか？Sheet1ですか？どこかのメニューからこのルーチンに来るのか、
+
+    '「元データ」シートを選択する
     Sheet1.Select
     
-    
-    Sheet1.Name = "元データ"  'Sheet1 の名前を「元データ」にする
-    Dim id
-    Set id = Worksheets("元データ").Range("A1") 'id＝元データSheetのA1を変数として宣言
-    Set id = Worksheets("元データ").Range(id, id.End(xlDown)) 'データの最終行を把握
-    Set id = Worksheets("元データ").Range(id, id.End(xlToRight))  'データの最終列を把握
-    id.Select  '点検用：上記のコードが正しければ、Sheet1のデータ範囲がドラッグされた状態になる（確認後、消去可）
-
-    '取得したデータの並べ替えを行う
-
-    With Worksheets("元データ").Sort
-        .SortFields.Clear
-        .SortFields.Add Key:=Worksheets("元データ").Cells(1, "D")  '「圃場名」でソート
-        .SortFields.Add Key:=Worksheets("元データ").Cells(1, "G")  '「圃場内位置」でソート
-        .SortFields.Add Key:=Worksheets("元データ").Cells(1, "H")  '「圃場内位置2」でソート
-        .SetRange id                                               '前処理した並べ替え範囲をセットする
-        .header = xlYes                            '前処理した並べ替え範囲の1行目をヘッダーとして並べ替えから除外する
-        .Apply                                     'ソートの実行
-
+    'STEP01: 「元データ」シートのデータを並べ替え
+    Dim r As Range
+    Set r = ActiveSheet.Range("A1")                     'A1を取得
+    Set r = ActiveSheet.Range(r, r.End(xlDown))         'rを基準に最終行までを取得
+    Set r = ActiveSheet.Range(r, r.End(xlToRight))      'rを基準に最終列までを取得
+    With ActiveSheet.Sort
+        .SortFields.Clear                               '前回のソート条件を初期化
+        .SortFields.Add Key:=ActiveSheet.Cells(1, "D")  '圃場名でソート
+        .SortFields.Add Key:=ActiveSheet.Cells(1, "G")  '圃場内位置でソート
+        .SortFields.Add Key:=ActiveSheet.Cells(1, "H")  '圃場内位置2でソート
+        .SetRange r                                     '並べ替え範囲をセットする
+        .header = xlYes                                 '並べ替え範囲の1行目をヘッダーとして認識し、並べ替えから除外する
+        .Apply                                          'ソートの実行
     End With
 
-    '並べ替えたデータを別Sheet「並べ替え①」に転記する
-    Sheet2.Name = "並べ替え①"  'Sheet2 の名前を「並べ替え①」にする
-    id.Copy Destination:=Worksheets("並べ替え①").Range("A1")  '「元データ」で並べ替えたデータ範囲をを"並べ替え①"のA1を先頭に転記する
+    'STEP02: 並べ替えたデータを別Sheet「並べ替え①」に転記する（各パラメータの中央値を出す用）
+    r.Copy Destination:=Worksheets("並べ替え①").Range("A1")  '「元データ」で並べ替えたデータ範囲をを"並べ替え①"のA1を基準に転記する
     Worksheets("並べ替え①").Columns("I:CX").Hidden = True
-    
     
     'グラフの交点になる縦軸・横軸の中央値を求める
     Dim param(2) As Double   '小数点のある数値の変数として配列：param(0)～param(2)を宣言
     
-    Dim r As Range
     Set r = Sheet2.Range("DA2")
     Set r = Sheet2.Range(r, r.End(xlDown))   '変数RにDA2のパラメータCのデータ範囲を取得した
     param(0) = WorksheetFunction.Median(r)   '配列：param(0)にDA2のデータ範囲の中央値を代入する
