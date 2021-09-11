@@ -2,182 +2,163 @@ Option Explicit
 
 Sub sort_for_graphical_display()
     
-    'TODO: トリガーボタンはどのシートにありますか？Sheet1ですか？どこかのメニューからこのルーチンに来るのか、
-
     '「元データ」シートを選択する
     Sheet1.Select
     
-    'STEP01: 「元データ」シートのデータを並べ替え
+    '「元データ」シートのデータを並べ替え
     Dim r As Range
     Set r = ActiveSheet.Range("A1")                     'A1を取得
     Set r = ActiveSheet.Range(r, r.End(xlDown))         'rを基準に最終行までを取得
     Set r = ActiveSheet.Range(r, r.End(xlToRight))      'rを基準に最終列までを取得
     With ActiveSheet.Sort
         .SortFields.Clear                               '前回のソート条件を初期化
-        .SortFields.Add Key:=ActiveSheet.Cells(1, "D")  '圃場名でソート
-        .SortFields.Add Key:=ActiveSheet.Cells(1, "G")  '圃場内位置でソート
-        .SortFields.Add Key:=ActiveSheet.Cells(1, "H")  '圃場内位置2でソート
+        .SortFields.Add Key:=ActiveSheet.Range("D1")    '圃場名でソート
+        .SortFields.Add Key:=ActiveSheet.Range("G1")    '圃場内位置でソート
+        .SortFields.Add Key:=ActiveSheet.Range("H1")    '圃場内位置2でソート
         .SetRange r                                     '並べ替え範囲をセットする
         .header = xlYes                                 '並べ替え範囲の1行目をヘッダーとして認識し、並べ替えから除外する
         .Apply                                          'ソートの実行
     End With
-
-    'STEP02: 並べ替えたデータを別Sheet「並べ替え①」に転記する（各パラメータの中央値を出す用）
-    r.Copy Destination:=Worksheets("並べ替え①").Range("A1")  '「元データ」で並べ替えたデータ範囲をを"並べ替え①"のA1を基準に転記する
-    Worksheets("並べ替え①").Columns("I:CX").Hidden = True
     
-    'グラフの交点になる縦軸・横軸の中央値を求める
-    Dim param(2) As Double   '小数点のある数値の変数として配列：param(0)～param(2)を宣言
+    'パラメータC,D,Eの中央値を求める
+    Const C As Integer = 0
+    Const D As Integer = 1
+    Const E As Integer = 2
+    Dim param(2) As Double                          '小数点の配列3要素を宣言
     
-    Set r = Sheet2.Range("DA2")
-    Set r = Sheet2.Range(r, r.End(xlDown))   '変数RにDA2のパラメータCのデータ範囲を取得した
-    param(0) = WorksheetFunction.Median(r)   '配列：param(0)にDA2のデータ範囲の中央値を代入する
+    Set r = ActiveSheet.Range("DA2")
+    Set r = ActiveSheet.Range(r, r.End(xlDown))     '変数rにパラメータCのデータ範囲を取得した
+    param(C) = WorksheetFunction.Median(r)          '配列：param(C)にパラメータCの中央値を代入する
     
-    Set r = Sheet2.Range("DB2")
-    Set r = Sheet2.Range(r, r.End(xlDown))   '変数RにDB2のパラメータCのデータ範囲を取得した
-    param(1) = WorksheetFunction.Median(r)   '配列：param(1)にDB2のデータ範囲の中央値を代入する
+    Set r = ActiveSheet.Range("DB2")
+    Set r = ActiveSheet.Range(r, r.End(xlDown))     '変数rにパラメータDのデータ範囲を取得した
+    param(D) = WorksheetFunction.Median(r)          '配列：param(D)にパラメータDの中央値を代入する
     
-    Set r = Sheet2.Range("DC2")
-    Set r = Sheet2.Range(r, r.End(xlDown))   '変数RにDC2のパラメータCのデータ範囲を取得した
-    param(2) = WorksheetFunction.Median(r)   '配列：param(2)にDC2のデータ範囲の中央値を代入する
+    Set r = ActiveSheet.Range("DC2")
+    Set r = ActiveSheet.Range(r, r.End(xlDown))     '変数rにパラメータEのデータ範囲を取得した
+    param(E) = WorksheetFunction.Median(r)          '配列：param(E)にパラメータEの中央値を代入する
     
-    グラフ1.Axes(xlValue).CrossesAt = param(2)   '特性深度×緩衝因子のグラフの縦軸交点にparam(2)を代入
-    グラフ1.Axes(xlCategory).CrossesAt = param(1)   '特性深度×緩衝因子のグラフの横軸交点にparam(1)を代入
-    
-    グラフ2.Axes(xlValue).CrossesAt = param(0)   '特性深度×緩衝因子のグラフの縦軸交点にparam(0)を代入
-    グラフ2.Axes(xlCategory).CrossesAt = param(1)   '特性深度×緩衝因子のグラフの横軸交点にparam(1)を代入
-    
-    
-    'グラフ1～3のタイトルをsheet2"並べ替え①"の複数セルの値を組み合わせて作成し、代入する・・前処理：変数
-    
-    Dim s As String  '「品目」
-    Dim f As String  '「圃場名」
-    Dim t As String     '「収集日時」
-
-    s = Worksheets("並べ替え①").Range("C2")
-    f = Worksheets("並べ替え①").Range("D2")
-    t = Worksheets("並べ替え①").Range("E2")
- 
-    'グラフ1のタイトルを代入する
-    
-    With グラフ1
-    
-        .HasTitle = True                    'タイトルをグラフに表示する
-        .ChartTitle.Formula = s + "_" + f + "_" + t 'タイトルの文字列を指定する
-        .ChartTitle.Top = 5                 'TOP位置
-        .ChartTitle.Left = 100               'Left位置
-    
-        With .ChartTitle.Format.TextFrame2.TextRange.Font
-    
-            .Size = 16 '文字のサイズ
-            .Fill.ForeColor.ObjectThemeColor = 2 '色を指定する
+    '雛形グラフの原点をパラメータの中央値にする
+    グラフ1.Axes(xlValue).CrossesAt = param(E)      '特性深度×緩衝因子のグラフの縦軸交点にパラメータEの中央値を代入
+    グラフ1.Axes(xlCategory).CrossesAt = param(D)   '特性深度×緩衝因子のグラフの横軸交点にパラメータDの中央値を代入
+    グラフ2.Axes(xlValue).CrossesAt = param(C)      '特性深度×最大硬度のグラフの縦軸交点にパラメータCの中央値を代入
+    グラフ2.Axes(xlCategory).CrossesAt = param(D)   '特性深度×最大硬度のグラフの横軸交点にパラメータDの中央値を代入
         
-        End With
-    
-    End With
-    
-    'グラフ2のタイトルを代入する
-    
-    With グラフ2
-    
-        .HasTitle = True                    'タイトルをグラフに表示する
-        .ChartTitle.Formula = s + "_" + f + "_" + t 'タイトルの文字列を指定する
-        .ChartTitle.Top = 5                 'TOP位置
-        .ChartTitle.Left = 260               'Left位置
-    
-        With .ChartTitle.Format.TextFrame2.TextRange.Font
-    
-            .Size = 14 '文字のサイズ
-            .Fill.ForeColor.ObjectThemeColor = 2 '色を指定する
-        
-        End With
-    
-    End With
-    
-     'グラフ2のタイトルを代入する
-    
-    With グラフ3
-    
-        .HasTitle = True                    'タイトルをグラフに表示する
-        .ChartTitle.Formula = s + "_" + f + "_" + t 'タイトルの文字列を指定する
-        .ChartTitle.Top = 5                 'TOP位置
-        .ChartTitle.Left = 260               'Left位置
-    
-        With .ChartTitle.Format.TextFrame2.TextRange.Font
-    
-            .Size = 14 '文字のサイズ
-            .Fill.ForeColor.ObjectThemeColor = 2 '色を指定する
-        
-        End With
-    
-    End With
-    
-     'グラフ6のタイトルを代入する
-    
-    With グラフ6
-    
-        .HasTitle = True                    'タイトルをグラフに表示する
-        .ChartTitle.Formula = s + "_" + f + "_" + t 'タイトルの文字列を指定する
-        .ChartTitle.Top = 5                 'TOP位置
-        .ChartTitle.Left = 260               'Left位置
-    
-        With .ChartTitle.Format.TextFrame2.TextRange.Font
-    
-            .Size = 14 '文字のサイズ
-            .Fill.ForeColor.ObjectThemeColor = 2 '色を指定する
-        
-        End With
-    
-    End With
-    
-    '標準モジュール"exceldb"を使って、sheet3"並べ替え②"のデータ範囲を特定する
-    
+    'exceldbを使って、sheet3"並べ替え②"のデータ範囲を特定する
     Dim db As New exceldb
     Dim hdr As Range
     Dim data As Range
     
-    Dim ret As Variant
-        
-    Set hdr = Sheet1.Range("A1:CX1")
-    Set data = Sheet1.Range("A2:CX2")
-    Set data = Sheet1.Range(data, data.End(xlDown))
-    
+    'exceldbを使うための下準備（ヘッダー範囲とデータ範囲を定義）
+    Set hdr = ActiveSheet.Range("A1:CX1")
+    Set data = ActiveSheet.Range("A2:CX2")
+    Set data = ActiveSheet.Range(data, data.End(xlDown))
     data.Select
-    
-    
    
-   'ループ処理・・変数
-    
-    Dim locations_col(2) As String
-    Dim locations_row(2) As String
-        locations_col(0) = "A"
-        locations_col(1) = "B"
-        locations_col(2) = "C"
-        locations_row(0) = "1"
-        locations_row(1) = "2"
-        locations_row(2) = "3"
-    Dim col As Integer
-    Dim row As Integer
-    Dim destination_idx As Integer
-    
-    
-    'ループ処理・・データ範囲の検索と"並べ替え②"の所定範囲へ転記
-    
-    For col = LBound(locations_col) To UBound(locations_col)  '変数locations_colの0～2まで
-               
-        For row = LBound(locations_row) To UBound(locations_row)    '変数locations_rowの0～2まで
-            db.SetInit hdr, data    'Search #Init
-            Set r = db.GetCurser_r("圃場内位置", locations_col(col))
-            Set r = db.GetCurser_r("圃場内位置2", locations_row(row))
-            Set r = r.Resize(, 60 + 12)
-            r.Select
-            r.Copy Sheet3.Range("A3").Offset(destination_idx)
-            destination_idx = destination_idx + 48    'A1に該当するデータをsheet3のA3から48行づつずらした範囲に転記する
+    '圃場1つを選択（ドロップダウンから持ってくる）
+    Dim point_hojou As String
+    point_hojou = "中原-開パイ下"
 
-        Next row
-       
-    Next col
-               
+    '重複削除用の作業シートを作成
+    Dim sh_keys As Worksheet
+    Set sh_keys = CreateSheet("keys")
+    sh_keys.Cells.ClearContents
 
+    '圃場1つのデータ範囲を取得して、重複削除用の作業シートに貼り付けて、重複を削除したらループ回数がわかる
+    Dim rows As Long
+    db.SetInit hdr, data
+    Set r = db.GetCurser_r("圃場名", point_hojou)
+    r(1, 7).Resize(r.rows.Count, 2).Copy Destination:=sh_keys.Range("A1")
+    sh_keys.Range("A1").CurrentRegion.RemoveDuplicates Columns:=Array(1, 2), header:=xlNo
+    rows = sh_keys.Range("A1").CurrentRegion.rows.Count
+
+    'グラフタイトル（作物名_圃場_日付）を作ってセットする e.g. レタス_中原-開パイ下_21.07.25
+    Dim graphTitle As String
+    graphTitle = ConcatenateByRange(r(1, 3).Resize(, 3))
+    グラフ1.ChartTitle.Text = graphTitle
+    グラフ2.ChartTitle.Text = graphTitle
+    グラフ6.ChartTitle.Text = graphTitle
+
+    '最大硬度×最大深度 のグラフは散布図なので元データから設定できる
+    グラフ3.ChartTitle.Text = graphTitle
+    グラフ3.SetSourceData Source:=ActiveSheet.Range(GetCellAddressAfterRangeUnion(ActiveSheet.Range("DA2"), ActiveSheet.Range("DE2")))
+
+    '平均集計シートの下準備
+    Dim sh_agg As Worksheet
+    Set sh_agg = CreateSheet("agg")
+    sh_agg.Cells.ClearContents
+    sh_agg.Range("A1").Value = "深度"
+    sh_agg.Range("B1").Value = 1
+    sh_agg.Range("B1").AutoFill Destination:=sh_agg.Range("B1").Resize(, 60), Type:=xlFillSeries
+
+    '5点測点データ(60ヶ所)を集計(平均)して、1/1000しながら平均集計シートに転記します
+    Dim point_alphabet As String
+    Dim point_number As String
+    Dim point_name As String
+    Dim row As Long
+    For row = 1 To rows
+        point_alphabet = sh_keys.Cells(row, "A").Value
+        point_number = sh_keys.Cells(row, "B").Value
+        point_name = "硬度" & point_alphabet & point_number 'e.g. 硬度A1
+        db.SetInit hdr, data
+        Set r = db.GetCurser_r("圃場名", point_hojou)
+        Set r = db.GetCurser_r("圃場内位置", point_alphabet)
+        Set r = db.GetCurser_r("圃場内位置2", point_number)
+        CopyAfterAggregate sh_agg, point_name, r(, 13).Resize(r.rows.Count, 60)
+    Next row
+    
 End Sub
     
+Function ConcatenateByRange(rgs As Range, Optional separate As String) As String
+    '範囲形式で参照される値を連結する
+    Dim buf As String
+    Dim r As Range
+    For Each r In rgs
+        If separate <> vbNullString And buf <> vbNullString Then
+            buf = buf & separate
+        End If
+        buf = buf & r.Value
+    Next
+    ConcatenateByRange = buf
+End Function
+
+Function SheetExists(search_name As String) As Boolean
+    'シートが存在するかを調べる
+    Dim sh As Worksheet
+    SheetExists = False
+    For Each sh In Worksheets
+        If sh.Name = search_name Then
+            SheetExists = True
+        End If
+    Next sh
+End Function
+
+Function CreateSheet(sheetName As String) As Worksheet
+    'シートが存在するかを調べて、存在しなければシートを新規作成する
+    If SheetExists(sheetName) Then
+        Set CreateSheet = Worksheets(sheetName)
+    Else
+        Set CreateSheet = Worksheets.Add(After:=ActiveSheet)
+        CreateSheet.Name = sheetName
+    End If
+End Function
+
+Sub CopyAfterAggregate(toCopySheet As Worksheet, point_name As String, rng As Range)
+    '5点測点データ(60ヶ所)を集計(平均)して、1/1000して toCopySheet に転記します。A列にkey情報 point_name を入れます
+    Dim r As Range
+    Dim i As Integer
+    Set r = toCopySheet.Cells(toCopySheet.rows.Count, "A").End(xlUp).Offset(1)
+    r.Value = point_name
+    For i = 1 To rng.Columns.Count
+        r.Offset(, i).Value = WorksheetFunction.Average(rng(i).Resize(rng.rows.Count)) / 1000
+    Next i
+End Sub
+
+Function GetCellAddressAfterRangeUnion(rng1 As Range, rng2 As Range) As String
+    '=元データ!$DA$2:$DA$46,元データ!$DE$2:$DE$46 のような値を返します
+    Set rng1 = rng1.Parent.Range(rng1, rng1.End(xlDown))
+    Set rng2 = rng1.Parent.Range(rng2, rng2.End(xlDown))
+    GetCellAddressAfterRangeUnion = rng1.Address(External:=True) & "," & rng2.Address(External:=True)
+End Function
+
+
